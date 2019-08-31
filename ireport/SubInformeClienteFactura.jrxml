@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SubInformeClienteFactura" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17430dc2-4b75-4e51-ad5f-59e95dee6546">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="proyecto"/>
+	<parameter name="ID_FACTURA" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select ID_PERSONA, nombre, apellido, direccion, telefono, email from persona where ID_PERSONA in (select ID_PERSONA from negocio where ID_FACTURA =  $P{ID_FACTURA} )]]>
+	</queryString>
+	<field name="ID_PERSONA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ID_PERSONA"/>
+	</field>
+	<field name="NOMBRE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NOMBRE"/>
+	</field>
+	<field name="APELLIDO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="APELLIDO"/>
+	</field>
+	<field name="DIRECCION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DIRECCION"/>
+	</field>
+	<field name="TELEFONO" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="TELEFONO"/>
+	</field>
+	<field name="EMAIL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EMAIL"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="157" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="10" width="170" height="19" uuid="0c3cbbbb-a476-46a8-a642-061e93f17751">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f586eed9-8111-4ddd-acee-9348386f7039"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[NOMBRE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="40" width="170" height="19" uuid="f93888d0-ad27-4bbe-9036-123f4802dd63">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51e03820-e879-4853-afbe-268fc4344c84"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[APELLIDO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="70" width="170" height="19" uuid="cef65294-a673-4556-aa2f-f6f3886cee05">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5801c5cf-faed-4341-9471-4356baa6d04e"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[DIRECCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="100" width="170" height="20" uuid="a7c963f8-87ea-4d52-b928-187e9c5c1d88">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3959c4a4-2b9a-4b6f-b240-aa1514d7f031"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[TELEFONO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="130" width="170" height="20" uuid="e78f0c11-e061-4eef-806d-46dc918c177f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="95db2ade-787d-4ee2-b12c-c859b6976de4"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[EMAIL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="180" y="10" width="364" height="19" uuid="0e6f961c-dd15-4b2b-8c9d-1c9b8c7416a8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f586eed9-8111-4ddd-acee-9348386f7039"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="40" width="364" height="19" uuid="ef922beb-3e81-4aa4-904c-39fae6dd3057">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="51e03820-e879-4853-afbe-268fc4344c84"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{APELLIDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="70" width="364" height="19" uuid="fdf66a62-2f9b-4bf4-b29d-21cdbe3d93f4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5801c5cf-faed-4341-9471-4356baa6d04e"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECCION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="100" width="364" height="20" uuid="5eb960cf-ff11-4488-8607-481f850cc056">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3959c4a4-2b9a-4b6f-b240-aa1514d7f031"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TELEFONO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="130" width="364" height="20" uuid="c6a4a647-6cc1-4d18-9018-e896d1860689">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="95db2ade-787d-4ee2-b12c-c859b6976de4"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EMAIL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+</jasperReport>

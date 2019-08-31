@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/TableModels/LibroTableModel.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Logica/LogicaTemas.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelAyuda.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Logica/LogicaBBDD.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelVenta.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelPersonas.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Gestiones/GestionarFacturas.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Gestiones/GestionarNotasLibro.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/TableModels/CajaTableModel.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Dto/Factura.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Dto/Persona.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/Dialog/DialogFactura.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelAjustes.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelCompra.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Logica/LogicaNegocio.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Gestiones/GestionarPersonas.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/TableModels/PersonasTableModel.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelEstadistica.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Logica/SshTunel.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Gestiones/GestionarInventario.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelLibroDiario.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/Dialog/DialogPersona.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Dto/Inventario.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Logica/StretchIcon.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/Dialog/DialogNotaLibro.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelCaja.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelInventario.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Dto/Usuario.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Dto/Producto.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/Dialog/DialogProducto.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/MainBody/PanelFacturas.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/TableModels/PersonaCortoTableModel.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Dto/NotaLibroDiario.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/TableModels/ProductoTableModel.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Gestiones/GestionarCaja.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/Main/Login.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/GUI/Main/Main.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/TableModels/FacturaTableModel.java</file>
+            <file>file:/D:/P/Proyectos/Netbeans/Proyecto/src/Logica/ConexionBBDD.java</file>
+        </group>
+    </open-files>
+</project-private>
