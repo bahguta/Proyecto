@@ -21,6 +21,9 @@ import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
 import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 import java.awt.CardLayout;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -192,6 +195,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabelVersion = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuLibro = new javax.swing.JMenu();
         menuCaja = new javax.swing.JMenu();
@@ -223,12 +228,24 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         jScrollPane1.setViewportView(jPanelBody);
 
         jLabel1.setFont(new java.awt.Font("DialogInput", 1, 12)); // NOI18N
-        jLabel1.setText("Creado por Plamen Petkov 2018 ®");
+        jLabel1.setText("Creado por Plamen Petkov 2019 ®");
 
         jLabel2.setFont(new java.awt.Font("DialogInput", 1, 12)); // NOI18N
         jLabel2.setText("Version: ");
 
         jLabelVersion.setFont(new java.awt.Font("DialogInput", 1, 12)); // NOI18N
+
+        jLabel3.setFont(LogicaTemas.TEXT_FONT);
+        jLabel3.setText("bahguta API");
+
+        jLabel4.setFont(LogicaTemas.TEXT_FONT);
+        jLabel4.setForeground(new java.awt.Color(51, 51, 255));
+        jLabel4.setText("http://bahguta.ddns.net");
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelBottomLayout = new javax.swing.GroupLayout(jPanelBottom);
         jPanelBottom.setLayout(jPanelBottomLayout);
@@ -239,6 +256,10 @@ public class Main extends javax.swing.JFrame implements MenuListener {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabelVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addContainerGap())
@@ -251,7 +272,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
                     .addComponent(jLabelVersion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(jLabel2)))
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel4)))
                 .addContainerGap())
         );
 
@@ -467,6 +490,16 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         cardLayout.show(jPanelBody, "panelAyuda");
     }//GEN-LAST:event_menuAyudaMouseClicked
 
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        try {
+            String url = "javadoc/index.html";
+            File htmlFile = new File(url);
+            Desktop.getDesktop().browse(htmlFile.toURI());
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+    }//GEN-LAST:event_jLabel4MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -491,6 +524,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelVersion;
     private javax.swing.JPanel jPanelBody;
     private javax.swing.JPanel jPanelBottom;
