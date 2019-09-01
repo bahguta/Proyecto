@@ -78,7 +78,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
      */
     public Main() {
         Login login = new Login(this, true);
-        login.setVisible(true);
+        login.setVisible(true); 
         usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
         //Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/icono.png"));
 
