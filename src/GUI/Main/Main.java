@@ -22,10 +22,12 @@ import Logica.LogicaTemas;
 import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 import java.awt.CardLayout;
 import java.awt.Desktop;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -40,7 +42,15 @@ import org.openide.util.Exceptions;
 /**
  *
  * @author Plam
+ *
+ * Este Proyecto ha sido desarollado para la asignatura "Proyecto" del instituto
+ * IES Juan Jose Calvo Miguel - Sotrondio
+ *
+ * El programa se concentra en el manejo de las notas diarias que se van tomando, 
+ * el stock de los productos que entran (compra) y salen (Venta) de la empresa, 
+ * las personas sean clientes o provedoores y manejo de facturas.
  */
+
 public class Main extends javax.swing.JFrame implements MenuListener {
 
     public final static int MIN_LARGO = 1000;
@@ -64,17 +74,19 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     private JScrollPane scrollPane;
 
     /**
-     * Creates new form Main
+     * Constructor: 
      */
     public Main() {
         Login login = new Login(this, true);
         login.setVisible(true);
         usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
-        
-        
+        //Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/icono.png"));
+
         initComponents();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        Image img = new ImageIcon(getClass().getResource("/img/icono.png")).getImage();
+        setIconImage(img);
 
         LogicaTemas logicaTemas = new LogicaTemas();
         gestionarCaja = new GestionarCaja();
@@ -142,8 +154,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     public static double GET_VERSION() {
         return Main.VERSION;
     }
-    
-    private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD){
+
+    private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
         logica = new LogicaNegocio(nombre, pass, host, puerto, nombreBBDD);
     }
 
@@ -160,7 +172,6 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 //        }
 //        logica = new LogicaNegocio("proyecto", "proyecto", "localhost", 5656, "XE");
 //    }
-
     public static void setLookAndFeel(LookAndFeel laf) {
         try {
             UIManager.setLookAndFeel(laf);
@@ -197,6 +208,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         jLabelVersion = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         menuLibro = new javax.swing.JMenu();
         menuCaja = new javax.swing.JMenu();
@@ -210,6 +222,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         menuAyuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("bahguta");
+        setIconImages(null);
 
         jPanelBody.setMinimumSize(new java.awt.Dimension(0, 550));
         jPanelBody.setPreferredSize(new java.awt.Dimension(901, 515));
@@ -218,7 +232,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         jPanelBody.setLayout(jPanelBodyLayout);
         jPanelBodyLayout.setHorizontalGroup(
             jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 916, Short.MAX_VALUE)
+            .addGap(0, 915, Short.MAX_VALUE)
         );
         jPanelBodyLayout.setVerticalGroup(
             jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,6 +261,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             }
         });
 
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/Skudo.png"))); // NOI18N
+        jLabel5.setToolTipText("");
+
         javax.swing.GroupLayout jPanelBottomLayout = new javax.swing.GroupLayout(jPanelBottom);
         jPanelBottom.setLayout(jPanelBottomLayout);
         jPanelBottomLayout.setHorizontalGroup(
@@ -257,6 +274,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabelVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
@@ -269,6 +288,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBottomLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelVersion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelBottomLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
@@ -448,8 +468,6 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    
-
     private void menuLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLibroMouseClicked
         cardLayout.show(jPanelBody, "panelLibroDiario");
     }//GEN-LAST:event_menuLibroMouseClicked
@@ -514,7 +532,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 new Main().setVisible(true);
             }
         });
@@ -526,6 +544,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelVersion;
     private javax.swing.JPanel jPanelBody;
     private javax.swing.JPanel jPanelBottom;
@@ -542,7 +561,6 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     private javax.swing.JMenu menuPersonas;
     private javax.swing.JMenu menuVentas;
     // End of variables declaration//GEN-END:variables
-
 
     @Override
     public void menuSelected(MenuEvent me) {

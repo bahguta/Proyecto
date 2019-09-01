@@ -64,7 +64,7 @@ public class GestionarPersonas {
     /**
      * Metodo para obtener una persona buscada por el nombre
      *
-     * @param nombre el nombre de la persona que se va a buscar
+     * @param ID_persona el ID de la persona que se va a buscar
      * @return retorna una persona tipo Persona , en caso contrario retorna null
      */
     public Persona getPersonaPorID(int ID_persona) {

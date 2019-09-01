@@ -102,7 +102,7 @@ public class GestionarInventario {
      *
      * @param nombre el nombre del producto
      * @param precio su precio
-     * @param pesosu peso
+     * @param peso su peso
      * @param cantidad cuanta cantidad se ha comprado
      * @return returna las filas actualizadas
      */
