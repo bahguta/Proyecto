@@ -228,7 +228,7 @@ public class DialogNotaLibro extends javax.swing.JDialog {
             if (this.nota == null) {
                 logica.addNota(fecha, Double.valueOf(debe), Double.valueOf(haber), detalle);
             } else {
-                logica.moidifcarNota(this.nota.getCodNota(), fecha, Double.valueOf(debe), Double.valueOf(haber), detalle);
+                logica.moidifcarNota(this.nota.getCodNota(), Double.valueOf(debe), Double.valueOf(haber), detalle);
             }
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());

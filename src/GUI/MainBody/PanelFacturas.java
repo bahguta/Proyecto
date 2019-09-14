@@ -5,7 +5,6 @@
  */
 package GUI.MainBody;
 
-
 import Dto.Factura;
 import Dto.Persona;
 import GUI.Dialog.DialogFactura;
@@ -311,24 +310,62 @@ public class PanelFacturas extends javax.swing.JPanel {
         if (ID_factura != -1) {
             productoTableModel = new ProductoTableModel(logica.getProductosPorFactura(ID_factura));
             jTable1Productos.setModel(productoTableModel);
-            
+
             Persona p = logica.getPersonaPorIDFactura(ID_factura);
             List<Persona> lista = new ArrayList<>();
             lista.add(p);
             ptm = new PersonaCortoTableModel(lista);
             jTableCliente.setModel(ptm);
         }
-        
+
     }//GEN-LAST:event_jTableFacturasMouseClicked
 
     private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
-        if (jComboBoxTipo.getSelectedIndex() == 1) {
-            jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasClientes()));
-        } else if (jComboBoxTipo.getSelectedIndex() == 2) {
-            jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasProveedores()));
-        } else {
-            jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
-        }
+        
+        System.out.println("antes run");
+        
+        
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+
+                switch (jComboBoxTipo.getSelectedIndex()) {
+                    case 1:
+                        System.out.println("1");
+                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasClientes()));
+                        break;
+                    case 2:
+                        System.out.println("2");
+                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasProveedores()));
+                        break;
+                    default:
+                        System.out.println("todas");
+                        jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
+                        break;
+                }
+            }
+        });
+//        Thread t = new Thread( new Runnable() {
+//            
+//            @Override
+//            public void run() {
+//                System.out.println("dentro de run");
+//                switch (jComboBoxTipo.getSelectedIndex()) {
+//                    case 1:
+//                        System.out.println("1");
+//                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasClientes()));
+//                        break;
+//                    case 2:
+//                        System.out.println("2");
+//                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasProveedores()));
+//                        break;
+//                    default:
+//                        System.out.println("todas");
+//                        jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
+//                        break;
+//                }
+//            }
+//        });
+//        t.start();
     }//GEN-LAST:event_jComboBoxTipoActionPerformed
 
     private void jTable1ProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1ProductosMouseClicked

@@ -111,7 +111,7 @@ public class LogicaNegocio {
     public boolean cambiarConexion(String usuario, String password, String IP, int puerto, String nombreBBDD) {
         ConexionBBDD conn = new ConexionBBDD();
         if (conn.conexionBBDD(IP, puerto, nombreBBDD, usuario, password)) {
-            conexion.cerrarConexion();
+           // conexion.cerrarConexion();
             conexion = conn;
             return true;
         }
@@ -569,8 +569,8 @@ public class LogicaNegocio {
      * @param detalle detalles sobre la nota
      * @return retorna las filas actualizadas en la base de datos
      */
-    public int moidifcarNota(int ID_nota, Date fecha, Double debe, Double haber, String detalle) {
-        return gestionarNotasLibro.moidifcarNota(ID_nota, fecha, detalle, debe, haber);
+    public int moidifcarNota(int ID_nota, Double debe, Double haber, String detalle) {
+        return gestionarNotasLibro.moidifcarNota(ID_nota, detalle, debe, haber);
     }
 
     /**

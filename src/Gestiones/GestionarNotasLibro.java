@@ -91,9 +91,9 @@ public class GestionarNotasLibro {
      * @param haber lo que gana
      * @return  retorna las filas actualizadas
      */
-    public int moidifcarNota(int ID_nota, Date fecha, String detalle, Double debe, Double haber) {
+    public int moidifcarNota(int ID_nota, String detalle, Double debe, Double haber) {
         int filas = 0;
-        String consulta = "update nota set fecha = TO_DATE('" + sdf.format(fecha) + "'),  detalle = '" + detalle + "', debe = " + debe + ", haber = " + haber + " where id_nota = " + ID_nota;
+        String consulta = "update nota set  detalle = '" + detalle + "', debe = " + debe + ", haber = " + haber + " where id_nota = " + ID_nota;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Notas modificadas: " + filas);
         refrescarListaNotas();

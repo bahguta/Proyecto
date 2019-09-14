@@ -61,7 +61,6 @@ public class PanelLibroDiario extends javax.swing.JPanel {
 //        columnModel.getColumn(2).setPreferredWidth(300);
 //        columnModel.getColumn(3).setPreferredWidth(100);
 //        columnModel.getColumn(3).setPreferredWidth(100);
-
         setBorder(LogicaTemas.GET_TITLE_BORDER("Libro Diario"));
 
         sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -429,7 +428,16 @@ public class PanelLibroDiario extends javax.swing.JPanel {
         if (ID_nota != -1 && evt.getClickCount() >= 2) {
             DialogNotaLibro dialog = new DialogNotaLibro(frame, true, logica, logica.getNotaPorID(ID_nota));
             dialog.setVisible(true);
+            try {
+                String fechaIn = (String) fechaInicio.getSelectedItem();
+                String fechaFi = (String) fechaFin.getSelectedItem();
+                jTableLibroDiario.setModel(new LibroTableModel(logica.getNotasEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
+            } catch (ParseException e) {
+                System.out.println(e.getMessage());
+            }
         }
+
+
     }//GEN-LAST:event_jTableLibroDiarioMouseClicked
 
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
