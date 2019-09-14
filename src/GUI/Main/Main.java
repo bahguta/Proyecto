@@ -41,7 +41,7 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * @author Plam
+ * 
  *
  * Este Proyecto ha sido desarollado para la asignatura "Proyecto" del instituto
  * IES Juan Jose Calvo Miguel - Sotrondio
@@ -49,6 +49,7 @@ import org.openide.util.Exceptions;
  * El programa se concentra en el manejo de las notas diarias que se van tomando, 
  * el stock de los productos que entran (compra) y salen (Venta) de la empresa, 
  * las personas sean clientes o provedoores y manejo de facturas.
+ * @author Plam
  */
 
 public class Main extends javax.swing.JFrame implements MenuListener {
