@@ -3,7 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/Gestiones/GestionarCaja.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/Gestiones/GestionarFacturas.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/Gestiones/GestionarInventario.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/Logica/LogicaNegocio.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/Logica/LogicaTemas.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/GUI/Dialog/DialogNotaLibro.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/GUI/Main/Main.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/GUI/MainBody/PanelFacturas.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/GUI/MainBody/PanelLibroDiario.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/Gestiones/GestionarPersonas.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/GUI/MainBody/PanelAyuda.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/Gestiones/GestionarNotasLibro.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto/src/GUI/MainBody/PanelAjustes.java</file>
         </group>
     </open-files>
