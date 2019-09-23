@@ -30,7 +30,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -54,14 +53,14 @@ import org.openide.util.Exceptions;
 
 public class Main extends javax.swing.JFrame implements MenuListener {
 
-    public final static int MIN_LARGO = 1000;
-    public final static int MIN_ALTO = 700;
+    public final static int MIN_LARGO = 1400;
+    public final static int MIN_ALTO = 900;
     private static double VERSION = 1.0;
     private LogicaNegocio logica = null;
     private GestionarCaja gestionarCaja = null;
 
     private CardLayout cardLayout;
-    private static JPanel panelAjustes,
+    private static JPanel panelAjustes, panelAjuste, 
             panelLibroDiario,
             panelCaja,
             panelInventario,
@@ -72,7 +71,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             panelFacturas,
             panelAyuda;
     private Usuario usuario;
-    private JScrollPane scrollPane;
+   // private JScrollPane scrollPane;
 
     /**
      * Constructor: 
@@ -88,7 +87,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
         Image img = new ImageIcon(getClass().getResource("/img/icono.png")).getImage();
         setIconImage(img);
-
+        //this.setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
+        
         LogicaTemas logicaTemas = new LogicaTemas();
         gestionarCaja = new GestionarCaja();
         /**
@@ -103,7 +103,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 //        }
 
         conexion(login.getNombre(), login.getPass(), login.getHost(), login.getPuerto(), login.getNombreBBDD());
-
+        //conexion();
+        
+      
         BoxLayout boxLayout = new BoxLayout(getContentPane(), BoxLayout.Y_AXIS);
         //boxLayout.getTarget().setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
 
@@ -156,6 +158,10 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         return Main.VERSION;
     }
 
+    private void conexion(){
+        logica = new LogicaNegocio();
+    }
+    
     private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
         logica = new LogicaNegocio(nombre, pass, host, puerto, nombreBBDD);
     }
@@ -225,6 +231,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("bahguta");
         setIconImages(null);
+        setPreferredSize(new java.awt.Dimension(1024, 800));
 
         jPanelBody.setMinimumSize(new java.awt.Dimension(0, 550));
         jPanelBody.setPreferredSize(new java.awt.Dimension(901, 515));
@@ -233,7 +240,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         jPanelBody.setLayout(jPanelBodyLayout);
         jPanelBodyLayout.setHorizontalGroup(
             jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 915, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanelBodyLayout.setVerticalGroup(
             jPanelBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -452,7 +459,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addGap(11, 11, 11))
             .addComponent(jPanelBottom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );

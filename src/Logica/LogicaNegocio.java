@@ -36,6 +36,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class LogicaNegocio {
 
     private static final Logger LOG = Logger.getLogger(LogicaNegocio.class.getName());
+    
 
     /**
      * Miembros de la clase
@@ -51,6 +52,7 @@ public class LogicaNegocio {
     //gestionar notas libro diario
     private GestionarNotasLibro gestionarNotasLibro;
 
+    //ruta para los informes que va a crear
     private File rutaInformes;
 
     /**

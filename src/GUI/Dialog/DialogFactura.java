@@ -325,11 +325,11 @@ public class DialogFactura extends javax.swing.JDialog {
         Persona p = logica.getPersonaPorNombre(nombre);
         if (p != null) {
             String trabajos = jTextAreaTrabajos.getText();
-            logica.addFactura(precioTotal, p.getCodPersona(), listaProductos, trabajos, parent);
-        } else { 
-            return;
-        }
-        dispose();
+            if (logica.addFactura(precioTotal, p.getCodPersona(), listaProductos, trabajos, parent) != 0){
+            dispose();
+            }
+        } 
+        
     }//GEN-LAST:event_jButtonNuevaFacturaActionPerformed
 
     private void jButtonCancelarNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarNuevaFacturaActionPerformed
