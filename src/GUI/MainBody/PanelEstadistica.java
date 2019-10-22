@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -39,7 +40,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
     private LogicaNegocio logica;
     private List<JLabel> listaLabelsH1;
     private List<JLabel> listaLabelsH2;
-   // private boolean cambiar = true; // estado a true - significa que ya se puede cambiar la imagen del PieChart
+    // private boolean cambiar = true; // estado a true - significa que ya se puede cambiar la imagen del PieChart
     private String rutaLineChart, rutaBarChart3d, rutaPieChart3d;
     private File barChart3d, lineChart, pieChart3d;
     private JFrame parent;
@@ -55,13 +56,15 @@ public class PanelEstadistica extends javax.swing.JPanel {
 
         setBorder(LogicaTemas.GET_TITLE_BORDER("Estadistica"));
 
-        ruta = new File("imagenes");
+        ruta = new File("img_estadistica");
         if (ruta.mkdir()) {
-            System.out.println("Carpeta creada con Exito");
+            System.out.println("Carpeta " + ruta.getPath() + " creada con Exito");
+        } else if (ruta.exists()) {
+            System.out.println("La carpeta img_estadistica existe !!! No se crea !");
         } else {
-            System.out.println("Carpeta NO creada");
+            JOptionPane.showMessageDialog(this, "La carpeta " + ruta.getPath() + " NO se ha creado\nRevisa los permisos del programa.");
         }
-        
+
     }
 
     /////////////////
@@ -71,8 +74,6 @@ public class PanelEstadistica extends javax.swing.JPanel {
     //
     /////////////////
     /////////////////
-  
-
     public void estadisticaPieChart3d(NotaLibroDiario nota) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("Cobros", nota.getHaber());
@@ -87,7 +88,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         if (pieChart3d != null && pieChart3d.exists()) {
             pieChart3d.delete();
         }
-        rutaPieChart3d = "imagenes/pie_Chart3D" + "_" + System.currentTimeMillis() + ".jpeg";
+        rutaPieChart3d = ruta.getPath() + "/pie_Chart3D" + "_" + System.currentTimeMillis() + ".jpeg";
         pieChart3d = new File(rutaPieChart3d);
         try {
             ChartUtilities.saveChartAsJPEG(pieChart3d, chart, 600, 400);
@@ -105,11 +106,11 @@ public class PanelEstadistica extends javax.swing.JPanel {
             dataset.addValue(diferencia, "Beneficio", nota.getFecha());
         }
         JFreeChart barChart = ChartFactory.createBarChart3D("Estadistica de Cobros", "Fecha", "Dinero", dataset, PlotOrientation.VERTICAL, true, true, true);
-        
+
         if (barChart3d != null && barChart3d.exists()) {
             barChart3d.delete();
         }
-        rutaBarChart3d = "imagenes/barChart2d" + "_" + System.currentTimeMillis() + ".jpeg";
+        rutaBarChart3d = ruta.getPath() + "/barChart2d" + "_" + System.currentTimeMillis() + ".jpeg";
         barChart3d = new File(rutaBarChart3d);
 
         try {
@@ -131,7 +132,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         if (lineChart != null && lineChart.exists()) {
             lineChart.delete();
         }
-        rutaLineChart = "imagenes/lineChart" + "_" + System.currentTimeMillis() + ".jpeg";
+        rutaLineChart = ruta.getPath() + "/lineChart" + "_" + System.currentTimeMillis() + ".jpeg";
         lineChart = new File(rutaLineChart);
         try {
             ChartUtilities.saveChartAsJPEG(lineChart, barChart, 600, 400);

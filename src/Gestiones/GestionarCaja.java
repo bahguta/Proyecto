@@ -5,6 +5,7 @@
  */
 package Gestiones;
 
+import Dto.NotaLibroDiario;
 import Dto.Persona;
 import Dto.Producto;
 import Logica.LogicaNegocio;
@@ -18,8 +19,12 @@ import javax.swing.JOptionPane;
  */
 public class GestionarCaja {
 
-    public static double CAJA = 0d;
+    private double CAJA;
+    private LogicaNegocio logica; 
 
+    public GestionarCaja() {
+        this.CAJA = 0;
+    }
     /**
      * Metodo para gestionar la venta y la compra de la empresa.
      *
@@ -33,8 +38,11 @@ public class GestionarCaja {
      * @return retorna un booleano , true en caso de que se ha echo
      * correctamente la venta/compra y false en caso contrario
      */
-    public static boolean ventaCompra(JFrame frame, LogicaNegocio logica, Persona p, List<Producto> lista, double precio, GestionarInventario g) {
-        if (p.getTipo().equals("CLIENTE")) {
+    public boolean ventaCompra(JFrame frame, Persona p, List<Producto> lista, double precio, GestionarInventario g) {
+        System.out.println(CAJA);
+        
+        
+        if (p.getTipo().equalsIgnoreCase("CLIENTE")) {
             //venta
             for (Producto producto : lista) {
                 int cantidad = g.getProducto(producto.getCodProducto()).getCantidad() - producto.getCantidad();
@@ -42,25 +50,60 @@ public class GestionarCaja {
                     JOptionPane.showMessageDialog(frame, "Insuficiente Producto en stock.");
                     return false;
                 }
-                CAJA += precio;
+                //sumaCAJA(precio);
+
                 g.modificarProducto(producto.getCodProducto(), producto.getNombre(), producto.getPrecio(), producto.getPeso(), cantidad);
-                g.getProducto(producto.getCodProducto()).setCantidad(cantidad);
+                //g.getProducto(producto.getCodProducto()).setCantidad(cantidad);
             }
         } else {
             //compra
             for (Producto producto : lista) {
+                double total = 0;
                 int cantidad = g.getProducto(producto.getCodProducto()).getCantidad() + producto.getCantidad();
-                double total = CAJA - precio;
-                if (CAJA < 0) {
+                total = CAJA - precio;
+                if (total < 0) {
                     JOptionPane.showMessageDialog(frame, "Insuficiente Dinero.");
                     return false;
                 }
-                CAJA -= precio;
+               // restaCAJA(total);
+                //CAJA -= precio;
                 g.modificarProducto(producto.getCodProducto(), producto.getNombre(), producto.getPrecio(), producto.getPeso(), cantidad);
 
             }
         }
         return true;
     }
+    
+    public double actualizarCaja(GestionarNotasLibro gLbro){
+        
+        double cobros = 0;
+        double gastos = 0;
+        
+        for (NotaLibroDiario nota : gLbro.getListaNotas()) {
+            cobros += nota.getHaber();
+            gastos += nota.getDebe();
+        }
+        
+        CAJA = cobros - gastos;
+        
+        return cobros - gastos;
+        
+    }
+    
+
+    public void sumaCAJA(double valor) {
+        this.CAJA += valor;
+    }
+    
+    public void restaCAJA(double valor){
+        this.CAJA -= valor;
+    }
+
+    public  void setCAJA(double valor) {
+        this.CAJA = valor;
+    }
+
+   
+    
 
 }

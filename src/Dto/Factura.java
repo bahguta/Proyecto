@@ -7,6 +7,7 @@ package Dto;
 import java.io.*;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 /**
  *
  * @author Plam
@@ -78,5 +79,13 @@ public class Factura implements Serializable{
     }
     
     ////// Fin Getter Setter //////
+
+    @Override
+    public String toString() {
+        return "Factura{" + "codFactura=" + codFactura + ", fecha=" + fecha + ", trabajos=" + trabajos + ", listaProductos=" + listaProductos + ", precio=" + precio + '}';
+    }
+    private static final Logger LOG = Logger.getLogger(Factura.class.getName());
+    
+    
     
 }

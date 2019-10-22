@@ -5,6 +5,8 @@
  */
 package Dto;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author Plam
@@ -13,22 +15,13 @@ public class Usuario {
     
     private String nombre;
     private String pass;
-//    private List<Persona> listaPersonas;
-//    private List<NotaLibroDiario> listaNotasLibroDiario;
+
 
     public Usuario(String nombre, String pass) {
-//        this.listaPersonas = listaPersonas;
-//        this.listaNotasLibroDiario = listaNotasLibroDiario;
         this.nombre = nombre;
         this.pass = pass;
     }
 
-//    public Usuario() {
-//        listaPersonas = new LinkedList<>();
-//        listaNotasLibroDiario = new LinkedList<>();
-//        this.nombre = nombre;
-//        this.pass = pass;
-//    }
 
     public String getNombre() {
         return nombre;
@@ -41,4 +34,11 @@ public class Usuario {
     public void setPass(String pass){
         this.pass = pass;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "nombre=" + nombre + ", pass=" + pass + '}';
+    }
+    private static final Logger LOG = Logger.getLogger(Usuario.class.getName());
+    
 }

@@ -6,7 +6,6 @@
 package TableModels;
 
 import Dto.NotaLibroDiario;
-import Gestiones.GestionarCaja;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -18,6 +17,9 @@ import javax.swing.table.AbstractTableModel;
  * @author Plam
  */
 public class CajaTableModel extends AbstractTableModel{
+    
+    
+    private static DecimalFormat df = new DecimalFormat("#.##");
     
     private List <NotaLibroDiario> listanotas;
     private String [] listaColumnas = new String [] {"ID_Nota", "Fecha", "Debe", "Haber", "Caja"};
@@ -51,7 +53,7 @@ public class CajaTableModel extends AbstractTableModel{
             case 3:
                 return listanotas.get(rowIndex).getHaber();
             case 4:
-                return GestionarCaja.CAJA;
+                return formater.format(listanotas.get(rowIndex).getHaber() - listanotas.get(rowIndex).getDebe());
         }
         return null;
     }
@@ -75,5 +77,10 @@ public class CajaTableModel extends AbstractTableModel{
             total += listanota.getHaber();
         }
         return total;
+    }
+    
+    public double getTotal(){
+        return getTotalHaber() - getTotalDebe();
+        
     }
 }

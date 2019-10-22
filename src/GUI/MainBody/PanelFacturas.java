@@ -321,8 +321,13 @@ public class PanelFacturas extends javax.swing.JPanel {
     }//GEN-LAST:event_jTableFacturasMouseClicked
 
     private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
-        
-        System.out.println("antes run");
+//        if (jComboBox.getSelectedItem().toString().equalsIgnoreCase("Clientes")) {
+//            jTablePersonas.setModel(new PersonasTableModel(logica.getListaClientes()));
+//        } else if (jComboBox.getSelectedItem().toString().equalsIgnoreCase("Proveedores")) {
+//            jTablePersonas.setModel(new PersonasTableModel(logica.getListaProveedores()));
+//        } else {
+//            jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
+//        }
         
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -330,15 +335,12 @@ public class PanelFacturas extends javax.swing.JPanel {
 
                 switch (jComboBoxTipo.getSelectedIndex()) {
                     case 1:
-                        System.out.println("1");
                         jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasClientes()));
                         break;
                     case 2:
-                        System.out.println("2");
                         jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasProveedores()));
                         break;
                     default:
-                        System.out.println("todas");
                         jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
                         break;
                 }

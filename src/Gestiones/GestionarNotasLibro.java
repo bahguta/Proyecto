@@ -32,7 +32,7 @@ public class GestionarNotasLibro {
     public GestionarNotasLibro(ConexionBBDD conexion) {
         this.conexion = conexion;
         this.listaNotas = new ArrayList<>();
-        this.sdf = new SimpleDateFormat("dd/MM/yyyy");
+        this.sdf = new SimpleDateFormat("yyyy/MM/dd");
     }
 
     /**
@@ -75,9 +75,10 @@ public class GestionarNotasLibro {
      */
     public int addNota(Date fecha, Double debe, Double haber, String detalle) {
         int filas = 0;
-        String consulta = "insert into nota (ID_nota, fecha, detalle, debe, haber) values ( ID_NOTA_SEQ.nextVal , TO_DATE('" + sdf.format(fecha) + "'),'" + detalle + "', " + debe + ", " + haber + ")";
+        String consulta = "insert into nota (fecha, detalle, debe, haber) values ('" + sdf.format(fecha) + "','" + detalle + "', " + debe + ", " + haber + ")";
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Notas Insertadas: " + filas);
+        System.out.println(sdf.format(fecha));
         refrescarListaNotas();
         return filas;
     }
@@ -113,7 +114,7 @@ public class GestionarNotasLibro {
      * Metodo para refrescar la lista de las notas
      */
     private void refrescarListaNotas() {
-        String consulta = "Select * from nota";
+        String consulta = "select * from nota";
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         if (resultado != null) {
             try {

@@ -5,8 +5,13 @@
  */
 package GUI.MainBody;
 
+import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
@@ -14,13 +19,27 @@ import javax.swing.JFrame;
  */
 public class PanelCompra extends javax.swing.JPanel {
 
+    private static final long serialVersionUID = 1L;
+
+    private LogicaNegocio logica;
+    private List<JLabel> listaLabelsH2;
+
     /**
      * Creates new form PanelCompra
      */
-    public PanelCompra(JFrame frame) {
+    public PanelCompra(JFrame frame, LogicaNegocio logica) {
         initComponents();
-
         setBorder(LogicaTemas.GET_TITLE_BORDER("Compras"));
+
+        this.logica = logica;
+        
+        listaLabelsH2 = new ArrayList<>();
+        listaLabelsH2.add(jLabel1H2);
+        listaLabelsH2.add(jLabel2H2);
+        listaLabelsH2.add(jLabel3H2);
+
+        LogicaTemas.addListJLabel("JLabelH2LibroDiario", listaLabelsH2);
+
     }
 
     /**
@@ -32,38 +51,152 @@ public class PanelCompra extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSpinner1 = new javax.swing.JSpinner();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonBorrar = new javax.swing.JButton();
+        jButtonHacerPedido = new javax.swing.JButton();
+        jButtonLimpiar = new javax.swing.JButton();
+        jLabel1H2 = new javax.swing.JLabel();
+        jLabel2H2 = new javax.swing.JLabel();
+        jLabel3H2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableProveedores = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableProductosProveedor = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableProductosUsuario = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(901, 500));
 
-        jPasswordField1.setText("jPasswordField1");
+        jButtonAdd.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonAdd.setText("Añadir");
+
+        jButtonBorrar.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonBorrar.setText("Borrar");
+
+        jButtonHacerPedido.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonHacerPedido.setText("Hacer Pedido");
+
+        jButtonLimpiar.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonLimpiar.setText("Limpiar");
+
+        jLabel1H2.setText("Proveedores");
+
+        jLabel2H2.setText("Productos por proveedor");
+
+        jLabel3H2.setText("Productos a comprar");
+
+        jTableProveedores.setFont(LogicaTemas.TEXT_FONT_H1);
+        jTableProveedores.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTableProveedores);
+
+        jTableProductosProveedor.setFont(LogicaTemas.TEXT_FONT_H1);
+        jTableProductosProveedor.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTableProductosProveedor);
+
+        jTableProductosUsuario.setFont(LogicaTemas.TEXT_FONT_H1);
+        jTableProductosUsuario.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTableProductosUsuario);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(306, Short.MAX_VALUE)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(81, 81, 81)
-                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(374, 374, 374))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1H2)
+                        .addGap(0, 716, Short.MAX_VALUE)
+                        .addComponent(jLabel2H2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3H2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonBorrar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonAdd))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonLimpiar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonHacerPedido))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(256, 256, 256)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(321, Short.MAX_VALUE))
+                    .addComponent(jLabel1H2)
+                    .addComponent(jLabel2H2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3H2)
+                    .addComponent(jButtonAdd)
+                    .addComponent(jButtonBorrar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonHacerPedido)
+                    .addComponent(jButtonLimpiar))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonBorrar;
+    private javax.swing.JButton jButtonHacerPedido;
+    private javax.swing.JButton jButtonLimpiar;
+    private javax.swing.JLabel jLabel1H2;
+    private javax.swing.JLabel jLabel2H2;
+    private javax.swing.JLabel jLabel3H2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTableProductosProveedor;
+    private javax.swing.JTable jTableProductosUsuario;
+    private javax.swing.JTable jTableProveedores;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelCompra.class.getName());
 }

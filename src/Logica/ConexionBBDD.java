@@ -18,51 +18,75 @@ import java.sql.Statement;
  */
 public class ConexionBBDD {
 
-    Connection conexion = null;
-    Statement stmtSQL = null;
-    PreparedStatement pstmtSQL = null;
+    private Connection conexion = null;
+    private Statement stmtSQL = null;
+    private PreparedStatement pstmtSQL = null;
     private String user;
     private String host;
     private String pass;
-    private int puerto; 
+    private int puerto;
     private String bdName;
+    private boolean isConnected = false;
 
-//    //abre una conexion a la base de datos
-//    public void conexionBBDD(String nomEqui, String nomBBDD, int puerto, String usr, String pwd) {
-//        System.out.println("-----------------------------------");
-//        System.out.println("Conectando a la BBDD ...");
-//        try {
-//            Class.forName("oracle.jdbc.OracleDriver").newInstance();
-//        } catch (ClassNotFoundException ex) {
-//            System.out.println("Error con el driver,comprueba que lo has metido en el proyecto y que es el correcto");
-//        } catch (InstantiationException ex) {
-//            Logger.getLogger(ConexionBBDD.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            Logger.getLogger(ConexionBBDD.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        //defino la url que se usará para la conexion; 
-//        String url = "jdbc:oracle:thin:@" + nomEqui + ":" + puerto + ":" + nomBBDD;
-//        System.out.println("-> " + url);
-//        try {
-//            conexion = DriverManager.getConnection(url, usr, pwd);
-//            if (conexion != null) {
-//                System.out.println("-----------------------------------");
-//                System.out.println("BBDD conexión establecida con exito");
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Error al conectar con la BBDD, compruebe si está levantada");
-//        }
-//
-//    }
-    //abre una conexion a la base de datos
+    //abre una conexion a la base de datos con MySql
+    public boolean conexionBBDDMySql(String nomEqui, int puerto, String nomBBDD, String usr, String pwd) {
+        host = nomEqui;
+        user = usr;
+        pass = pwd;
+        this.puerto = puerto;
+        bdName = nomBBDD;
+
+        System.out.println("------------------------");
+        System.out.println("Conectando a la BBDD ...");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("-----------------------------------------------------------------------------------");
+            System.out.println("Error con el driver,comprueba que lo has metido en el proyecto y que es el correcto");
+            return false;
+        }
+
+        //defino la url que se usará para la conexion; 1521 para oracle
+        //jdbc:mysql://localhost:3306/karthicraj","mysql","mysql"
+        String url = "jdbc:mysql://" + nomEqui + ":" + puerto + "/" + nomBBDD;
+        System.out.println(url);
+        try {
+            //creo la conexion
+            conexion = DriverManager.getConnection(url, usr, pwd);
+            if (conexion != null) {
+                System.out.println("------------------------------");
+                System.out.println("Conexión establecida con exito");
+                isConnected = true;
+                return true;
+            }
+        } catch (SQLException ex) {
+            //System.out.println("Fallo en la conexion; verificar BBDD, nombre equipo, usuario o contraseña");
+            System.out.println("Error al conectar con la BBDD, compruebe si está levantada");
+            //System.exit(1);
+            return false;
+        }
+        return false;
+
+    }
+
+    public boolean isConexionExitosa() {
+        return isConnected;
+    }
+
+    public void conexionBBDD(Object o) {
+        if (o == null) {
+            isConnected = false;
+        }
+    }
+
+    //abre una conexion a la base de datos con Oracle
     public boolean conexionBBDD(String nomEqui, int puerto, String nomBBDD, String usr, String pwd) {
         host = nomEqui;
         user = usr;
         pass = pwd;
         this.puerto = puerto;
         bdName = nomBBDD;
-        
+
         System.out.println("------------------------");
         System.out.println("Conectando a la BBDD ...");
         try {
@@ -82,6 +106,7 @@ public class ConexionBBDD {
             if (conexion != null) {
                 System.out.println("------------------------------");
                 System.out.println("Conexión establecida con exito");
+                isConnected = true;
                 return true;
             }
         } catch (SQLException ex) {
@@ -93,25 +118,24 @@ public class ConexionBBDD {
         return false;
 
     }
-    
-    
-    public String getHost(){
+
+    public String getHost() {
         return host;
     }
-    
-    public String getUser(){
+
+    public String getUser() {
         return user;
     }
-    
-    public String getPass(){
+
+    public String getPass() {
         return pass;
     }
-    
-    public int getPuerto(){
+
+    public int getPuerto() {
         return puerto;
     }
-    
-    public String getBBDDName(){
+
+    public String getBBDDName() {
         return bdName;
     }
 
@@ -130,11 +154,16 @@ public class ConexionBBDD {
         } catch (SQLException ex) {
             //Logger.getLogger(MetodosBBDD.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Error al cerrar la conexion a la BBDD");
+        } finally {
+            isConnected = false;
         }
     }
 
     //metodo para ejecutar una Statement SELECT
     public ResultSet ejecutarStatementSELECT(String sql, int tipoResultado, int tipoActualizacion) {
+        if (!isConnected) {
+            return null;
+        }
         ResultSet juegoResultados = null;
         try {
             // Para crear un Statement
@@ -153,6 +182,9 @@ public class ConexionBBDD {
 
     //metodo para ejecutar una Statement UPDATE, INSERT, UPDATE
     public int ejecutarStatementNOSELECT(String sql, int tipoResultado, int tipoActualizacion) {
+        if (!isConnected) {
+            return -1;
+        }
         int numFilasResultadoConsulta = 0;
         try {
             // Para crear un Statement
@@ -168,6 +200,9 @@ public class ConexionBBDD {
     // ejecutarPreparedStatementSelect o ejecutarPreparedStatementNoSelect
     //carga en el atributo pstmt el prepare statement
     public void crearPreparedStatement(String sql, int tipoResultado, int tipoActualizacion) {
+        if (!isConnected) {
+            return;
+        }
         try {
             // Para crear un PreparedStatement para ejecutar posteriormente
             if (conexion == null) {
@@ -185,6 +220,9 @@ public class ConexionBBDD {
     //metodo para ejecutar una PreparedStatement SELECT
     //usando la preparedStatement almacenada en el atributo pstmt
     public ResultSet ejecutarPreparedStatementSELECT() {
+        if (!isConnected) {
+            return null;
+        }
         ResultSet resultadoConsulta = null;
         try {
             resultadoConsulta = pstmtSQL.executeQuery();
@@ -197,6 +235,9 @@ public class ConexionBBDD {
     //metodo para ejecutar una PreparedStatement UPDATE, INSERT, UPDATE
     //usando la preparedStatement almacenada en el atributo pstmt
     public int ejecutarPreparedStatementNOSELECT() {
+        if (!isConnected) {
+            return -1;
+        }
         int numFilasAfectadasSQL = 0;
         try {
             numFilasAfectadasSQL = pstmtSQL.executeUpdate();

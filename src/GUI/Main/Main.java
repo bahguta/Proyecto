@@ -26,6 +26,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -40,27 +41,30 @@ import org.openide.util.Exceptions;
 
 /**
  *
- * 
+ *
  *
  * Este Proyecto ha sido desarollado para la asignatura "Proyecto" del instituto
  * IES Juan Jose Calvo Miguel - Sotrondio
  *
- * El programa se concentra en el manejo de las notas diarias que se van tomando, 
- * el stock de los productos que entran (compra) y salen (Venta) de la empresa, 
- * las personas sean clientes o provedoores y manejo de facturas.
+ * El programa se concentra en el manejo de las notas diarias que se van
+ * tomando, el stock de los productos que entran (compra) y salen (Venta) de la
+ * empresa, las personas sean clientes o provedoores y manejo de facturas.
+ *
  * @author Plam
  */
-
 public class Main extends javax.swing.JFrame implements MenuListener {
+
+    private static final Logger LOG = Logger.getLogger(Main.class.getName());
 
     public final static int MIN_LARGO = 1400;
     public final static int MIN_ALTO = 900;
     private static double VERSION = 1.0;
+    private static final long serialVersionUID = 1L;
     private LogicaNegocio logica = null;
     private GestionarCaja gestionarCaja = null;
 
     private CardLayout cardLayout;
-    private static JPanel panelAjustes, panelAjuste, 
+    private static JPanel panelAjustes, panelAjuste,
             panelLibroDiario,
             panelCaja,
             panelInventario,
@@ -71,14 +75,14 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             panelFacturas,
             panelAyuda;
     private Usuario usuario;
-   // private JScrollPane scrollPane;
+    // private JScrollPane scrollPane;
 
     /**
-     * Constructor: 
+     * Constructor:
      */
     public Main() {
         Login login = new Login(this, true);
-        login.setVisible(true); 
+        login.setVisible(true);
         usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
         //Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/icono.png"));
 
@@ -88,9 +92,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         Image img = new ImageIcon(getClass().getResource("/img/icono.png")).getImage();
         setIconImage(img);
         //this.setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
-        
+
         LogicaTemas logicaTemas = new LogicaTemas();
-        gestionarCaja = new GestionarCaja();
+
         /**
          * Activar para usar SSH Tunel para conectar a la base de datos del
          * servidor (Comentar la linia de BBDD servidor)
@@ -101,11 +105,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 //        } else {
 //            conexionLocal();
 //        }
-
         conexion(login.getNombre(), login.getPass(), login.getHost(), login.getPuerto(), login.getNombreBBDD());
         //conexion();
-        
-      
+
         BoxLayout boxLayout = new BoxLayout(getContentPane(), BoxLayout.Y_AXIS);
         //boxLayout.getTarget().setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
 
@@ -122,8 +124,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         panelLibroDiario = new PanelLibroDiario(this, logica);
         panelCaja = new PanelCaja(this, logica);
         panelInventario = new PanelInventario(this, logica);
-        panelCompra = new PanelCompra(this);
-        panelVenta = new PanelVenta(this);
+        panelCompra = new PanelCompra(this, logica);
+        panelVenta = new PanelVenta(this, logica);
         panelPersonas = new PanelPersonas(this, logica);
         panelEstadistica = new PanelEstadistica(this, logica);
         panelFacturas = new PanelFacturas(this, logica);
@@ -150,7 +152,10 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         menuEstadistica.addMenuListener(this);
         menuFacturas.addMenuListener(this);
         menuAyuda.addMenuListener(this);
-
+        
+        
+        //logica.setCaja();
+        //gestionarCaja = new GestionarCaja();
         jLabelVersion.setText(Main.GET_VERSION() + "");
     }
 
@@ -158,12 +163,16 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         return Main.VERSION;
     }
 
-    private void conexion(){
+    private void conexion() {
         logica = new LogicaNegocio();
     }
-    
+
     private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
-        logica = new LogicaNegocio(nombre, pass, host, puerto, nombreBBDD);
+        logica = new LogicaNegocio(this, nombre, pass, host, puerto, nombreBBDD);
+    }
+    
+    public static void actualizarPanelCaja(){
+        ((PanelCaja) panelCaja).actualizarCaja();
     }
 
 //    private void conexionLocal() {

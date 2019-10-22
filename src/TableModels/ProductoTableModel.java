@@ -61,37 +61,32 @@ public class ProductoTableModel extends AbstractTableModel{
     public String getColumnName(int i) {
         return listaColumnas[i];
     }
+
+    /**
+     * 
+     * Metodo para buscar la posicion en la tabla de un producto
+     * 
+     * @param id_producto  el ID del producto que se busca
+     * @return retorna el producto encontrado
+     * @throws NullPointerException 
+     */
+    public int getRowProducto(int id_producto){
+        
+        for (int i = 0; i < listaProductos.size()-1; i++) {
+            if ((int) getValueAt(i, 0) == id_producto) {
+                return i;
+            }
+        }
+        return -1;
+    }
     
-//    @Override
-//    public boolean isCellEditable(int row, int column) { // custom isCellEditable function
-//        return this.editable_cells[row][column];
-//    }
-//
-//    public void setCellEditable(int row, int col, boolean value) {
-//        this.editable_cells[row][col] = value; // set cell true/false
-//        
-//        for (int i = 0; i < this.editable_cells.length-1; i++) {
-//            this.editable_cells[i][this.editable_cells.length-1] = true;
-//        }
-//        
-//        
-//        this.fireTableCellUpdated(row, col);
-//    }
-//    
-//    public double getTotalDebe(){
-//        double total = 0d;
-//        for (Producto listanota : listaProductos) {
-//            total += listanota.getDebe();
-//        }
-//        return total;
-//    }
-//    
-//    public double getTotalHaber(){
-//        double total = 0d;
-//        for (NotaLibroDiario listanota : listanotas) {
-//            total += listanota.getHaber();
-//        }
-//        return total;
-//    }
+    public Producto getProducto(int id_producto) throws NullPointerException{
+        for (Producto producto : listaProductos) {
+            if (producto.getCodProducto() == id_producto) {
+                return producto;
+            }
+        }
+        return null;
+    }
     
 }
