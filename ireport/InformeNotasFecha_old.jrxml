@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InformeNotas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a1bf312-9bb3-42a4-b7c0-ecdc5a3cd0ef">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="proyecto"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value="Ik5PVEEiICwxNSwxNSwxYzcwMjQxZC1iNDQwLTRkZDgtODZmNy01ZGNlNjllNDQ3MGE7"/>
-	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="419"/>
 	<parameter name="ID_NOTA" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
@@ -14,38 +12,33 @@
 	<parameter name="Fecha" class="java.sql.Date">
 		<parameterDescription><![CDATA[Fecha]]></parameterDescription>
 	</parameter>
-	<parameter name="ID_nota" class="java.lang.Integer">
-		<defaultValueExpression><![CDATA[$F{ID_nota}]]></defaultValueExpression>
-	</parameter>
-	<parameter name="total" class="java.lang.Double">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
-	<parameter name="total_bigInt" class="java.math.BigDecimal">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
-	</parameter>
 	<queryString>
-		<![CDATA[select * from nota where nota.fecha = $P{Fecha}]]>
+		<![CDATA[SELECT *
+FROM "NOTA"
+WHERE 
+	 "NOTA"."FECHA" = $P{Fecha}]]>
 	</queryString>
-	<field name="ID_nota" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+	<field name="ID_NOTA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="ID_NOTA"/>
 	</field>
-	<field name="fecha" class="java.sql.Date">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+	<field name="FECHA" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="FECHA"/>
 	</field>
-	<field name="detalle" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+	<field name="DETALLE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="DETALLE"/>
 	</field>
-	<field name="debe" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+	<field name="DEBE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="DEBE"/>
 	</field>
-	<field name="haber" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
+	<field name="HABER" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="HABER"/>
 	</field>
+	<sortField name="ID_NOTA"/>
 	<variable name="HABER" class="java.lang.Double" resetType="Page" calculation="Sum">
-		<variableExpression><![CDATA[$F{haber}]]></variableExpression>
+		<variableExpression><![CDATA[$F{HABER}]]></variableExpression>
 	</variable>
 	<variable name="DEBE" class="java.lang.Double" resetType="Page" calculation="Sum">
-		<variableExpression><![CDATA[$F{debe}]]></variableExpression>
+		<variableExpression><![CDATA[$F{DEBE}]]></variableExpression>
 	</variable>
 	<variable name="Total" class="java.lang.Double">
 		<variableExpression><![CDATA[$V{HABER} -$V{DEBE}]]></variableExpression>
@@ -55,7 +48,7 @@
 		<variableExpression><![CDATA[$P{Nota}]]></variableExpression>
 	</variable>
 	<variable name="f" class="java.sql.Timestamp">
-		<variableExpression><![CDATA[$F{fecha}]]></variableExpression>
+		<variableExpression><![CDATA[$F{FECHA}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -74,18 +67,18 @@
 	<pageHeader>
 		<band height="56" splitType="Stretch">
 			<textField>
-				<reportElement x="295" y="12" width="249" height="28" uuid="625e0b15-44e7-4d84-8100-138ffa5b4497"/>
-				<textElement textAlignment="Center">
-					<font size="16"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Fecha: " + $F{fecha}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="10" y="13" width="280" height="30" uuid="142a4a6f-759c-47e6-b63d-68123700edfc"/>
+				<reportElement x="210" y="12" width="334" height="28" uuid="625e0b15-44e7-4d84-8100-138ffa5b4497"/>
 				<textElement textAlignment="Left">
 					<font size="16"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Nota # " + $F{ID_nota}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="13" width="180" height="30" uuid="142a4a6f-759c-47e6-b63d-68123700edfc"/>
+				<textElement textAlignment="Right">
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{Nota}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -115,26 +108,26 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="363" splitType="Stretch">
+		<band height="80" splitType="Stretch">
 			<textField>
 				<reportElement x="10" y="10" width="263" height="60" uuid="cc58acd8-39a2-4e03-b268-06b83810b670">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="89309820-e1c1-4099-80bd-904d71ea6c89"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{detalle}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{DETALLE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="290" y="10" width="110" height="30" uuid="9a65a5a7-d987-4760-a88d-27780b41540c">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0fb3ba9-7e63-4807-9a97-86da497d8b3a"/>
 				</reportElement>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{debe}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{DEBE}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="420" y="10" width="124" height="30" uuid="6cf06827-f4d2-4aec-9f38-9d869ee84268">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="aa4413a4-93e4-4a82-887b-79945b7b5345"/>
 				</reportElement>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{haber}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{HABER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -145,16 +138,14 @@
 				<textElement textAlignment="Right" rotation="None">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Total:     " +    + $V{Total}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Total:     " +    $V{Total}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="432" y="10" width="100" height="20" uuid="aa3afa7b-46a4-4754-818c-6e184661ee66"/>
-				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{HABER}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="295" y="10" width="100" height="20" uuid="e623c474-9a05-4f17-b75f-5d468abd2285"/>
-				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$V{DEBE}]]></textFieldExpression>
 			</textField>
 		</band>
