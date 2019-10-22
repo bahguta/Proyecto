@@ -5,6 +5,8 @@
  */
 package Dto;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author Plam
@@ -83,5 +85,6 @@ public class Persona {
     public String toString() {
         return "Persona{" + "cod=" + cod + ", nombre=" + nombre + ", apellido=" + apellido + ", direccion=" + direccion + ", telefono=" + telefono + ", email=" + email + ", tipo=" + tipo + '}';
     }
+    private static final Logger LOG = Logger.getLogger(Persona.class.getName());
     
 }

@@ -5,8 +5,16 @@
  */
 package GUI.MainBody;
 
+import Dto.Producto;
+import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
+import TableModels.PersonaCortoTableModel;
+import TableModels.ProductoTableModel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
@@ -14,10 +22,19 @@ import javax.swing.JFrame;
  */
 public class PanelVenta extends javax.swing.JPanel {
 
+    private static final long serialVersionUID = 1L;
+
+    private List<JLabel> listaLabelsH2;
+    private LogicaNegocio logica;
+    private PersonaCortoTableModel pctm; // para jtableClientes
+    private ProductoTableModel ptm; //para jtableProductosStock
+    private ProductoTableModel ptmpc; //para jtableProductosCliente
+    private List<Producto> listaProductos; //para los productos que va a comprar el cliente 
+
     /**
      * Creates new form PanelVenta
      */
-    public PanelVenta(JFrame frame) {
+    public PanelVenta(JFrame frame, LogicaNegocio logica) {
         initComponents();
 //        Font font = new Font(Font.MONOSPACED, Font.BOLD, 20);
 //        Border bGreyLine = BorderFactory.createLineBorder(Color.CYAN, 2, true);
@@ -25,6 +42,25 @@ public class PanelVenta extends javax.swing.JPanel {
 //        TitledBorder titledBorder = new TitledBorder(border);
         setBorder(LogicaTemas.GET_TITLE_BORDER("Ventas"));
         //setMinimumSize(new Dimension(Main.MIN_LARGO, Main.MIN_ALTO));
+        this.logica = logica;
+        listaLabelsH2 = new ArrayList<>();
+        listaLabelsH2.add(jLabel1H2);
+        listaLabelsH2.add(jLabel2H2);
+        listaLabelsH2.add(jLabel3H2);
+
+        LogicaTemas.addListJLabel("JLabelH2LibroDiario", listaLabelsH2);
+
+        listaProductos = new ArrayList<>();
+
+        pctm = new PersonaCortoTableModel(this.logica.getListaClientes());
+        jTableClientes.setModel(pctm);
+
+        ptmpc = new ProductoTableModel(listaProductos);
+        jTableProductosCliente.setModel(ptmpc);
+
+        ptm = new ProductoTableModel(this.logica.getListaProductos());
+        jTableProductosStock.setModel(ptm);
+
     }
 
     /**
@@ -36,38 +72,212 @@ public class PanelVenta extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSlider1 = new javax.swing.JSlider();
-        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableClientes = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableProductosStock = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableProductosCliente = new javax.swing.JTable();
+        jButtonAdd = new javax.swing.JButton();
+        jButtonBorrar = new javax.swing.JButton();
+        jButtonHacerPedido = new javax.swing.JButton();
+        jButtonLimpiar = new javax.swing.JButton();
+        jLabel1H2 = new javax.swing.JLabel();
+        jLabel2H2 = new javax.swing.JLabel();
+        jLabel3H2 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(901, 500));
 
-        jLabel1.setText("jLabel1");
+        jTableClientes.setFont(LogicaTemas.TEXT_FONT);
+        jTableClientes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTableClientes);
+
+        jTableProductosStock.setFont(LogicaTemas.TEXT_FONT);
+        jTableProductosStock.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTableProductosStock);
+
+        jTableProductosCliente.setFont(LogicaTemas.TEXT_FONT);
+        jTableProductosCliente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTableProductosCliente);
+
+        jButtonAdd.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonAdd.setText("Añadir");
+        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddActionPerformed(evt);
+            }
+        });
+
+        jButtonBorrar.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonBorrar.setText("Borrar");
+        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarActionPerformed(evt);
+            }
+        });
+
+        jButtonHacerPedido.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonHacerPedido.setText("Hacer Pedido");
+
+        jButtonLimpiar.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonLimpiar.setText("Limpiar");
+
+        jLabel1H2.setText("Clientes");
+
+        jLabel2H2.setText("Productos en stock");
+
+        jLabel3H2.setText("Productos a vender");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(103, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(97, 97, 97))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonLimpiar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonHacerPedido))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 883, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3H2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonBorrar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonAdd))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1H2)
+                                .addGap(324, 324, 324)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2H2)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(52, 52, 52)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(128, 128, 128))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1H2)
+                    .addComponent(jLabel2H2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonAdd)
+                        .addComponent(jButtonBorrar))
+                    .addComponent(jLabel3H2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonHacerPedido)
+                    .addComponent(jButtonLimpiar))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
+        int id_producto = (Integer) jTableProductosStock.getValueAt(jTableProductosStock.getSelectedRow(), 0);
+        System.out.println(id_producto);
+        if (id_producto == -1) {
+            return;
+        }
+        Producto p = logica.getProductoPorID(id_producto);
+        if (p != null && p.getCantidad() > 0) {
+            for (Producto producto : listaProductos) {
+                if (producto.getCodProducto() == p.getCodProducto()) {
+                    producto.setCantidad(producto.getCantidad() + 1);
+                    jTableProductosCliente.setModel(new ProductoTableModel(listaProductos));
+                    return;
+                }
+            }
+
+            p.setCantidad(1);
+            listaProductos.add(p);
+            jTableProductosCliente.setModel(new ProductoTableModel(listaProductos));
+        }
+
+    }//GEN-LAST:event_jButtonAddActionPerformed
+
+    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
+        if (jTableProductosCliente.getSelectedRow() == -1) {
+            return;
+        }
+        int id_producto = (Integer) jTableProductosCliente.getValueAt(jTableProductosCliente.getSelectedRow(), 0);
+
+        //borro el producto de la lista 
+        listaProductos.remove(ptmpc.getProducto(id_producto));
+        for (Producto producto : listaProductos) {
+            if (producto.getCodProducto() == id_producto) {
+                if (producto.getCantidad() - 1 <= 0) {
+                    producto.setCantidad(0);
+                }
+            }
+        }
+        //vuelvo a añadir la lista en el model del jtable
+        ptmpc = new ProductoTableModel(listaProductos);
+        jTableProductosCliente.setModel(ptmpc);
+
+    }//GEN-LAST:event_jButtonBorrarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JSlider jSlider1;
+    private javax.swing.JButton jButtonAdd;
+    private javax.swing.JButton jButtonBorrar;
+    private javax.swing.JButton jButtonHacerPedido;
+    private javax.swing.JButton jButtonLimpiar;
+    private javax.swing.JLabel jLabel1H2;
+    private javax.swing.JLabel jLabel2H2;
+    private javax.swing.JLabel jLabel3H2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTableClientes;
+    private javax.swing.JTable jTableProductosCliente;
+    private javax.swing.JTable jTableProductosStock;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelVenta.class.getName());
 }

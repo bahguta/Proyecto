@@ -44,6 +44,7 @@ public class GestionarPersonas {
         refrescarListaPersonas();
         for (Persona persona : listaPersonas) {
             if (nombre.contains(persona.getNombre()) && nombre.contains(persona.getApellido())) {
+                System.out.println("Persona enconrada: " + persona.toString());
                 return persona;
             }
         }
@@ -140,7 +141,7 @@ public class GestionarPersonas {
      */
     public int borrarPersona(int ID_persona) {
         int filas = 0;
-        String consulta = "delete from persona where ID_persona = " + ID_persona;
+        String consulta = "delete from persona where ID_PERSONA = " + ID_persona;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         //refresco la lista para que actualize los objetos por si hubo cambios
         refrescarListaPersonas();
@@ -156,7 +157,7 @@ public class GestionarPersonas {
      * @return retorna las filas actualizadas 
      */
     public int modificarPersona(Persona p) {
-        String consulta = "update persona set nombre = '" + p.getNombre() + "', apellido = '" + p.getApellido() + "', telefono =" + p.getTelefono() + ", direccion = '" + p.getDireccion() + "', email = '" + p.getEmail() + "', typo = '" + p.getTipo() + "' where ID_persona = " + p.getCodPersona();
+        String consulta = "update persona set nombre = '" + p.getNombre() + "', apellido = '" + p.getApellido() + "', telefono =" + p.getTelefono() + ", direccion = '" + p.getDireccion() + "', email = '" + p.getEmail() + "', type = '" + p.getTipo() + "' where ID_PERSONA = " + p.getCodPersona();
         int filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         //refresco la lista para que actualize los objetos por si hubo cambios
         refrescarListaPersonas();
@@ -201,22 +202,22 @@ public class GestionarPersonas {
      */
     public int addPersona(String nombre, String apellido, String direccion, long telefono, String email, String tipo) {
         int filas = 0;
-        try {
+//        try {
             int ID_Persona = -1;
-            String consultaNextID = "select ID_PERSONA_SEQ.nextVal from dual";
-            ResultSet result = conexion.ejecutarStatementSELECT(consultaNextID, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            if (result.next()) {
-                ID_Persona = result.getInt(1);
-            }
+//            String consultaNextID = "SELECT max(ID_Persona) FROM persona";
+//            ResultSet resultado = conexion.ejecutarStatementSELECT(consultaNextID, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//            if (resultado.next()) {
+//                ID_Persona = resultado.getInt(1);
+//            }
 
-            String consulta = "insert into PERSONA (ID_persona, nombre, apellido, direccion, telefono, email, typo) values (" + ID_Persona + ", '" + nombre + "', '" + apellido + "', '" + direccion + "', " + telefono + ", '" + email + "', '" + tipo + "')";
+            String consulta = "insert into persona (nombre, apellido, direccion, telefono, email, type) values ('" + nombre + "', '" + apellido + "', '" + direccion + "', " + telefono + ", '" + email + "', '" + tipo + "')";
 
             filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             refrescarListaPersonas();
             System.out.println("Personas insertadas: " + filas);
-        } catch (SQLException e) {
-            System.out.println("Error en la consulta ...");
-        }
+//        } catch (SQLException e) {
+//            System.out.println("Error en la consulta ...");
+//        }
         return filas;
     }
 }

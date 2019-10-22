@@ -78,18 +78,18 @@ public class GestionarInventario {
      */
     private void refrescarListaProductos() {
         try {
-            String consulta = "Select * from Producto";
+            String consulta = "select * from producto";
             ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             if (resultado != null) {
-                listaProductos.clear();
+                listaProductos = new ArrayList<>();
                 while (resultado.next()) {
                     listaProductos.add(
                             new Producto(
-                                    resultado.getInt("ID_PRODUCTO"),
-                                    resultado.getString("NOMBRE"),
-                                    resultado.getDouble("PRECIO"),
-                                    resultado.getDouble("PESO"),
-                                    resultado.getInt("CANTIDAD")));
+                                    resultado.getInt("ID_producto"),
+                                    resultado.getString("nombre"),
+                                    resultado.getDouble("precio"),
+                                    resultado.getDouble("peso"),
+                                    resultado.getInt("cantidad")));
                 } //end while
             } //end if
         } catch (SQLException ex) {
@@ -107,8 +107,8 @@ public class GestionarInventario {
      * @return returna las filas actualizadas
      */
     public int addProducto(String nombre, double precio, double peso, int cantidad) {
-        String consulta = "insert into producto (ID_producto, nombre, peso, precio, cantidad) "
-                + "values ( ID_PRODUCTO_SEQ.nextVal,'" + nombre + "', " + peso + ", " + precio + ", " + cantidad + ")";
+        String consulta = "insert into producto (nombre, peso, precio, cantidad) "
+                + "values ('" + nombre + "', " + peso + ", " + precio + ", " + cantidad + ")";
         int filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Productos insertados: " + filas);
         refrescarListaProductos();
@@ -123,7 +123,7 @@ public class GestionarInventario {
      */
     public int borrarProducto(int codProducto) {
         int filas = 0;
-        String consulta = "delete from producto where ID_PRODUCTO =" + codProducto;
+        String consulta = "delete from producto where ID_producto =" + codProducto;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         refrescarListaProductos();
         System.out.println("Filas borradas: " + filas);
@@ -143,7 +143,7 @@ public class GestionarInventario {
         if (cantidad == -1) {
             return -1;
         }
-        String consulta = "update producto set cantidad = '" + cantidad + "' where ID_PRODUCTO = " + codProducto;
+        String consulta = "update producto set cantidad = '" + cantidad + "' where ID_producto = " + codProducto;
         int filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Productos actualizados: " + filas);
         refrescarListaProductos();
@@ -156,7 +156,7 @@ public class GestionarInventario {
      * @param codProducto el codigo del producto que se va a buscar
      * @return retorna un producto tipo Producto, en caso contrario retorna null
      */
-    public Producto getProducto(int codProducto) {
+    public Producto getProducto(int codProducto){
         refrescarListaProductos();
         for (Producto producto : listaProductos) {
             if (producto.getCodProducto() == codProducto) {
@@ -178,7 +178,7 @@ public class GestionarInventario {
      */
     public int modificarProducto(int codProducto, String nombre, double precio, double peso, int cantidad) {
         int filas = 0;
-        String consulta = "update producto set nombre = '" + nombre + "', peso = " + peso + ", precio =" + precio + ", cantidad = " + cantidad + " where ID_PRODUCTO = " + codProducto;
+        String consulta = "update producto set nombre = '" + nombre + "', peso = " + peso + ", precio =" + precio + ", cantidad = " + cantidad + " where ID_producto = " + codProducto;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         refrescarListaProductos();
         System.out.println("Productos actualizados: " + filas);

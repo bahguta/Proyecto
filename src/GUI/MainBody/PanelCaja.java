@@ -19,7 +19,7 @@ import javax.swing.JLabel;
  */
 public class PanelCaja extends javax.swing.JPanel {
 
-    private List<JLabel> listaLabelsH1;
+    private List<JLabel> listaLabelsH1; 
     private List<JLabel> listaLabelsH2;
     private LogicaNegocio logica;
     private CajaTableModel ctm;
@@ -34,14 +34,7 @@ public class PanelCaja extends javax.swing.JPanel {
         
         
         this.logica = logica;
-        
-        ctm = new CajaTableModel(logica.getNotaLibroDiarios());
-        jTable1.setModel(ctm);
-        
-        jLabelTotalDebeH2.setText("" + ctm.getTotalDebe());
-        jLabelTotalHaberH2.setText("" + ctm.getTotalHaber());
-        jLabelTotalH1.setText("" + (ctm.getTotalHaber() - ctm.getTotalDebe()));
-        
+
         listaLabelsH1 = new ArrayList<>();
         listaLabelsH1.add(jLabel4H1);
         listaLabelsH1.add(jLabelTotalH1);
@@ -54,6 +47,18 @@ public class PanelCaja extends javax.swing.JPanel {
         
         LogicaTemas.addListJLabel("JLabelH1Caja", listaLabelsH1);
         LogicaTemas.addListJLabel("JLabelH2Caja", listaLabelsH2);
+        
+        actualizarCaja();
+        
+    }
+    
+    public void actualizarCaja(){
+        ctm = new CajaTableModel(logica.getNotaLibroDiarios());
+        jTable1.setModel(ctm);
+        jLabelTotalDebeH2.setText(String.format("%.2f", ctm.getTotalDebe()));
+        jLabelTotalHaberH2.setText(String.format("%.2f", ctm.getTotalHaber()));
+        jLabelTotalH1.setText(String.format("%.2f", ctm.getTotal()));
+        logica.setCaja(ctm.getTotal());
     }
 
     /**

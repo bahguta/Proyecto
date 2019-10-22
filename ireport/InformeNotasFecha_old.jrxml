@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InformeNotas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a1bf312-9bb3-42a4-b7c0-ecdc5a3cd0ef">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="proyecto"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value="Ik5PVEEiICwxNSwxNSwxYzcwMjQxZC1iNDQwLTRkZDgtODZmNy01ZGNlNjllNDQ3MGE7"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ID_NOTA" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
@@ -13,25 +15,22 @@
 		<parameterDescription><![CDATA[Fecha]]></parameterDescription>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT *
-FROM "NOTA"
-WHERE 
-	 "NOTA"."FECHA" = $P{Fecha}]]>
+		<![CDATA[select * from nota where ID_nota = $P{ID_NOTA}]]>
 	</queryString>
-	<field name="ID_NOTA" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.label" value="ID_NOTA"/>
+	<field name="ID_nota" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FECHA" class="java.sql.Timestamp">
-		<property name="com.jaspersoft.studio.field.label" value="FECHA"/>
+	<field name="fecha" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DETALLE" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.label" value="DETALLE"/>
+	<field name="detalle" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="DEBE" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.label" value="DEBE"/>
+	<field name="debe" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="HABER" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.label" value="HABER"/>
+	<field name="haber" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<sortField name="ID_NOTA"/>
 	<variable name="HABER" class="java.lang.Double" resetType="Page" calculation="Sum">

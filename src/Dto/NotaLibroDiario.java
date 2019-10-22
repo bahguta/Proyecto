@@ -6,6 +6,7 @@
 package Dto;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 /**
  *
@@ -71,6 +72,13 @@ public class NotaLibroDiario {
     public void setHaber(double haber) {
         this.haber = haber;
     }
+
+    @Override
+    public String toString() {
+        return "NotaLibroDiario{" + "codNota=" + codNota + ", fecha=" + fecha + ", detalle=" + detalle + ", debe=" + debe + ", haber=" + haber + '}';
+    }
+    private static final Logger LOG = Logger.getLogger(NotaLibroDiario.class.getName());
+    
     
     
 }

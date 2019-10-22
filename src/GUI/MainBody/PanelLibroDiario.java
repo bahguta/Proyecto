@@ -19,10 +19,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumnModel;
 import org.openide.util.Exceptions;
 
 /**
@@ -31,54 +34,29 @@ import org.openide.util.Exceptions;
  */
 public class PanelLibroDiario extends javax.swing.JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates new form PanelLibroDiario
      */
     private GregorianCalendar cal1, cal2;
-    //private Usuario persona;
     private LibroTableModel ltm;
     private List<JLabel> listaLabelsH1;
     private List<JLabel> listaLabelsH2;
     private JFrame frame;
     private LogicaNegocio logica;
     private SimpleDateFormat sdf;
-    //private boolean filtrada; //si esta a true significa que JtableNotas esta filtrado
 
     public PanelLibroDiario(JFrame frame, LogicaNegocio logica) {
 
         this.frame = frame;
         this.logica = logica;
-        //persona = p;
+
         ltm = new LibroTableModel(logica.getNotaLibroDiarios());
+        
         initComponents();
-
-        jTableLibroDiario.setModel(ltm);
-
-//        TableColumnModel columnModel = jTableLibroDiario.getColumnModel();
-//
-//        columnModel.getColumn(0).setPreferredWidth(100);
-//        columnModel.getColumn(1).setPreferredWidth(100);
-//        columnModel.getColumn(2).setPreferredWidth(300);
-//        columnModel.getColumn(3).setPreferredWidth(100);
-//        columnModel.getColumn(3).setPreferredWidth(100);
         setBorder(LogicaTemas.GET_TITLE_BORDER("Libro Diario"));
-
-        sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-        cal1 = new GregorianCalendar(1900, 01, 01);
-        cal2 = new GregorianCalendar(2025, 12, 31);
-
-        fechaInicio.setModel(new DefaultComboBoxModel<>(getFechaComboBoxModel()));
-        ///fechaInicio.setSelectedIndex(1);
-        fechaFin.setModel(new DefaultComboBoxModel<>(getFechaComboBoxModel()));
-        fechaFin.setSelectedIndex(fechaFin.getModel().getSize() - 1);
-
-        //jTableLibroDiario.setModel(new DefaultTableModel(p.getListaNotasLibroDiario()));
-        NumberFormat formater = new DecimalFormat("#0.00");
-
-        lblDebeH2.setText(formater.format(ltm.getTotalDebe()));
-        lblHaberH2.setText(formater.format(ltm.getTotalHaber()));
-
+        
         listaLabelsH1 = new ArrayList<>();
         listaLabelsH1.add(jLabel1H1);
 
@@ -92,13 +70,44 @@ public class PanelLibroDiario extends javax.swing.JPanel {
 
         LogicaTemas.addListJLabel("JLabelH1LibroDiario", listaLabelsH1);
         LogicaTemas.addListJLabel("JLabelH2LibroDiario", listaLabelsH2);
+        
+        
+        jTableLibroDiario.setModel(ltm);
+
+        TableColumnModel columnModel = jTableLibroDiario.getColumnModel();
+
+        columnModel.getColumn(0).setPreferredWidth(100);
+        columnModel.getColumn(1).setPreferredWidth(100);
+        columnModel.getColumn(2).setPreferredWidth(300);
+        columnModel.getColumn(3).setPreferredWidth(100);
+        columnModel.getColumn(3).setPreferredWidth(100);
+
+        sdf = new SimpleDateFormat("yyyy/MM/dd");
+
+        cal1 = new GregorianCalendar(1900, 01, 01);
+        cal2 = new GregorianCalendar(2025, 12, 31);
+
+        fechaInicio.setModel(new DefaultComboBoxModel<>(getFechaComboBoxModel()));
+        fechaFin.setModel(new DefaultComboBoxModel<>(getFechaComboBoxModel()));
+        
+        fechaFin.setSelectedIndex(fechaFin.getModel().getSize() - 1);
+
+        //jTableLibroDiario.setModel(new DefaultTableModel(p.getListaNotasLibroDiario()));
+        NumberFormat formater = new DecimalFormat("#0.00");
+
+        lblDebeH2.setText(formater.format(ltm.getTotalDebe()));
+        lblHaberH2.setText(formater.format(ltm.getTotalHaber()));
+
+        
     }
 
     private double getTotatDebeEntreFechas(Date fechaIn, Date fechaFin) {
         double totalDebe = 0d;
-        for (NotaLibroDiario notaLibroDiario : logica.getNotaLibroDiarios()) {
+        for (NotaLibroDiario notaLibroDiario : logica.getNotasEntreFechas(fechaIn, fechaFin)) {
             if (notaLibroDiario.getFecha().after(fechaIn)
-                    && notaLibroDiario.getFecha().before(fechaFin)) {
+                    && notaLibroDiario.getFecha().before(fechaFin)
+                    || notaLibroDiario.getFecha().equals(fechaIn)
+                    || notaLibroDiario.getFecha().equals(fechaFin)) {
                 totalDebe += notaLibroDiario.getDebe();
             }
         }
@@ -107,34 +116,17 @@ public class PanelLibroDiario extends javax.swing.JPanel {
 
     private double getTotatHaberEntreFechas(Date fechaIn, Date fechaFin) {
         double totalHaber = 0d;
-        for (NotaLibroDiario notaLibroDiario : logica.getNotaLibroDiarios()) {
+        for (NotaLibroDiario notaLibroDiario : logica.getNotasEntreFechas(fechaIn, fechaFin)) {
             if (notaLibroDiario.getFecha().after(fechaIn)
-                    && notaLibroDiario.getFecha().before(fechaFin)) {
+                    && notaLibroDiario.getFecha().before(fechaFin)
+                    || notaLibroDiario.getFecha().equals(fechaIn)
+                    || notaLibroDiario.getFecha().equals(fechaFin)) {
                 totalHaber += notaLibroDiario.getHaber();
             }
         }
         return totalHaber;
     }
 
-//    public ArrayList<NotaLibroDiario> getListaEntreFechas(Date fechaIn, Date fechaFin) {
-//        ArrayList<NotaLibroDiario> lista = new ArrayList<>();
-////        Calendar c1 = Calendar.getInstance();
-////        c1.setTime(fechaIn);
-////
-////        Calendar c2 = Calendar.getInstance();
-////        c2.setTime(fechaFin);
-////        ArrayList<String> listaFechas = new ArrayList<String>();
-////        
-//
-//        for (NotaLibroDiario notaLibroDiario : logica.getNotaLibroDiarios()) {
-//            if (notaLibroDiario.getFecha().after(fechaIn)
-//                    && notaLibroDiario.getFecha().before(fechaFin)) {
-//                lista.add(notaLibroDiario);
-//            }
-//        }
-//
-//        return lista;
-//    }
     public String[] getFechaComboBoxModel() {
         String[] fechasComboboxModel;
         Calendar c1 = Calendar.getInstance();
@@ -344,8 +336,8 @@ public class PanelLibroDiario extends javax.swing.JPanel {
             String fechaIn = (String) fechaInicio.getSelectedItem();
             String fechaFi = (String) fechaFin.getSelectedItem();
             jTableLibroDiario.setModel(new LibroTableModel(logica.getNotasEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
-            lblDebeH2.setText("" + getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
-            lblHaberH2.setText("" + getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
+            lblDebeH2.setText(String.format("%.2f", getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
+            lblHaberH2.setText(String.format("%.2f", getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
 
             //filtrada = true;
         } catch (ParseException ex) {
@@ -371,8 +363,8 @@ public class PanelLibroDiario extends javax.swing.JPanel {
             String fechaIn = (String) fechaInicio.getSelectedItem();
             String fechaFi = (String) fechaFin.getSelectedItem();
             jTableLibroDiario.setModel(new LibroTableModel(logica.getNotasEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
-            lblDebeH2.setText("" + getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
-            lblHaberH2.setText("" + getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
+            lblDebeH2.setText(String.format("%.2f", getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
+            lblHaberH2.setText(String.format("%.2f", getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
         } catch (ParseException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -387,10 +379,10 @@ public class PanelLibroDiario extends javax.swing.JPanel {
             String fechaIn = (String) fechaInicio.getSelectedItem();
             String fechaFi = (String) fechaFin.getSelectedItem();
             jTableLibroDiario.setModel(new LibroTableModel(logica.getNotasEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
-            lblDebeH2.setText("" + getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
-            lblHaberH2.setText("" + getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
+            lblDebeH2.setText(String.format("%.2f", getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
+            lblHaberH2.setText(String.format("%.2f", getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
         } catch (ParseException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.log(Level.WARNING, ex.getMessage());
         }
 
     }//GEN-LAST:event_jButtonNuevaNotaActionPerformed
@@ -412,8 +404,8 @@ public class PanelLibroDiario extends javax.swing.JPanel {
             String fechaIn = (String) fechaInicio.getSelectedItem();
             String fechaFi = (String) fechaFin.getSelectedItem();
             jTableLibroDiario.setModel(new LibroTableModel(logica.getNotasEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
-            lblDebeH2.setText("" + getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
-            lblHaberH2.setText("" + getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi)));
+            lblDebeH2.setText(String.format("%.2f", getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
+            lblHaberH2.setText(String.format("%.2f", getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
         } catch (ParseException ex) {
             Exceptions.printStackTrace(ex);
         }
@@ -469,4 +461,5 @@ public class PanelLibroDiario extends javax.swing.JPanel {
     private javax.swing.JLabel lblDebeH2;
     private javax.swing.JLabel lblHaberH2;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelLibroDiario.class.getName());
 }

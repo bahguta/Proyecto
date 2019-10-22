@@ -6,6 +6,7 @@
 package Logica;
 
 import Dto.*;
+import GUI.Main.Main;
 import Gestiones.*;
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -36,7 +38,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 public class LogicaNegocio {
 
     private static final Logger LOG = Logger.getLogger(LogicaNegocio.class.getName());
-    
 
     /**
      * Miembros de la clase
@@ -54,6 +55,7 @@ public class LogicaNegocio {
 
     //ruta para los informes que va a crear
     private File rutaInformes;
+    private GestionarCaja gestionarCaja;
 
     /**
      * Constructor Datos necesarios para la conexion a la base de datos
@@ -64,23 +66,31 @@ public class LogicaNegocio {
      * @param puerto
      * @param nombreBBDD
      */
-    public LogicaNegocio(String usuario, String password, String IP, int puerto, String nombreBBDD) {
+    public LogicaNegocio(JFrame frame, String usuario, String password, String IP, int puerto, String nombreBBDD) {
         //creo la clase conexion
         this.conexion = new ConexionBBDD();
         //inicializo la conexion 
-        this.conexion.conexionBBDD(IP, puerto, nombreBBDD, usuario, password);
+        //this.conexion.conexionBBDD(IP, puerto, nombreBBDD, usuario, password);
+        this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password);
 
         //creo las clases de gestionar 
         this.gestionarPersonas = new GestionarPersonas(conexion);
         this.gestionarFacturas = new GestionarFacturas(conexion);
         this.gestionarInventario = new GestionarInventario(conexion);
         this.gestionarNotasLibro = new GestionarNotasLibro(conexion);
+        this.gestionarCaja = new GestionarCaja();
 
-        this.rutaInformes = new File("ireport");
+        actualizarCaja();
+
+        //setCaja();
+        this.rutaInformes = new File("informes");
         if (rutaInformes.mkdir()) {
             System.out.println("Carpeta informes creada con exito");
+        } else if (rutaInformes.exists()) {
+            System.out.println("La carpeta Informes existe !!! No se crea !");
         } else {
-            System.out.println("Carpeta NO creada");
+            JOptionPane.showMessageDialog(frame, "Carpeta" + rutaInformes.getPath() + " NO creada\nRevisa los persmisos del programa.");
+
         }
         //refresco las listas de los gestiones
 //        this.gestionarInventario.refrescarListaProductos();
@@ -93,10 +103,10 @@ public class LogicaNegocio {
 //            agregarProductosCSV();
 //        }
     }
-    
-    public LogicaNegocio(){
+
+    public LogicaNegocio() {
         this.conexion = null;
-        
+
     }
 
     /**
@@ -113,7 +123,7 @@ public class LogicaNegocio {
     public boolean cambiarConexion(String usuario, String password, String IP, int puerto, String nombreBBDD) {
         ConexionBBDD conn = new ConexionBBDD();
         if (conn.conexionBBDD(IP, puerto, nombreBBDD, usuario, password)) {
-           // conexion.cerrarConexion();
+            // conexion.cerrarConexion();
             conexion = conn;
             return true;
         }
@@ -192,7 +202,10 @@ public class LogicaNegocio {
     public DefaultComboBoxModel<String> getFechasComboboxModel(Date fechaInicio, Date fechaFin) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         DefaultComboBoxModel<String> listaFechas = new DefaultComboBoxModel<>();
-        gestionarNotasLibro.getListaNotas().stream().filter((nota) -> (nota.getFecha().after(fechaInicio) && nota.getFecha().before(fechaFin))).forEachOrdered((nota) -> {
+        gestionarNotasLibro.getListaNotas().stream().filter((nota) -> (nota.getFecha().equals(fechaInicio)
+                && nota.getFecha().after(fechaInicio)
+                && nota.getFecha().before(fechaFin)
+                && nota.getFecha().equals(fechaFin))).forEachOrdered((nota) -> {
             listaFechas.addElement(sdf.format(nota.getFecha()));
         });
         return listaFechas;
@@ -276,6 +289,47 @@ public class LogicaNegocio {
      *
      *
      */
+    public boolean ventaCompra(JFrame frame, Persona p, Factura f, double precio, GestionarInventario g) {
+        String trabajos = "#" + p.getCodPersona() + " " + p.getNombre() + " " + p.getApellido() + " - " + f.getTrabajos();
+        if (!gestionarCaja.ventaCompra(frame, p, f.getListaProductos(), precio, g)) {
+            System.out.println("ventaCompra false");
+            return false;
+        }
+        System.out.println(f.toString());
+        System.out.println(p);
+        if (p.getTipo().equalsIgnoreCase("cliente")) {
+            System.out.println("venta cliente");
+            gestionarNotasLibro.addNota(f.getFecha(), 0d, precio, trabajos);
+        } else {
+            System.out.println("compra proveedor");
+            gestionarNotasLibro.addNota(f.getFecha(), precio, 0d, trabajos);
+        }
+        actualizarCaja();
+        Main.actualizarPanelCaja();
+        return true;
+    }
+
+    public double actualizarCaja() {
+        double cobros = 0;
+        double gastos = 0;
+
+        for (NotaLibroDiario nota : gestionarNotasLibro.getListaNotas()) {
+            cobros += nota.getHaber();
+            gastos += nota.getDebe();
+        }
+
+        setCaja(cobros - gastos);
+        return cobros - gastos;
+    }
+
+    public void setCaja(double valor) {
+        gestionarCaja.setCAJA(valor);
+    }
+
+    public void sumaCaja(double valor) {
+        gestionarCaja.sumaCAJA(valor);
+    }
+
     /**
      *
      *
@@ -472,7 +526,7 @@ public class LogicaNegocio {
      * @return retorna el producto , en caso contrario retorna null
      * @throws NullPointerException
      */
-    public Producto getProductoPorID(int ID_producto) throws NullPointerException {
+    public Producto getProductoPorID(int ID_producto) {
         return gestionarInventario.getProducto(ID_producto);
     }
 
@@ -526,9 +580,12 @@ public class LogicaNegocio {
      */
     public List<NotaLibroDiario> getNotasEntreFechas(Date fechaInicio, Date fechaFin) {
         List<NotaLibroDiario> lista = new ArrayList<>();
-        gestionarNotasLibro.getListaNotas().stream().filter((nota) -> (nota.getFecha().after(fechaInicio) && nota.getFecha().before(fechaFin)
-                || nota.getFecha().equals(fechaInicio) || nota.getFecha().equals(fechaFin))).forEachOrdered((nota) -> {
+        gestionarNotasLibro.getListaNotas().stream().filter((nota) -> (nota.getFecha().after(fechaInicio)
+                && nota.getFecha().before(fechaFin)
+                || nota.getFecha().equals(fechaInicio)
+                || nota.getFecha().equals(fechaFin))).forEachOrdered((nota) -> {
             lista.add(nota);
+            System.out.println(nota.toString());
         });
         return lista;
     }

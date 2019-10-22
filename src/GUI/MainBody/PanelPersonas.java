@@ -262,11 +262,13 @@ public class PanelPersonas extends javax.swing.JPanel {
 
         }
         jTableFacturas.setModel(new FacturaTableModel(logica.getListaFacturas(ID_Persona)));
+        jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
     }//GEN-LAST:event_jTablePersonasMouseClicked
 
     private void jButtonNuevaPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPersonaActionPerformed
         DialogPersona dialog = new DialogPersona(parent, true, logica, null);
         dialog.setVisible(true);
+        jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
     }//GEN-LAST:event_jButtonNuevaPersonaActionPerformed
 
     private void jButtonVerFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerFacturaActionPerformed
