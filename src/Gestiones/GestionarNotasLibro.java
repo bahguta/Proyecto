@@ -13,13 +13,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * Gestionar Notas del Libro Diario
  * @author Plam
  */
 public class GestionarNotasLibro {
+    private static final Logger LOG = Logger.getLogger(GestionarNotasLibro.class.getName());
 
     private List<NotaLibroDiario> listaNotas;
     private ConexionBBDD conexion;
@@ -86,7 +88,6 @@ public class GestionarNotasLibro {
     /**
      * Metodo para modificar una nota del libro diario
      * @param ID_nota el codigo de la nota que se va a modificar
-     * @param fecha la nueva fecha
      * @param detalle los nuevos detalles sobre la nota
      * @param debe lo que debe
      * @param haber lo que gana

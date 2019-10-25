@@ -1,9 +1,11 @@
 
 /**
- * <font color="#000000">
- * Paquete <b>Dto</b>
- * <p>Este paquete contiene los modelos de los objetos necesarios\\npara la implementacion del modelo DAO</p>
- * </font>
+ * <font color="#1E86C9">
+ * Paquete <b>Gestiones</b></font>
+ * <font color="#128555">
+ * <br>Este paquete hace la conexion con el modelo , obtiene todos los datos que se piden del controlador.<br>
+ * Hace la comunicacion con la base de datos. </font>
+ * 
  */
 
-package Dto;
+package Gestiones;

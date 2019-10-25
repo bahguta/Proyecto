@@ -12,12 +12,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
- *
+ * Gestionar Personas
+ * 
  * @author Plam
  */
 public class GestionarPersonas {
+    private static final Logger LOG = Logger.getLogger(GestionarPersonas.class.getName());
 
     private List<Persona> listaPersonas;
     private ConexionBBDD conexion;

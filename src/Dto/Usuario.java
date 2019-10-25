@@ -8,10 +8,14 @@ package Dto;
 import java.util.logging.Logger;
 
 /**
- *
+ * Objeto Usuario, usado para controlar las cuentas del programa
+ * 
  * @author Plam
  */
-public class Usuario {
+public class Usuario implements java.io.Serializable{
+
+    private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(Usuario.class.getName());
     
     private String nombre;
     private String pass;
@@ -39,6 +43,5 @@ public class Usuario {
     public String toString() {
         return "Usuario{" + "nombre=" + nombre + ", pass=" + pass + '}';
     }
-    private static final Logger LOG = Logger.getLogger(Usuario.class.getName());
     
 }

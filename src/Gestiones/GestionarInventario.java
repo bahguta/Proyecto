@@ -11,9 +11,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openide.util.Exceptions;
 
 /**
+ * Gestionar Inventario
  *
  * @author Plam
  */
@@ -25,7 +28,7 @@ public class GestionarInventario {
     /**
      * Constructor
      *
-     * @param conexion la conexion para la base de datos
+     * @param conexion 
      */
     public GestionarInventario(ConexionBBDD conexion) {
         this.conexion = conexion;
@@ -93,7 +96,7 @@ public class GestionarInventario {
                 } //end while
             } //end if
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            LOG.log(Level.WARNING,ex.getMessage());
         }
     }
 
@@ -184,5 +187,6 @@ public class GestionarInventario {
         System.out.println("Productos actualizados: " + filas);
         return filas;
     }
+    private static final Logger LOG = Logger.getLogger(GestionarInventario.class.getName());
 
 }

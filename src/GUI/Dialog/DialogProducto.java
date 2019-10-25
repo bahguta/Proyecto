@@ -10,23 +10,26 @@ import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- *
+ * Dialog para el manejo de un producto
+ * 
  * @author Plam
  */
 public class DialogProducto extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private List<JLabel> listaLabelsH2;
     private List<JLabel> listaLabelsH1;
     private LogicaNegocio logica;
     private Producto producto;
-    //private Producto producto;
 
     /**
-     * Creates new form DialogProducto
+     * Constructor
      */
     public DialogProducto(java.awt.Frame parent, boolean modal, LogicaNegocio logica, Producto producto) {
         super(parent, modal);
@@ -61,6 +64,15 @@ public class DialogProducto extends javax.swing.JDialog {
         LogicaTemas.addListJLabel("JLabelH2DialogProducto", listaLabelsH2);
     }
 
+    /**
+     * Metodo para obtener una nueva instancia de DialogProducto.class
+     * 
+     * @param parent
+     * @param modal
+     * @param logica
+     * @param producto
+     * @return 
+     */
     public static DialogProducto newInstance(JFrame parent, boolean modal, LogicaNegocio logica, Producto producto) {
         return new DialogProducto(parent, modal, logica, producto);
     }
@@ -204,10 +216,18 @@ public class DialogProducto extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para cerrar el dialogo
+     * @param evt 
+     */
     private void btnCancelarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarProductoActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarProductoActionPerformed
 
+    /**
+     * Metodo para añadir un nuevo producto a la base de datos
+     * @param evt 
+     */
     private void btnOKProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKProductoActionPerformed
         try {
             String nombre = jTextFieldNombre.getText();
@@ -252,4 +272,5 @@ public class DialogProducto extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldPeso;
     private javax.swing.JTextField jTextFieldPrecio;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(DialogProducto.class.getName());
 }

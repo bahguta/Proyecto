@@ -10,14 +10,18 @@ import Logica.LogicaTemas;
 import TableModels.CajaTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- *
+ * Panel Caja
+ * 
  * @author Plam
  */
 public class PanelCaja extends javax.swing.JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     private List<JLabel> listaLabelsH1; 
     private List<JLabel> listaLabelsH2;
@@ -25,7 +29,7 @@ public class PanelCaja extends javax.swing.JPanel {
     private CajaTableModel ctm;
     
     /**
-     * Creates new form PanelCaja
+     * Constructor
      */
     public PanelCaja(JFrame frame, LogicaNegocio logica) {
         initComponents();
@@ -52,6 +56,10 @@ public class PanelCaja extends javax.swing.JPanel {
         
     }
     
+    /**
+     * Metodo para actualizar la caja.<br>
+     * Recoge las factura y las notas diarias, hace los calculos y asigna el valor a la caja.
+     */
     public void actualizarCaja(){
         ctm = new CajaTableModel(logica.getNotaLibroDiarios());
         jTable1.setModel(ctm);
@@ -164,4 +172,5 @@ public class PanelCaja extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelCaja.class.getName());
 }

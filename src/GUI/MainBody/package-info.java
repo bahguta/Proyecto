@@ -1,9 +1,11 @@
 
 /**
- * <font color="#000000">
- * Paquete <b>Dto</b>
- * <p>Este paquete contiene los modelos de los objetos necesarios\\npara la implementacion del modelo DAO</p>
- * </font>
+ * <font color="#1E86C9">
+ * Paquete <b>GUI.MainBody</b></font>
+ * <font color="#128555">
+ * <br>El paquete <b>GUI.MainBody</b> representa la vista del modelo MVC.<br>
+ * Contiene todos los paneles del programa</font>
+ * 
  */
 
-package Dto;
+package GUI.MainBody;

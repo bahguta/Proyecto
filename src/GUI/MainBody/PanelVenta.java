@@ -17,7 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- *
+ * Panel Venta 
+ * 
  * @author Plam
  */
 public class PanelVenta extends javax.swing.JPanel {
@@ -32,16 +33,13 @@ public class PanelVenta extends javax.swing.JPanel {
     private List<Producto> listaProductos; //para los productos que va a comprar el cliente 
 
     /**
-     * Creates new form PanelVenta
+     * Constructor
      */
     public PanelVenta(JFrame frame, LogicaNegocio logica) {
         initComponents();
-//        Font font = new Font(Font.MONOSPACED, Font.BOLD, 20);
-//        Border bGreyLine = BorderFactory.createLineBorder(Color.CYAN, 2, true);
-//        Border border = BorderFactory.createTitledBorder(bGreyLine, "Ventas", TitledBorder.CENTER, TitledBorder.TOP, font, Color.ORANGE);
-//        TitledBorder titledBorder = new TitledBorder(border);
+
         setBorder(LogicaTemas.GET_TITLE_BORDER("Ventas"));
-        //setMinimumSize(new Dimension(Main.MIN_LARGO, Main.MIN_ALTO));
+
         this.logica = logica;
         listaLabelsH2 = new ArrayList<>();
         listaLabelsH2.add(jLabel1H2);
@@ -219,6 +217,10 @@ public class PanelVenta extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para añadir un producto de los productos en Stock en la lista del cliente
+     * @param evt 
+     */
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         int id_producto = (Integer) jTableProductosStock.getValueAt(jTableProductosStock.getSelectedRow(), 0);
         System.out.println(id_producto);
@@ -242,6 +244,10 @@ public class PanelVenta extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButtonAddActionPerformed
 
+    /**
+     * Metodo para borrar un producto de la lista del cliente
+     * @param evt 
+     */
     private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
         if (jTableProductosCliente.getSelectedRow() == -1) {
             return;

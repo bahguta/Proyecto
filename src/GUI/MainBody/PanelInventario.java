@@ -11,42 +11,39 @@ import Logica.LogicaTemas;
 import TableModels.ProductoTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
+ * Panel Inventario
  *
  * @author Plam
  */
 public class PanelInventario extends javax.swing.JPanel {
 
+    private static final long serialVersionUID = 1L;
+
     private List<JLabel> listaLabelsH2;
     private JFrame frame;
     private LogicaNegocio logica;
-    //private ProductoTableModel productoTableModel;
 
     /**
-     * Creates new form PanelInventario
+     * Constructor
      */
     public PanelInventario(JFrame frame, LogicaNegocio logica) {
         initComponents();
         this.frame = frame;
         this.logica = logica;
-//        Font font = new Font(Font.MONOSPACED, Font.BOLD, 20);
-//        Border bGreyLine = BorderFactory.createLineBorder(Color.CYAN, 2, true);
-//        Border border = BorderFactory.createTitledBorder(bGreyLine, "Inventario", TitledBorder.CENTER, TitledBorder.TOP, font, Color.ORANGE);
-//        TitledBorder titledBorder = new TitledBorder(border);
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Inventario"));
-        //JFileChooser jFileChooser = new JFileChooser("D:\\P\\Proyectos\\Netbeans\\Proyecto\\imagenes", FileSystemView.getFileSystemView());
-        //add(jFileChooser);
 
+        setBorder(LogicaTemas.GET_TITLE_BORDER("Inventario"));
+        
         listaLabelsH2 = new ArrayList<>();
         listaLabelsH2.add(jLabel1H2);
 
         LogicaTemas.addListJLabel("JLabelH2Inventario", listaLabelsH2);
 
-        //productoTableModel = );
         jTableProductos.setModel(new ProductoTableModel(this.logica.getListaProductos()));
     }
 
@@ -165,28 +162,37 @@ public class PanelInventario extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para cambiar la informacion de un producto. Se abre ventana nueva 
+     * @param evt 
+     */
     private void jButtonCambiarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCambiarProductoActionPerformed
         if (jTableProductos.getSelectedRow() == -1) {
             return;
         }
         int cod = (int) jTableProductos.getValueAt(jTableProductos.getSelectedRow(), 0);
-        //Producto p = 
         if (cod == -1) {
             return;
         }
-        //if (logica.getProductoPorID(cod) != null) {
         DialogProducto dialog = new DialogProducto(frame, true, logica, logica.getProductoPorID(cod));
         dialog.setVisible(true);
-        //}
         jTableProductos.setModel(new ProductoTableModel(logica.getListaProductos()));
     }//GEN-LAST:event_jButtonCambiarProductoActionPerformed
 
+    /**
+     * Metodo para crear un producto. Se abre ventana nueva
+     * @param evt 
+     */
     private void jButtonCrearProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearProductoActionPerformed
         DialogProducto dialog = new DialogProducto(frame, true, logica, null);
         dialog.setVisible(true);
         jTableProductos.setModel(new ProductoTableModel(logica.getListaProductos()));
     }//GEN-LAST:event_jButtonCrearProductoActionPerformed
 
+    /**
+     * Metodo para borrar  un producto. Se borra tambien de la base de datos
+     * @param evt 
+     */
     private void jButtonBorrarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarProductoActionPerformed
         if (jTableProductos.getSelectedRow() == -1) {
             return;
@@ -202,6 +208,10 @@ public class PanelInventario extends javax.swing.JPanel {
         jTableProductos.setModel(new ProductoTableModel(logica.getListaProductos()));
     }//GEN-LAST:event_jButtonBorrarProductoActionPerformed
 
+    /**
+     * Metodo para manejar los clicks de la table de los productos
+     * @param evt 
+     */
     private void jTableProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableProductosMouseClicked
         int ID_producto = (int) jTableProductos.getValueAt(jTableProductos.getSelectedRow(), 0);
         if (ID_producto != -1 && evt.getClickCount() >= 2) {
@@ -219,4 +229,5 @@ public class PanelInventario extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableProductos;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelInventario.class.getName());
 }

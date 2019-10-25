@@ -4,34 +4,29 @@
  * and open the template in the editor.
  */
 package Dto;
-import java.io.*;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 /**
- *
+ * Objeto Factura 
+ * 
  * @author Plam
  */
-public class Factura implements Serializable{
+public class Factura implements java.io.Serializable{
     
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(Factura.class.getName());
     
     /**
      * Membros de la clase
      */
     
-    //Codigo unico de la factura
     private int codFactura;
-    //Fecha de la factura
     private Date fecha;
-    //actividades realizados 
     private String trabajos;
-    //lista con productos que contiene la factura
     private List<Producto> listaProductos;
-    //el precio de la factura SIN IVA
     private double precio;
 
-    //constructor
     public Factura(int codFactura, Date fecha, String trabajos, List<Producto> listaProductos, double precio) {
         this.codFactura = codFactura;
         this.fecha = fecha;
@@ -84,7 +79,7 @@ public class Factura implements Serializable{
     public String toString() {
         return "Factura{" + "codFactura=" + codFactura + ", fecha=" + fecha + ", trabajos=" + trabajos + ", listaProductos=" + listaProductos + ", precio=" + precio + '}';
     }
-    private static final Logger LOG = Logger.getLogger(Factura.class.getName());
+    
     
     
     

@@ -6,6 +6,7 @@
 package GUI.MainBody;
 
 import Logica.LogicaTemas;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -13,14 +14,13 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
 /**
- *
+ * Panel Ayuda
  * @author Plam
  */
 public class PanelAyuda extends javax.swing.JPanel {
 
-   
-    
-    
+    private static final long serialVersionUID = 1L;
+
     private final String root = "Componentes";
     private final String nLibro = "Libro Diario";
     private final String nFiltrarNotas = "Filtrar Notas";
@@ -134,7 +134,7 @@ public class PanelAyuda extends javax.swing.JPanel {
         jTextArea1.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Software para gestionar el inventario, clientes y proveedores para PYMES.\nEl programa ha sido desarrollado para realizar el proyecto del modulo \"Desarrollo de Aplicaciones Multiplataforma\" instituto - IES Juan Jose Calvo Miguel - Sotrondio.\n\nTutor: Jose Luis Arias Cobreros");
+        jTextArea1.setText("Software para gestionar el inventario, clientes, proveedores, notas del libro diario y facturas para PYMES.El programa ha sido desarrollado para realizar el proyecto del modulo \"Desarrollo de Aplicaciones Multiplataforma\" instituto - IES Juan Jose Calvo Miguel - Sotrondio.\n\nTutor: Julia Paz Triana Toribio");
         jTextArea1.setWrapStyleWord(true);
         jTextArea1.setFocusable(false);
         jTextArea1.setWrapStyleWord(true);
@@ -270,4 +270,5 @@ public class PanelAyuda extends javax.swing.JPanel {
     private javax.swing.JTextArea jTextAreaAyuda;
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelAyuda.class.getName());
 }

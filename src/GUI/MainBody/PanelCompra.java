@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- *
+ * Panel Compra
  * @author Plam
  */
 public class PanelCompra extends javax.swing.JPanel {
@@ -25,7 +25,7 @@ public class PanelCompra extends javax.swing.JPanel {
     private List<JLabel> listaLabelsH2;
 
     /**
-     * Creates new form PanelCompra
+     * Constructor
      */
     public PanelCompra(JFrame frame, LogicaNegocio logica) {
         initComponents();

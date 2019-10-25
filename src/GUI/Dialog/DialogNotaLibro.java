@@ -14,10 +14,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+/**
+ * Dialog para el manejo de una Nota del libro diario
+ * 
+ * @author bahguta
+ */
 public class DialogNotaLibro extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private List<JLabel> listaLabelsH2;
     private List<JLabel> listaLabelsH1;
@@ -26,7 +34,7 @@ public class DialogNotaLibro extends javax.swing.JDialog {
     private SimpleDateFormat sdf;
 
     /**
-     * Creates new form DialogNotaLibro
+     * Constructor
      */
     public DialogNotaLibro(JFrame parent, boolean modal, LogicaNegocio logica, NotaLibroDiario nota) {
         super(parent, modal);
@@ -209,10 +217,18 @@ public class DialogNotaLibro extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para cerrar el dialogo
+     * @param evt 
+     */
     private void jButtonCancelarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarNotaActionPerformed
         dispose();
     }//GEN-LAST:event_jButtonCancelarNotaActionPerformed
 
+    /**
+     * Metodo para añadir una nueva nota del libro diario a la base de datos
+     * @param evt 
+     */
     private void jButtonOKNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKNotaActionPerformed
 
         try {
@@ -238,6 +254,15 @@ public class DialogNotaLibro extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jButtonOKNotaActionPerformed
 
+    /**
+     * Metodo para obtener una nueva instancia de DialogNotaLibro.class
+     * 
+     * @param parent
+     * @param modal
+     * @param logica
+     * @param nota
+     * @return 
+     */
     public static DialogNotaLibro newInstance(JFrame parent, boolean modal, LogicaNegocio logica, NotaLibroDiario nota) {
         return new DialogNotaLibro(parent, modal, logica, nota);
     }
@@ -259,4 +284,5 @@ public class DialogNotaLibro extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldDebeNota;
     private javax.swing.JTextField jTextFieldHaberNota;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(DialogNotaLibro.class.getName());
 }

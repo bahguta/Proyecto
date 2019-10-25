@@ -48,7 +48,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jButtonEditarFactura" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jButtonImprimir" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -105,7 +105,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jButtonImprimir" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonEditarFactura" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonNuevaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -184,7 +184,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="jButtonImprimir">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="LogicaTemas.BUTTON_FONT" type="code"/>
@@ -192,7 +192,7 @@
         <Property name="text" type="java.lang.String" value="Imprimir"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonImprimirActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">

@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
@@ -32,6 +33,10 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
 /**
+ * Logica de Negocio.<br> Es el controlador del modelo MVC , es el responsable
+ * de hacer toda la logica del programa<br>
+ * Recoge las peticiones de la vista y manda consultas hacia las gestiones , las
+ * que se conectan a la base de datos .
  *
  * @author Plam
  */
@@ -82,26 +87,15 @@ public class LogicaNegocio {
 
         actualizarCaja();
 
-        //setCaja();
         this.rutaInformes = new File("informes");
         if (rutaInformes.mkdir()) {
-            System.out.println("Carpeta informes creada con exito");
+            LOG.log(Level.INFO, "Carpeta informes creada con exito");
         } else if (rutaInformes.exists()) {
-            System.out.println("La carpeta Informes existe !!! No se crea !");
+            LOG.log(Level.INFO, "La carpeta Informes existe !!! No se crea !");
         } else {
             JOptionPane.showMessageDialog(frame, "Carpeta" + rutaInformes.getPath() + " NO creada\nRevisa los persmisos del programa.");
 
         }
-        //refresco las listas de los gestiones
-//        this.gestionarInventario.refrescarListaProductos();
-//        this.gestionarNotasLibro.refrescarListaNotas();
-//        this.gestionarPersonas.refrescarListaPersonas();
-
-//        if (cargarDatos()) {
-//            cargarTablasSQL();
-//            agregarMesasCSV();
-//            agregarProductosCSV();
-//        }
     }
 
     public LogicaNegocio() {
@@ -120,10 +114,19 @@ public class LogicaNegocio {
      *
      *
      */
+    /**
+     * Metodo para cambiar la conexion de la base de datos
+     *
+     * @param usuario
+     * @param password
+     * @param IP
+     * @param puerto
+     * @param nombreBBDD
+     * @return
+     */
     public boolean cambiarConexion(String usuario, String password, String IP, int puerto, String nombreBBDD) {
         ConexionBBDD conn = new ConexionBBDD();
         if (conn.conexionBBDD(IP, puerto, nombreBBDD, usuario, password)) {
-            // conexion.cerrarConexion();
             conexion = conn;
             return true;
         }
@@ -141,6 +144,14 @@ public class LogicaNegocio {
      *
      *
      */
+    /**
+     * Metodo para añadir un usuario
+     *
+     * @param nombre
+     * @param pass
+     * @param userRole
+     * @return
+     */
     public int addUsuario(String nombre, String pass, String userRole) {
         String consulta = "insert into usuario (userID, nombre, pass, userRole) values ("
                 + "ID_usuario_seq.nextVal,"
@@ -151,6 +162,13 @@ public class LogicaNegocio {
         return filas;
     }
 
+    /**
+     * Metodo para obtener un usuario
+     *
+     * @param nombre
+     * @param pass
+     * @return
+     */
     public Usuario getUsuario(String nombre, String pass) {
         String consulta = "Select * from usuario where nombre = '" + nombre + "' and pass = '" + pass + "'";
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -289,6 +307,16 @@ public class LogicaNegocio {
      *
      *
      */
+    /**
+     * Metodo para hacer la venta - compra
+     *
+     * @param frame
+     * @param p
+     * @param f
+     * @param precio
+     * @param g
+     * @return
+     */
     public boolean ventaCompra(JFrame frame, Persona p, Factura f, double precio, GestionarInventario g) {
         String trabajos = "#" + p.getCodPersona() + " " + p.getNombre() + " " + p.getApellido() + " - " + f.getTrabajos();
         if (!gestionarCaja.ventaCompra(frame, p, f.getListaProductos(), precio, g)) {
@@ -309,6 +337,11 @@ public class LogicaNegocio {
         return true;
     }
 
+    /**
+     * Metodo para actualizar la caja
+     *
+     * @return
+     */
     public double actualizarCaja() {
         double cobros = 0;
         double gastos = 0;
@@ -590,21 +623,6 @@ public class LogicaNegocio {
         return lista;
     }
 
-//    /**
-//     * 
-//     * @return 
-//     */
-//    public List<NotaLibroDiario> getNotasHaber() {
-//        List<NotaLibroDiario> lista = null;
-//        if (!getNotaLibroDiarios().isEmpty()) {
-//            lista = new ArrayList<>();
-//            for (NotaLibroDiario nota : getNotaLibroDiarios()) {
-//
-//                lista.add(nota);
-//            }
-//        }
-//        return lista;
-//    }
     /**
      * Metodo para crear una nota del libro diario
      *
@@ -622,7 +640,6 @@ public class LogicaNegocio {
      * Metodo para modificar una nota
      *
      * @param ID_nota el codigo de la nota
-     * @param fecha la fecha dela nota
      * @param debe lo que debe
      * @param haber lo que gana
      * @param detalle detalles sobre la nota
@@ -885,9 +902,9 @@ public class LogicaNegocio {
                 conexion.ejecutarStatementNOSELECT(q, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Fichero NO encontrado !!!");
+            LOG.log(Level.WARNING, "Fichero NO encontrado !!!");
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            LOG.log(Level.WARNING, ex.getMessage());
         } finally {
             if (br != null) {
                 try {
@@ -898,4 +915,7 @@ public class LogicaNegocio {
         }
     }
 
+    
 }
+
+
