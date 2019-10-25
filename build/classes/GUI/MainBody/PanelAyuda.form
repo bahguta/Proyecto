@@ -74,7 +74,7 @@
             </Property>
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="Software para gestionar el inventario, clientes y proveedores para PYMES.&#xa;El programa ha sido desarrollado para realizar el proyecto del modulo &quot;Desarrollo de Aplicaciones Multiplataforma&quot; instituto - IES Juan Jose Calvo Miguel - Sotrondio.&#xa;&#xa;Tutor: Jose Luis Arias Cobreros"/>
+            <Property name="text" type="java.lang.String" value="Software para gestionar el inventario, clientes, proveedores, notas del libro diario y facturas para PYMES.El programa ha sido desarrollado para realizar el proyecto del modulo &quot;Desarrollo de Aplicaciones Multiplataforma&quot; instituto - IES Juan Jose Calvo Miguel - Sotrondio.&#xa;&#xa;Tutor: Julia Paz Triana Toribio"/>
             <Property name="wrapStyleWord" type="boolean" value="true"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>

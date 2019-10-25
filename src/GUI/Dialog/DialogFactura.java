@@ -16,14 +16,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
+ * Dialog para el manejo de un factura 
  *
  * @author Plam
  */
 public class DialogFactura extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
 
     private List<JLabel> listaLabelsH2;
     private List<JLabel> listaLabelsH1;
@@ -36,7 +40,7 @@ public class DialogFactura extends javax.swing.JDialog {
     private Factura factura;
 
     /**
-     * Creates new form DialogNuevaFactura
+     * Contructor
      */
     public DialogFactura(JFrame parent, boolean modal, LogicaNegocio logica, Factura f) {
         super(parent, modal);
@@ -66,8 +70,8 @@ public class DialogFactura extends javax.swing.JDialog {
 
             prodtm = new ProductoTableModel(listaProductos);
             
-            jButton2.setVisible(false);
-            jButton1.setVisible(false);
+            jButtonNuevoProducto.setVisible(false);
+            jButtonNuevaPersona.setVisible(false);
             jButtonAddProductoFactura.setVisible(false);
             jButtonBorrarProductoFactura.setVisible(false);
             jButtonNuevaFactura.setVisible(false);
@@ -78,8 +82,8 @@ public class DialogFactura extends javax.swing.JDialog {
         }
 
         jTableProductos.setModel(prodtm);
-        //prodtm.setCellEditable(0, 0, modal);
 
+        
         
 
         listaLabelsH1 = new ArrayList<>();
@@ -125,8 +129,8 @@ public class DialogFactura extends javax.swing.JDialog {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextAreaTrabajos = new javax.swing.JTextArea();
         jComboBoxProductos = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonNuevaPersona = new javax.swing.JButton();
+        jButtonNuevoProducto = new javax.swing.JButton();
         btnImprimir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -203,19 +207,19 @@ public class DialogFactura extends javax.swing.JDialog {
         jTextAreaTrabajos.setRows(5);
         jScrollPane2.setViewportView(jTextAreaTrabajos);
 
-        jButton1.setFont(LogicaTemas.BUTTON_FONT);
-        jButton1.setText(org.openide.util.NbBundle.getMessage(DialogFactura.class, "DialogFactura.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonNuevaPersona.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonNuevaPersona.setText(org.openide.util.NbBundle.getMessage(DialogFactura.class, "DialogFactura.jButtonNuevaPersona.text")); // NOI18N
+        jButtonNuevaPersona.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonNuevaPersonaActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(LogicaTemas.BUTTON_FONT);
-        jButton2.setText(org.openide.util.NbBundle.getMessage(DialogFactura.class, "DialogFactura.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonNuevoProducto.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonNuevoProducto.setText(org.openide.util.NbBundle.getMessage(DialogFactura.class, "DialogFactura.jButtonNuevoProducto.text")); // NOI18N
+        jButtonNuevoProducto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonNuevoProductoActionPerformed(evt);
             }
         });
 
@@ -254,13 +258,13 @@ public class DialogFactura extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(jButtonBorrarProductoFactura)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jButtonNuevoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabelH2FechaNuevaFactura, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jComboBoxPersonas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jButtonNuevaPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -289,7 +293,7 @@ public class DialogFactura extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6H2)
                     .addComponent(jComboBoxPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(jButtonNuevaPersona))
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9H2)
@@ -300,7 +304,7 @@ public class DialogFactura extends javax.swing.JDialog {
                     .addComponent(jButtonBorrarProductoFactura)
                     .addComponent(jLabel3H2)
                     .addComponent(jComboBoxProductos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(jButtonNuevoProducto))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
@@ -319,6 +323,11 @@ public class DialogFactura extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para agregar una nueva vactura en la base de datos
+     * 
+     * @param evt 
+     */
     private void jButtonNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaFacturaActionPerformed
         String nombre = (String) jComboBoxPersonas.getSelectedItem();
         System.out.println(nombre);
@@ -332,10 +341,19 @@ public class DialogFactura extends javax.swing.JDialog {
         } 
     }//GEN-LAST:event_jButtonNuevaFacturaActionPerformed
 
+    /**
+     * Metodo para cerrar el dialogo
+     * @param evt 
+     */
     private void jButtonCancelarNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarNuevaFacturaActionPerformed
         dispose();
     }//GEN-LAST:event_jButtonCancelarNuevaFacturaActionPerformed
 
+    /**
+     * Metodo para añadir un producto nuevo a la lista de la factura
+     * 
+     * @param evt 
+     */
     private void jButtonAddProductoFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddProductoFacturaActionPerformed
         String nomProducto = (String) jComboBoxProductos.getSelectedItem();
         Producto p = logica.getProductoPorNombre(nomProducto);
@@ -361,6 +379,11 @@ public class DialogFactura extends javax.swing.JDialog {
 
     }//GEN-LAST:event_jButtonAddProductoFacturaActionPerformed
 
+    /**
+     * Metodo para borrar un producto de la lista de la factura 
+     * 
+     * @param evt 
+     */
     private void jButtonBorrarProductoFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarProductoFacturaActionPerformed
         int ID_producto = (int) jTableProductos.getValueAt(jTableProductos.getSelectedRow(), 0);
         for (int i = 0; i < listaProductos.size(); i++) {
@@ -374,36 +397,56 @@ public class DialogFactura extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jButtonBorrarProductoFacturaActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    /**
+     * Metodo para agregar una nueva persona por si no existe en el JComboBox
+     * @param evt 
+     */
+    private void jButtonNuevaPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPersonaActionPerformed
         DialogPersona dialog = new DialogPersona(parent, true, logica, null);
         dialog.setVisible(true);
         jComboBoxPersonas.setModel(logica.getPersonasComboBoxModel());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonNuevaPersonaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    /**
+     * Metodo para agregar un nuevo producto por si el producto no aparece en el jCombobox
+     * @param evt 
+     */
+    private void jButtonNuevoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoProductoActionPerformed
         DialogProducto dialog = new DialogProducto(parent, true, logica, null);
         dialog.setVisible(true);
         jComboBoxProductos.setModel(logica.getProductosComboBoxModel());
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonNuevoProductoActionPerformed
 
+    /**
+     * Metodo para imprimir en pantalla una factura en pdf 
+     * @param evt 
+     */
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         if (factura != null) {
             logica.imprimirInformeFactura(factura);
         }
     }//GEN-LAST:event_btnImprimirActionPerformed
 
+    /**
+     * Metodo estatico para obtener una instancia nueva de DialogFactura.class
+     * @param parent
+     * @param modal
+     * @param logica
+     * @param f
+     * @return 
+     */
     public static DialogFactura newInstance(JFrame parent, boolean modal, LogicaNegocio logica, Factura f) {
         return new DialogFactura(parent, modal, logica, f);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnImprimir;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonAddProductoFactura;
     private javax.swing.JButton jButtonBorrarProductoFactura;
     private javax.swing.JButton jButtonCancelarNuevaFactura;
     private javax.swing.JButton jButtonNuevaFactura;
+    private javax.swing.JButton jButtonNuevaPersona;
+    private javax.swing.JButton jButtonNuevoProducto;
     private javax.swing.JComboBox<String> jComboBoxPersonas;
     private javax.swing.JComboBox<String> jComboBoxProductos;
     private javax.swing.JLabel jLabel1H1DialogNuevaFactura;
@@ -419,4 +462,5 @@ public class DialogFactura extends javax.swing.JDialog {
     private javax.swing.JTable jTableProductos;
     private javax.swing.JTextArea jTextAreaTrabajos;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(DialogFactura.class.getName());
 }

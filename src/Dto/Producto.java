@@ -5,16 +5,17 @@
  */
 package Dto;
 
-import java.io.*;
 import java.util.logging.Logger;
 
 /**
- *
+ * Objeto Producto
+ * 
  * @author Plam
  */
-public class Producto implements Serializable {
+public class Producto implements java.io.Serializable {
     
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(Producto.class.getName());
     
     private int codProducto;
     private String nombre; 
@@ -70,6 +71,5 @@ public class Producto implements Serializable {
     public String toString() {
         return "Producto{" + "codProducto=" + codProducto + ", nombre=" + nombre + ", precio=" + precio + ", peso=" + peso + ", cantidad=" + cantidad + '}';
     }
-    private static final Logger LOG = Logger.getLogger(Producto.class.getName());
     
 }

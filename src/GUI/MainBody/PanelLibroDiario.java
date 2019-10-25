@@ -29,7 +29,8 @@ import javax.swing.table.TableColumnModel;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * Panel Libro Diario
+ * 
  * @author Plam
  */
 public class PanelLibroDiario extends javax.swing.JPanel {
@@ -37,7 +38,7 @@ public class PanelLibroDiario extends javax.swing.JPanel {
     private static final long serialVersionUID = 1L;
 
     /**
-     * Creates new form PanelLibroDiario
+     * Constructor
      */
     private GregorianCalendar cal1, cal2;
     private LibroTableModel ltm;
@@ -92,7 +93,6 @@ public class PanelLibroDiario extends javax.swing.JPanel {
         
         fechaFin.setSelectedIndex(fechaFin.getModel().getSize() - 1);
 
-        //jTableLibroDiario.setModel(new DefaultTableModel(p.getListaNotasLibroDiario()));
         NumberFormat formater = new DecimalFormat("#0.00");
 
         lblDebeH2.setText(formater.format(ltm.getTotalDebe()));
@@ -101,6 +101,12 @@ public class PanelLibroDiario extends javax.swing.JPanel {
         
     }
 
+    /**
+     * Metodo para obtener el total de haber - deber , entre dos fechas
+     * @param fechaIn
+     * @param fechaFin
+     * @return 
+     */
     private double getTotatDebeEntreFechas(Date fechaIn, Date fechaFin) {
         double totalDebe = 0d;
         for (NotaLibroDiario notaLibroDiario : logica.getNotasEntreFechas(fechaIn, fechaFin)) {
@@ -114,6 +120,12 @@ public class PanelLibroDiario extends javax.swing.JPanel {
         return totalDebe;
     }
 
+    /**
+     * Metodo para obtener total haber entre dos fechas
+     * @param fechaIn
+     * @param fechaFin
+     * @return 
+     */
     private double getTotatHaberEntreFechas(Date fechaIn, Date fechaFin) {
         double totalHaber = 0d;
         for (NotaLibroDiario notaLibroDiario : logica.getNotasEntreFechas(fechaIn, fechaFin)) {
@@ -127,6 +139,10 @@ public class PanelLibroDiario extends javax.swing.JPanel {
         return totalHaber;
     }
 
+    /**
+     * Metodo para obtener un array con las fechas para utilizarlas en un jComboBox
+     * @return 
+     */
     public String[] getFechaComboBoxModel() {
         String[] fechasComboboxModel;
         Calendar c1 = Calendar.getInstance();
@@ -331,6 +347,10 @@ public class PanelLibroDiario extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para filtrar las notas entre dos fechas
+     * @param evt 
+     */
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         try {
             String fechaIn = (String) fechaInicio.getSelectedItem();
@@ -339,13 +359,16 @@ public class PanelLibroDiario extends javax.swing.JPanel {
             lblDebeH2.setText(String.format("%.2f", getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
             lblHaberH2.setText(String.format("%.2f", getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
 
-            //filtrada = true;
         } catch (ParseException ex) {
             Exceptions.printStackTrace(ex);
         }
 
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
+    /**
+     * Metodo para modificar la informacion de una nota 
+     * @param evt 
+     */
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         if (jTableLibroDiario.getSelectedRow() == -1) {
             return;
@@ -371,6 +394,10 @@ public class PanelLibroDiario extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnModificarActionPerformed
 
+    /**
+     * Metodo para crear una nueva nota del libro diario
+     * @param evt 
+     */
     private void jButtonNuevaNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaNotaActionPerformed
         DialogNotaLibro dialog = new DialogNotaLibro(frame, true, logica, null);
         dialog.setVisible(true);
@@ -387,6 +414,10 @@ public class PanelLibroDiario extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButtonNuevaNotaActionPerformed
 
+    /**
+     * Metodo para borrar una nota del libro diario, se borra tambien de la base de datos
+     * @param evt 
+     */
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
         if (jTableLibroDiario.getSelectedRow() == -1) {
             return;
@@ -412,6 +443,10 @@ public class PanelLibroDiario extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnBorrarActionPerformed
 
+    /**
+     * Metodo para manejar los clicks de la table del libro diario
+     * @param evt 
+     */
     private void jTableLibroDiarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableLibroDiarioMouseClicked
         if (jTableLibroDiario.getSelectedRow() == -1) {
             return;
@@ -432,6 +467,10 @@ public class PanelLibroDiario extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jTableLibroDiarioMouseClicked
 
+    /**
+     * Metodo para imprimir una nota del libro diario
+     * @param evt 
+     */
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         if (jTableLibroDiario.getSelectedRow() == -1) {
             return;

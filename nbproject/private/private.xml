@@ -11,6 +11,7 @@
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/test/GUI/Main/MainSuite.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogFactura.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/LibroTableModel.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Main/package-info.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelEstadistica.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarPersonas.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelCompra.java</file>
@@ -18,6 +19,7 @@
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarInventario.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/test/Dto/FacturaTest.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/Usuario.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/package-info.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/test/GUI/Main/LoginTest.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/test/Dto/UsuarioTest.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/Factura.java</file>
@@ -26,6 +28,7 @@
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarNotasLibro.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Main/Login.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/CajaTableModel.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/package-info.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/test/Dto/NotaLibroDiarioTest.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelVenta.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelLibroDiario.java</file>
@@ -35,13 +38,18 @@
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogPersona.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/test/GUI/Main/MainTest.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogProducto.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/package-info.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/PersonaCortoTableModel.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/ConexionBBDD.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogNotaLibro.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelCaja.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/package-info.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelFacturas.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/package-info.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/Producto.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/test/Dto/PersonaTest.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/package-info.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/img/package-info.java</file>
         </group>
     </open-files>
 </project-private>

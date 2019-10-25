@@ -6,13 +6,19 @@
 package GUI.Main;
 
 import Logica.LogicaTemas;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *  El dialogo login hace la conexion inicial con la base de datos<br>
+ *  a travez del controlador LogicaNegocio.class
+ * 
  * @author Plam
  */
 public class Login extends javax.swing.JDialog {
+
+    private static final long serialVersionUID = 1L;
     
     private boolean registrar = false;
 
@@ -24,7 +30,7 @@ public class Login extends javax.swing.JDialog {
     private char [] passLogin;
 
     /**
-     * Creates new form Login
+     * Constructor
      */
     public Login(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -62,7 +68,7 @@ public class Login extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabelIcon = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        jLabelRegistrar = new javax.swing.JLabel();
 
         jLabel3.setText(org.openide.util.NbBundle.getMessage(Login.class, "Login.jLabel3.text")); // NOI18N
 
@@ -140,12 +146,12 @@ public class Login extends javax.swing.JDialog {
         jLabelIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/login.png"))); // NOI18N
         jLabelIcon.setText(org.openide.util.NbBundle.getMessage(Login.class, "Login.jLabelIcon.text")); // NOI18N
 
-        jLabel11.setFont(LogicaTemas.TEXT_FONT);
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText(org.openide.util.NbBundle.getMessage(Login.class, "Login.jLabel11.text")); // NOI18N
-        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabelRegistrar.setFont(LogicaTemas.TEXT_FONT);
+        jLabelRegistrar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelRegistrar.setText(org.openide.util.NbBundle.getMessage(Login.class, "Login.jLabelRegistrar.text")); // NOI18N
+        jLabelRegistrar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel11MouseClicked(evt);
+                jLabelRegistrarMouseClicked(evt);
             }
         });
 
@@ -169,7 +175,7 @@ public class Login extends javax.swing.JDialog {
                                     .addComponent(jTextFieldLoginUsuario)
                                     .addComponent(jPasswordFieldLoginPass)))
                             .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabelRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -218,7 +224,7 @@ public class Login extends javax.swing.JDialog {
                             .addComponent(jPasswordFieldLoginPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10))))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel11)
+                .addComponent(jLabelRegistrar)
                 .addGap(33, 33, 33)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -253,6 +259,11 @@ public class Login extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para limpiar los cambos para poder rellenarlo de nuevo
+     * 
+     * @param evt 
+     */
     private void jButtonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimpiarActionPerformed
         jTextFieldLoginUsuario.setText("");
         jPasswordFieldLoginPass.setText("");
@@ -264,14 +275,16 @@ public class Login extends javax.swing.JDialog {
 
     }//GEN-LAST:event_jButtonLimpiarActionPerformed
 
+    /**
+     * Metodo para hacer la conexion inicial
+     * @param evt 
+     */
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
         nombreLogin = jTextFieldLoginUsuario.getText();
         passLogin = jPasswordFieldLoginPass.getPassword();
-        System.out.println(passLogin);
 
         nombre = jTextFieldUsuario.getText();
         pass = jPasswordField.getPassword();
-        System.out.println(pass);
         
         host = jTextFieldHost.getText();
         nombreBBDD = jTextFieldBBDD.getText();
@@ -284,60 +297,97 @@ public class Login extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButtonConnectActionPerformed
 
-    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+    /**
+     * Metodo para registrar una persona como usuario SIN permisos para el manejo de la base de datos
+     * @param evt 
+     */
+    private void jLabelRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegistrarMouseClicked
         registrar = true;
         jComboBox1.setSelectedIndex(1);
         jComboBox1.setEnabled(false);
         
-    }//GEN-LAST:event_jLabel11MouseClicked
+    }//GEN-LAST:event_jLabelRegistrarMouseClicked
 
+    /**
+     * Metodo para comprobar si un String es numero 
+     * @param s
+     * @return 
+     */
     public boolean esNumero(String s) {
         try {
             Integer.parseInt(s);
             return true;
         } catch (NumberFormatException e) {
-            e.getMessage();
+            LOG.log(Level.WARNING, e.getMessage());
         }
         return false;
     }
 
+    /**
+     * Metodo para obtener si el usuario es para registrarlo 
+     * @return 
+     */
     public boolean isRegistrar() {
         return registrar;
     }
 
-    
-
+    /**
+     * Metodo para obtener el nombre para el login 
+     * @return 
+     */
     public String getNombreLogin() {
         return nombreLogin;
     }
 
+    /**
+     * Metodo para obtener la contraseña para el login
+     * @return 
+     */
     public String getPassLogin() {
-        String passLog = String.valueOf(passLogin);
-        return passLog;
+        return passLogin.toString();
     }
 
+    /**
+     * Metodo para obtener el nombre para la conexion a la base de datos
+     * @return 
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Metodo para obtener la contraseña para la conexion a la base de datos
+     * @return 
+     */
     public String getPass() {
         String password = "";
         
         for (int i = 0; i < pass.length; i++) {
             password += pass[i];
         }
-        System.out.println(password);
         return password;
     }
 
+    /**
+     * Metodo para obtener el host para la conexion a la base de datos
+     * @return 
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     * Metodo para obtener el nombre de la base de datos para la conexion a la base de datos
+     * @return 
+     */
     public String getNombreBBDD() {
         return nombreBBDD;
     }
 
+    /**
+     * Metodo para obtener el puerto para la conexion a la base de datos
+     * @return 
+     */
     public int getPuerto() {
         return puerto;
     }
@@ -349,7 +399,6 @@ public class Login extends javax.swing.JDialog {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -359,6 +408,7 @@ public class Login extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelIcon;
+    private javax.swing.JLabel jLabelRegistrar;
     private javax.swing.JPasswordField jPasswordField;
     private javax.swing.JPasswordField jPasswordFieldLoginPass;
     private javax.swing.JSeparator jSeparator1;
@@ -368,4 +418,5 @@ public class Login extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldPuerto;
     private javax.swing.JTextField jTextFieldUsuario;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(Login.class.getName());
 }

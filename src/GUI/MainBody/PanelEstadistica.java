@@ -17,6 +17,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,10 +29,9 @@ import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-import org.openide.util.Exceptions;
 
 /**
- *
+ * Panel Estadistica
  * @author Plam
  */
 public class PanelEstadistica extends javax.swing.JPanel {
@@ -40,14 +41,13 @@ public class PanelEstadistica extends javax.swing.JPanel {
     private LogicaNegocio logica;
     private List<JLabel> listaLabelsH1;
     private List<JLabel> listaLabelsH2;
-    // private boolean cambiar = true; // estado a true - significa que ya se puede cambiar la imagen del PieChart
     private String rutaLineChart, rutaBarChart3d, rutaPieChart3d;
     private File barChart3d, lineChart, pieChart3d;
     private JFrame parent;
     private File ruta;
 
     /**
-     * Creates new form PanelEstadistica
+     * Constructor
      */
     public PanelEstadistica(JFrame parent, LogicaNegocio logica) {
         this.logica = logica;
@@ -58,22 +58,20 @@ public class PanelEstadistica extends javax.swing.JPanel {
 
         ruta = new File("img_estadistica");
         if (ruta.mkdir()) {
-            System.out.println("Carpeta " + ruta.getPath() + " creada con Exito");
+            LOG.log(Level.INFO, "Carpeta " + ruta.getPath() + " creada con Exito");
         } else if (ruta.exists()) {
-            System.out.println("La carpeta img_estadistica existe !!! No se crea !");
+            LOG.log(Level.INFO, "La carpeta img_estadistica existe !!! No se crea !");
         } else {
             JOptionPane.showMessageDialog(this, "La carpeta " + ruta.getPath() + " NO se ha creado\nRevisa los permisos del programa.");
         }
 
     }
 
-    /////////////////
-    /////////////////
-    //
-    //  Estadisticas
-    //
-    /////////////////
-    /////////////////
+
+    /**
+     * Metodo para generar la estadistica tipo PiePlot3d 
+     * @param nota 
+     */
     public void estadisticaPieChart3d(NotaLibroDiario nota) {
         DefaultPieDataset dataset = new DefaultPieDataset();
         dataset.setValue("Cobros", nota.getHaber());
@@ -93,10 +91,15 @@ public class PanelEstadistica extends javax.swing.JPanel {
         try {
             ChartUtilities.saveChartAsJPEG(pieChart3d, chart, 600, 400);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.log(Level.WARNING, ex.getMessage());
         }
     }
 
+    /**
+     * Metodo para generar la estadistica tipo BarChart3D
+     * @param fechaInicio
+     * @param fechaFin 
+     */
     public void estadisticaBarChart3d(Date fechaInicio, Date fechaFin) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (NotaLibroDiario nota : logica.getNotasEntreFechas(fechaInicio, fechaFin)) {
@@ -116,10 +119,15 @@ public class PanelEstadistica extends javax.swing.JPanel {
         try {
             ChartUtilities.saveChartAsJPEG(barChart3d, barChart, 600, 400);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.log(Level.WARNING, ex.getMessage());
         }
     }
-
+    
+    /**
+     * Metodo para generar la estadistica tipo LineChart
+     * @param fechaInicio
+     * @param fechaFin 
+     */
     public void estadisticaLineChart(Date fechaInicio, Date fechaFin) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (NotaLibroDiario nota : logica.getNotasEntreFechas(fechaInicio, fechaFin)) {
@@ -137,7 +145,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         try {
             ChartUtilities.saveChartAsJPEG(lineChart, barChart, 600, 400);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.log(Level.WARNING, ex.getMessage());
         }
     }
 
@@ -265,6 +273,10 @@ public class PanelEstadistica extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para filtrar las notas del libro diario entre dos fechas
+     * @param evt 
+     */
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         jLabelPieChart.setIcon(null);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -283,10 +295,14 @@ public class PanelEstadistica extends javax.swing.JPanel {
             jLabelLineChart.setIcon(img3);
 
         } catch (ParseException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.log(Level.WARNING, ex.getMessage());
         }
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
+    /**
+     * Metodo para manejar los clicks a la table Notas. Genera Estadistica
+     * @param evt 
+     */
     private void jTableNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableNotasMouseClicked
         if (jTableNotas.getSelectedRow() == -1) {
             return;
@@ -319,4 +335,5 @@ public class PanelEstadistica extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableNotas;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelEstadistica.class.getName());
 }

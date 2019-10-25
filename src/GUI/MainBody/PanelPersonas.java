@@ -13,15 +13,19 @@ import TableModels.FacturaTableModel;
 import TableModels.PersonasTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
+ * Panel Personas
  *
  * @author Plam
  */
 public class PanelPersonas extends javax.swing.JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     private List<JLabel> listaLabelsH1;
     private List<JLabel> listaLabelsH2;
@@ -31,29 +35,19 @@ public class PanelPersonas extends javax.swing.JPanel {
     private PersonasTableModel personaTableModel;
 
     /**
-     * Creates new form PanelPersonas
+     * Constructor
      */
     public PanelPersonas(JFrame parent, LogicaNegocio logica) {
         this.logica = logica;
         initComponents();
         this.parent = parent;
 
-//        Font font = new Font(Font.MONOSPACED, Font.BOLD, 20);
-//        Border bGreyLine = BorderFactory.createLineBorder(Color.CYAN, 2, true);
-//        Border border = BorderFactory.createTitledBorder(bGreyLine, "Personas", TitledBorder.CENTER, TitledBorder.TOP, font, Color.ORANGE);
-//        TitledBorder titledBorder = new TitledBorder(border);
         setBorder(LogicaTemas.GET_TITLE_BORDER("Personas"));
 
-        //setMinimumSize(new Dimension(Main.MIN_LARGO, Main.MIN_ALTO));
-//private javax.swing.JLabel jLabel1H3;
-//    private javax.swing.JLabel jLabel1H4;
-//    private javax.swing.JLabel jLabel2H3;
         personaTableModel = new PersonasTableModel(logica.getListaPersonas());
         jTablePersonas.setModel(personaTableModel);
         facturaTableModel = new FacturaTableModel(null);
 
-        //JScrollPane scrollPane = new JScrollPane(this);
-        //add(scrollPane);
         listaLabelsH1 = new ArrayList<>();
         listaLabelsH1.add(jLabel1H1);
 
@@ -252,6 +246,10 @@ public class PanelPersonas extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para manejar los click de la table de las personas
+     * @param evt 
+     */
     private void jTablePersonasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePersonasMouseClicked
         int ID_Persona = (int) jTablePersonas.getValueAt(jTablePersonas.getSelectedRow(), 0);
         if (ID_Persona == -1) {
@@ -265,12 +263,20 @@ public class PanelPersonas extends javax.swing.JPanel {
         jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
     }//GEN-LAST:event_jTablePersonasMouseClicked
 
+    /**
+     * Metodo para crear una nueva persona. Se abre ventana nueva
+     * @param evt 
+     */
     private void jButtonNuevaPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPersonaActionPerformed
         DialogPersona dialog = new DialogPersona(parent, true, logica, null);
         dialog.setVisible(true);
         jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
     }//GEN-LAST:event_jButtonNuevaPersonaActionPerformed
 
+    /**
+     * Metodo para ver la informacion de una factura
+     * @param evt 
+     */
     private void jButtonVerFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVerFacturaActionPerformed
         if (jTableFacturas.getSelectedRow() == -1) {
             return;
@@ -283,6 +289,11 @@ public class PanelPersonas extends javax.swing.JPanel {
         dialog.setVisible(true);
     }//GEN-LAST:event_jButtonVerFacturaActionPerformed
 
+    /**
+     * Metodo par aobtener las personas segun el valor de jComboBox<br>
+     * Clientes, Proveedores o todos.
+     * @param evt 
+     */
     private void jComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxActionPerformed
         if (jComboBox.getSelectedItem().toString().equalsIgnoreCase("Clientes")) {
             jTablePersonas.setModel(new PersonasTableModel(logica.getListaClientes()));
@@ -293,6 +304,10 @@ public class PanelPersonas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jComboBoxActionPerformed
 
+    /**
+     * Metodo para imprimir en pantalla una factura, genera un pdf
+     * @param evt 
+     */
     private void jButtonImprimirFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirFacturaActionPerformed
         if (jTableFacturas.getSelectedRow() == -1) {
             return;
@@ -303,6 +318,10 @@ public class PanelPersonas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonImprimirFacturaActionPerformed
 
+    /**
+     * Metodo para editar una persona 
+     * @param evt 
+     */
     private void jButtoneditarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtoneditarPersonaActionPerformed
         if (jTablePersonas.getSelectedRow() == -1) {
             return;
@@ -315,6 +334,10 @@ public class PanelPersonas extends javax.swing.JPanel {
         jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
     }//GEN-LAST:event_jButtoneditarPersonaActionPerformed
 
+    /**
+     * Metodo para borrar una persona. Se borra tambien de la base de datos
+     * @param evt 
+     */
     private void jButtonborrarPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonborrarPersonaActionPerformed
         if (jTablePersonas.getSelectedRow() == -1) {
             return;
@@ -329,6 +352,10 @@ public class PanelPersonas extends javax.swing.JPanel {
         jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
     }//GEN-LAST:event_jButtonborrarPersonaActionPerformed
 
+    /**
+     * Metodo para manejar los clicks de la tabla de las facturas
+     * @param evt 
+     */
     private void jTableFacturasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFacturasMouseClicked
         int idFactura = (int) jTableFacturas.getValueAt(jTableFacturas.getSelectedRow(), 0);
         if (idFactura != -1 && evt.getClickCount() >= 2) {
@@ -354,4 +381,5 @@ public class PanelPersonas extends javax.swing.JPanel {
     private javax.swing.JTable jTableFacturas;
     private javax.swing.JTable jTablePersonas;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelPersonas.class.getName());
 }

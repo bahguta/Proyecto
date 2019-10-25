@@ -16,14 +16,18 @@ import TableModels.PersonaCortoTableModel;
 import TableModels.ProductoTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
+ * Panel Factura
  *
  * @author Plam
  */
 public class PanelFacturas extends javax.swing.JPanel {
+
+    private static final long serialVersionUID = 1L;
 
     private List<JLabel> listaLabelsH1;
     private List<JLabel> listaLabelsH2;
@@ -34,19 +38,14 @@ public class PanelFacturas extends javax.swing.JPanel {
     private PersonaCortoTableModel ptm;
 
     /**
-     * Creates new form PanelFacturas
+     * Constructor
      */
     public PanelFacturas(JFrame parent, LogicaNegocio logica) {
         initComponents();
         this.parent = parent;
         this.logica = logica;
 
-//        Font font = new Font(Font.MONOSPACED, Font.BOLD, 20);
-//        Border bGreyLine = BorderFactory.createLineBorder(Color.CYAN, 2, true);
-//        Border border = BorderFactory.createTitledBorder(bGreyLine, "  Facturas  ", TitledBorder.CENTER, TitledBorder.TOP, font, Color.ORANGE);
-//        TitledBorder titledBorder = new TitledBorder(border);
         setBorder(LogicaTemas.GET_TITLE_BORDER("Facturas"));
-        //setMinimumSize(new Dimension(Main.MIN_LARGO, Main.MIN_ALTO));
 
         jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
 
@@ -77,7 +76,7 @@ public class PanelFacturas extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableFacturas = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        jButtonImprimir = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel4H2 = new javax.swing.JLabel();
         jLabel5H2 = new javax.swing.JLabel();
@@ -128,11 +127,11 @@ public class PanelFacturas extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(jTableFacturas);
 
-        jButton2.setFont(LogicaTemas.BUTTON_FONT);
-        jButton2.setText("Imprimir");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonImprimir.setFont(LogicaTemas.BUTTON_FONT);
+        jButtonImprimir.setText("Imprimir");
+        jButtonImprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonImprimirActionPerformed(evt);
             }
         });
 
@@ -232,7 +231,7 @@ public class PanelFacturas extends javax.swing.JPanel {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButtonEditarFactura)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton2)))))
+                                        .addComponent(jButtonImprimir)))))
                         .addGap(18, 18, 18)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -275,19 +274,27 @@ public class PanelFacturas extends javax.swing.JPanel {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(jButtonImprimir)
                     .addComponent(jButtonEditarFactura)
                     .addComponent(jButtonNuevaFactura))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para hacer factura nueva. Abre nueva ventana ! 
+     * @param evt 
+     */
     private void jButtonNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaFacturaActionPerformed
         DialogFactura dialog = new DialogFactura(parent, true, logica, null);
         dialog.setVisible(true);
         jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
     }//GEN-LAST:event_jButtonNuevaFacturaActionPerformed
 
+    /**
+     * Metodo para editar una factura 
+     * @param evt 
+     */
     private void jButtonEditarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarFacturaActionPerformed
         if (jTableFacturas.getSelectedRow() != -1) {
             int ID_FACTURA = (Integer) jTableFacturas.getValueAt(jTableFacturas.getSelectedRow(), 0);
@@ -298,6 +305,10 @@ public class PanelFacturas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonEditarFacturaActionPerformed
 
+    /**
+     * Metodo para manejar los click a la tabla de las facturas
+     * @param evt 
+     */
     private void jTableFacturasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFacturasMouseClicked
         if (jTableFacturas.getSelectedRow() == -1) {
             return;
@@ -320,56 +331,32 @@ public class PanelFacturas extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jTableFacturasMouseClicked
 
+    /**
+     * Metodo para manejar los eventos del jComboBox<br> 
+     * se cambia entre clientes, proveedores y todos
+     * @param evt 
+     */
     private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
-//        if (jComboBox.getSelectedItem().toString().equalsIgnoreCase("Clientes")) {
-//            jTablePersonas.setModel(new PersonasTableModel(logica.getListaClientes()));
-//        } else if (jComboBox.getSelectedItem().toString().equalsIgnoreCase("Proveedores")) {
-//            jTablePersonas.setModel(new PersonasTableModel(logica.getListaProveedores()));
-//        } else {
-//            jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
-//        }
-        
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
 
-                switch (jComboBoxTipo.getSelectedIndex()) {
-                    case 1:
-                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasClientes()));
-                        break;
-                    case 2:
-                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasProveedores()));
-                        break;
-                    default:
-                        jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
-                        break;
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            switch (jComboBoxTipo.getSelectedIndex()) {
+                case 1:
+                    jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasClientes()));
+                    break;
+                case 2:
+                    jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasProveedores()));
+                    break;
+                default:
+                    jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
+                    break;
             }
         });
-//        Thread t = new Thread( new Runnable() {
-//            
-//            @Override
-//            public void run() {
-//                System.out.println("dentro de run");
-//                switch (jComboBoxTipo.getSelectedIndex()) {
-//                    case 1:
-//                        System.out.println("1");
-//                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasClientes()));
-//                        break;
-//                    case 2:
-//                        System.out.println("2");
-//                        jTableFacturas.setModel(new FacturaTableModel(logica.getFacturasProveedores()));
-//                        break;
-//                    default:
-//                        System.out.println("todas");
-//                        jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
-//                        break;
-//                }
-//            }
-//        });
-//        t.start();
     }//GEN-LAST:event_jComboBoxTipoActionPerformed
 
+    /**
+     * Metodo para manejar los clock de la table de los productos
+     * @param evt 
+     */
     private void jTable1ProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1ProductosMouseClicked
         if (jTable1Productos.getSelectedRow() == -1) {
             return;
@@ -381,11 +368,16 @@ public class PanelFacturas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTable1ProductosMouseClicked
 
+    
     private void jTableClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableClienteMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jTableClienteMouseClicked
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    /**
+     * Metodo para imprimir una factura en pdf
+     * @param evt 
+     */
+    private void jButtonImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirActionPerformed
         if (jTableFacturas.getSelectedRow() == -1) {
             return;
         }
@@ -393,13 +385,13 @@ public class PanelFacturas extends javax.swing.JPanel {
         if (ID_factura != -1) {
             logica.imprimirInformeFactura(logica.getFacturaPorID(ID_factura));
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonImprimirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonEditarFactura;
+    private javax.swing.JButton jButtonImprimir;
     private javax.swing.JButton jButtonNuevaFactura;
     private javax.swing.JComboBox<String> jComboBoxTipo;
     private javax.swing.JLabel jLabel11H2;
@@ -416,4 +408,5 @@ public class PanelFacturas extends javax.swing.JPanel {
     private javax.swing.JTable jTableCliente;
     private javax.swing.JTable jTableFacturas;
     // End of variables declaration//GEN-END:variables
+    private static final Logger LOG = Logger.getLogger(PanelFacturas.class.getName());
 }

@@ -23,9 +23,12 @@ import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 import java.awt.CardLayout;
 import java.awt.Desktop;
 import java.awt.Image;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -40,15 +43,7 @@ import javax.swing.event.MenuListener;
 import org.openide.util.Exceptions;
 
 /**
- *
- *
- *
- * Este Proyecto ha sido desarollado para la asignatura "Proyecto" del instituto
- * IES Juan Jose Calvo Miguel - Sotrondio
- *
- * El programa se concentra en el manejo de las notas diarias que se van
- * tomando, el stock de los productos que entran (compra) y salen (Venta) de la
- * empresa, las personas sean clientes o provedoores y manejo de facturas.
+ * 
  *
  * @author Plam
  */
@@ -81,6 +76,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
      * Constructor:
      */
     public Main() {
+        imprimirLogo();
         Login login = new Login(this, true);
         login.setVisible(true);
         usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
@@ -169,6 +165,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 
     private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
         logica = new LogicaNegocio(this, nombre, pass, host, puerto, nombreBBDD);
+        
     }
     
     public static void actualizarPanelCaja(){
@@ -594,6 +591,23 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     @Override
     public void menuCanceled(MenuEvent me) {
 
+    }
+    
+    /**
+     * Metodo para imprimir el logo por consola
+     */
+    public void imprimirLogo() {
+
+        try {
+            File banner = new File("src/Logica/banner.txt");
+            BufferedReader br = new BufferedReader(new FileReader(banner));
+            String st;
+            while ((st = br.readLine()) != null) {
+                System.out.println(st);
+            }
+        } catch (IOException e) {
+            LOG.log(Level.WARNING, e.getMessage());
+        }
     }
 
 }

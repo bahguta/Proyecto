@@ -8,12 +8,14 @@ package Dto;
 import java.util.logging.Logger;
 
 /**
+ * Objeto Persona
  *
  * @author Plam
  */
-public class Persona {
+public class Persona implements java.io.Serializable{
     
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(Persona.class.getName());
     
     private int cod;
     private String nombre;
@@ -85,6 +87,5 @@ public class Persona {
     public String toString() {
         return "Persona{" + "cod=" + cod + ", nombre=" + nombre + ", apellido=" + apellido + ", direccion=" + direccion + ", telefono=" + telefono + ", email=" + email + ", tipo=" + tipo + '}';
     }
-    private static final Logger LOG = Logger.getLogger(Persona.class.getName());
     
 }

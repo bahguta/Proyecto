@@ -15,14 +15,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import org.openide.util.Exceptions;
 
 /**
- *
+ * Gestionar Facturas
+ * 
  * @author Plam
  */
 public class GestionarFacturas {
+    private static final Logger LOG = Logger.getLogger(GestionarFacturas.class.getName());
 
     private List<Factura> listaFacturas;
     private ConexionBBDD conexion;
@@ -30,7 +33,7 @@ public class GestionarFacturas {
     /**
      * Constructor
      *
-     * @param conexion la conexion para la base de datos
+     * @param conexion
      */
     public GestionarFacturas(ConexionBBDD conexion) {
         this.conexion = conexion;

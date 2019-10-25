@@ -9,12 +9,14 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 /**
- *
+ * Objeto Nota del libro diario
+ * 
  * @author Plam
  */
-public class NotaLibroDiario {
+public class NotaLibroDiario implements java.io.Serializable{
     
     private static final long serialVersionUID = 1L;
+    private static final Logger LOG = Logger.getLogger(NotaLibroDiario.class.getName());
     
     private int codNota;
     private Date fecha;
@@ -77,7 +79,6 @@ public class NotaLibroDiario {
     public String toString() {
         return "NotaLibroDiario{" + "codNota=" + codNota + ", fecha=" + fecha + ", detalle=" + detalle + ", debe=" + debe + ", haber=" + haber + '}';
     }
-    private static final Logger LOG = Logger.getLogger(NotaLibroDiario.class.getName());
     
     
     

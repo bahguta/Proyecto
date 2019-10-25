@@ -16,6 +16,7 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 /**
+ * Esta clase hace la logica de la vista , cambiar colores y tamaño de texto
  *
  * @author Plam
  */
@@ -27,14 +28,30 @@ public class LogicaTemas {
     public static Font TEXT_FONT = new Font("Monospaced", Font.BOLD, 14);
     public static Font TEXT_FONT_H1 = new Font("Monospaced", Font.BOLD, 18);
 
+    /**
+     * Metodo para agregar un JLabel en un Map 
+     * @param nombre
+     * @param lista 
+     */
     public static void addListJLabel(String nombre, List<JLabel> lista) {
         MAP_JLABEL.put(nombre, lista);
     }
 
+    /**
+     * Metodo para obtener un JLabel 
+     * @param nombre
+     * @return
+     * @throws NullPointerException 
+     */
     public static List<JLabel> getListJLabel(String nombre) throws NullPointerException {
         return MAP_JLABEL.get(nombre);
     }
 
+    /**
+     * MEtodo para cambiar el tamaño del texto
+     * @param sizeH1
+     * @param sizeH2 
+     */
     public static void setTextSize(float sizeH1, float sizeH2) {
         for (Map.Entry<String, List<JLabel>> entry : MAP_JLABEL.entrySet()) {
             String key = entry.getKey();
@@ -60,6 +77,11 @@ public class LogicaTemas {
         BUTTON_FONT.deriveFont(sizeH2);
     }
 
+    /**
+     * Metodo para crear unos bordes con titulo
+     * @param nombre
+     * @return 
+     */
     public static TitledBorder GET_TITLE_BORDER(String nombre) {
         Font font = new Font(Font.MONOSPACED, Font.BOLD, 20);
         Border line = BorderFactory.createLineBorder(Color.ORANGE, 2, true);
