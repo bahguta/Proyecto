@@ -145,7 +145,7 @@ public class GestionarNotasLibro {
     public Date getFechaIn() {
         refrescarListaNotas();
         Date fechaIn = null;
-        if (listaNotas != null) {
+        if (listaNotas != null && !listaNotas.isEmpty()) {
             fechaIn = listaNotas.get(0).getFecha();
             for (NotaLibroDiario nota : listaNotas) {
                 if (fechaIn.after(nota.getFecha()) || fechaIn.compareTo(nota.getFecha()) == 0) {

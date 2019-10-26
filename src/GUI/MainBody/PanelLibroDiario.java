@@ -146,9 +146,16 @@ public class PanelLibroDiario extends javax.swing.JPanel {
     public String[] getFechaComboBoxModel() {
         String[] fechasComboboxModel;
         Calendar c1 = Calendar.getInstance();
-        c1.setTime(logica.getNotasFechaIn());
+        if (null != logica.getNotasFechaIn()) {
+            c1.setTime(logica.getNotasFechaIn());
+        } else {
+            c1.setTime(new Date(19800101));
+        }
+        
+        
         Calendar c2 = Calendar.getInstance();
         c2.setTime(cal2.getTime());
+        
         ArrayList<String> listaFechas = new ArrayList<String>();
         while (!c1.equals(c2)) {
             listaFechas.add(sdf.format(c1.getTime()));

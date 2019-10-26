@@ -44,23 +44,19 @@ public class LogicaNegocio {
 
     private static final Logger LOG = Logger.getLogger(LogicaNegocio.class.getName());
 
-    /**
-     * Miembros de la clase
-     */
-    // conexion para conectarse a la base de datos 
+    // gestiones 
     private ConexionBBDD conexion;
-    //gestionar inventario
     private GestionarInventario gestionarInventario;
-    //gestionar personas
     private GestionarPersonas gestionarPersonas;
-    //gestionar facturas
     private GestionarFacturas gestionarFacturas;
-    //gestionar notas libro diario
     private GestionarNotasLibro gestionarNotasLibro;
-
+    private GestionarCaja gestionarCaja;
+    
     //ruta para los informes que va a crear
     private File rutaInformes;
-    private GestionarCaja gestionarCaja;
+    //comprueba si esta establecida la conexion con la base de datos 
+    //devuelve true si existe una conexion con base de datos y false en caso contrario
+    private static boolean isConexion = false;
 
     /**
      * Constructor Datos necesarios para la conexion a la base de datos
@@ -76,8 +72,8 @@ public class LogicaNegocio {
         this.conexion = new ConexionBBDD();
         //inicializo la conexion 
         //this.conexion.conexionBBDD(IP, puerto, nombreBBDD, usuario, password);
-        this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password);
-
+        
+        
         //creo las clases de gestionar 
         this.gestionarPersonas = new GestionarPersonas(conexion);
         this.gestionarFacturas = new GestionarFacturas(conexion);
@@ -97,7 +93,25 @@ public class LogicaNegocio {
 
         }
     }
+    
+    public boolean conectBBDD(String usuario, String password, String IP, int puerto, String nombreBBDD){
+        if(this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)){
+            LogicaNegocio.isConexion = true;
+            return true;
+        }
+        return false; 
+    }
 
+    public static boolean isIsConexion() {
+        return LogicaNegocio.isConexion;
+    }
+
+    public static void setIsConexion(boolean isConexion) {
+        LogicaNegocio.isConexion = isConexion;
+    }
+
+    
+    
     public LogicaNegocio() {
         this.conexion = null;
 

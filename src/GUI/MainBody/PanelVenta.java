@@ -17,8 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- * Panel Venta 
- * 
+ * Panel Venta
+ *
  * @author Plam
  */
 public class PanelVenta extends javax.swing.JPanel {
@@ -30,6 +30,11 @@ public class PanelVenta extends javax.swing.JPanel {
     private PersonaCortoTableModel pctm; // para jtableClientes
     private ProductoTableModel ptm; //para jtableProductosStock
     private ProductoTableModel ptmpc; //para jtableProductosCliente
+
+    //vamos a hacer una copia de los productos de stock para simular 
+    //el movimiento de las cantidades, una vez finalizada la factura se procedera a restar la cantidad de cada producto del almacen
+    private List<Producto> listaStock;
+
     private List<Producto> listaProductos; //para los productos que va a comprar el cliente 
 
     /**
@@ -48,17 +53,16 @@ public class PanelVenta extends javax.swing.JPanel {
 
         LogicaTemas.addListJLabel("JLabelH2LibroDiario", listaLabelsH2);
 
-        listaProductos = new ArrayList<>();
-
         pctm = new PersonaCortoTableModel(this.logica.getListaClientes());
         jTableClientes.setModel(pctm);
 
+        listaProductos = new ArrayList<>();
         ptmpc = new ProductoTableModel(listaProductos);
         jTableProductosCliente.setModel(ptmpc);
 
-        ptm = new ProductoTableModel(this.logica.getListaProductos());
+        listaStock = logica.getListaProductos();
+        ptm = new ProductoTableModel(listaStock);
         jTableProductosStock.setModel(ptm);
-
     }
 
     /**
@@ -218,8 +222,10 @@ public class PanelVenta extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Metodo para añadir un producto de los productos en Stock en la lista del cliente
-     * @param evt 
+     * Metodo para añadir un producto de los productos en Stock en la lista del
+     * cliente
+     *
+     * @param evt
      */
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         int id_producto = (Integer) jTableProductosStock.getValueAt(jTableProductosStock.getSelectedRow(), 0);
@@ -227,18 +233,33 @@ public class PanelVenta extends javax.swing.JPanel {
         if (id_producto == -1) {
             return;
         }
+        //producto en stock
         Producto p = logica.getProductoPorID(id_producto);
+        listaProductos. //
+                Producto produc = null;
+
         if (p != null && p.getCantidad() > 0) {
             for (Producto producto : listaProductos) {
                 if (producto.getCodProducto() == p.getCodProducto()) {
                     producto.setCantidad(producto.getCantidad() + 1);
                     jTableProductosCliente.setModel(new ProductoTableModel(listaProductos));
+                    produc = listaStock.stream()
+                            .filter(prod -> {
+                                if (prod.getCodProducto() == p.getCodProducto()) {
+                                    prod.setCantidad(prod.getCantidad() - p.getCantidad());
+                                    return true;
+                                }
+                                return false;
+                            }).findFirst();
                     return;
+                } else {
+                    p.setCantidad(1);
                 }
             }
 
-            p.setCantidad(1);
             listaProductos.add(p);
+
+            //quitar el producto del inventario
             jTableProductosCliente.setModel(new ProductoTableModel(listaProductos));
         }
 
@@ -246,7 +267,8 @@ public class PanelVenta extends javax.swing.JPanel {
 
     /**
      * Metodo para borrar un producto de la lista del cliente
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
         if (jTableProductosCliente.getSelectedRow() == -1) {

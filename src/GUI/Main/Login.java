@@ -11,23 +11,23 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- *  El dialogo login hace la conexion inicial con la base de datos<br>
- *  a travez del controlador LogicaNegocio.class
- * 
+ * El dialogo login hace la conexion inicial con la base de datos<br>
+ * a travez del controlador LogicaNegocio.class
+ *
  * @author Plam
  */
 public class Login extends javax.swing.JDialog {
 
     private static final long serialVersionUID = 1L;
-    
+
     private boolean registrar = false;
 
     private String nombre, host, nombreBBDD;
     private int puerto;
-    private char [] pass;
+    private char[] pass;
 
     private String nombreLogin;
-    private char [] passLogin;
+    private char[] passLogin;
 
     /**
      * Constructor
@@ -35,6 +35,19 @@ public class Login extends javax.swing.JDialog {
     public Login(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        //datos conexion
+        this.host = "";
+        this.puerto = 0;       
+        this.nombreBBDD = "";
+        this.nombreLogin = "";
+        this.passLogin = new char[]{};
+        
+        //datos usuario
+        this.nombre = "";
+        this.pass = new char[]{};
+        
+        
     }
 
     /**
@@ -261,8 +274,8 @@ public class Login extends javax.swing.JDialog {
 
     /**
      * Metodo para limpiar los cambos para poder rellenarlo de nuevo
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimpiarActionPerformed
         jTextFieldLoginUsuario.setText("");
@@ -277,7 +290,8 @@ public class Login extends javax.swing.JDialog {
 
     /**
      * Metodo para hacer la conexion inicial
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
         nombreLogin = jTextFieldLoginUsuario.getText();
@@ -285,7 +299,7 @@ public class Login extends javax.swing.JDialog {
 
         nombre = jTextFieldUsuario.getText();
         pass = jPasswordField.getPassword();
-        
+
         host = jTextFieldHost.getText();
         nombreBBDD = jTextFieldBBDD.getText();
         if (esNumero(jTextFieldPuerto.getText())) {
@@ -298,20 +312,23 @@ public class Login extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonConnectActionPerformed
 
     /**
-     * Metodo para registrar una persona como usuario SIN permisos para el manejo de la base de datos
-     * @param evt 
+     * Metodo para registrar una persona como usuario SIN permisos para el
+     * manejo de la base de datos
+     *
+     * @param evt
      */
     private void jLabelRegistrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegistrarMouseClicked
         registrar = true;
         jComboBox1.setSelectedIndex(1);
         jComboBox1.setEnabled(false);
-        
+
     }//GEN-LAST:event_jLabelRegistrarMouseClicked
 
     /**
-     * Metodo para comprobar si un String es numero 
+     * Metodo para comprobar si un String es numero
+     *
      * @param s
-     * @return 
+     * @return
      */
     public boolean esNumero(String s) {
         try {
@@ -324,16 +341,18 @@ public class Login extends javax.swing.JDialog {
     }
 
     /**
-     * Metodo para obtener si el usuario es para registrarlo 
-     * @return 
+     * Metodo para obtener si el usuario es para registrarlo
+     *
+     * @return
      */
     public boolean isRegistrar() {
         return registrar;
     }
 
     /**
-     * Metodo para obtener el nombre para el login 
-     * @return 
+     * Metodo para obtener el nombre para el login
+     *
+     * @return
      */
     public String getNombreLogin() {
         return nombreLogin;
@@ -341,7 +360,8 @@ public class Login extends javax.swing.JDialog {
 
     /**
      * Metodo para obtener la contraseña para el login
-     * @return 
+     *
+     * @return
      */
     public String getPassLogin() {
         return passLogin.toString();
@@ -349,7 +369,8 @@ public class Login extends javax.swing.JDialog {
 
     /**
      * Metodo para obtener el nombre para la conexion a la base de datos
-     * @return 
+     *
+     * @return
      */
     public String getNombre() {
         return nombre;
@@ -357,11 +378,12 @@ public class Login extends javax.swing.JDialog {
 
     /**
      * Metodo para obtener la contraseña para la conexion a la base de datos
-     * @return 
+     *
+     * @return
      */
     public String getPass() {
         String password = "";
-        
+
         for (int i = 0; i < pass.length; i++) {
             password += pass[i];
         }
@@ -370,15 +392,18 @@ public class Login extends javax.swing.JDialog {
 
     /**
      * Metodo para obtener el host para la conexion a la base de datos
-     * @return 
+     *
+     * @return
      */
     public String getHost() {
         return host;
     }
 
     /**
-     * Metodo para obtener el nombre de la base de datos para la conexion a la base de datos
-     * @return 
+     * Metodo para obtener el nombre de la base de datos para la conexion a la
+     * base de datos
+     *
+     * @return
      */
     public String getNombreBBDD() {
         return nombreBBDD;
@@ -386,11 +411,14 @@ public class Login extends javax.swing.JDialog {
 
     /**
      * Metodo para obtener el puerto para la conexion a la base de datos
-     * @return 
+     *
+     * @return
      */
     public int getPuerto() {
         return puerto;
     }
+
+    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

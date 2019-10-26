@@ -27,6 +27,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +45,7 @@ import javax.swing.event.MenuListener;
 import org.openide.util.Exceptions;
 
 /**
- * 
+ *
  *
  * @author Plam
  */
@@ -55,6 +57,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     public final static int MIN_ALTO = 900;
     private static double VERSION = 1.0;
     private static final long serialVersionUID = 1L;
+
     private LogicaNegocio logica = null;
     private GestionarCaja gestionarCaja = null;
 
@@ -79,7 +82,26 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         imprimirLogo();
         Login login = new Login(this, true);
         login.setVisible(true);
-        usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
+
+//        /**
+//         * Metodo para cerrar la aplicacion por si no se establece conexion con
+//         * la base de datos
+//         */
+//        login.addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosed(WindowEvent we) {
+//                super.windowClosed(we);
+//                if (!LogicaNegocio.isIsConexion()) {
+//                    System.exit(0);
+//                }
+//            }
+//
+//        });
+
+        if (login != null) {
+            usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
+        }
+        
         //Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/icono.png"));
 
         initComponents();
@@ -91,16 +113,6 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 
         LogicaTemas logicaTemas = new LogicaTemas();
 
-        /**
-         * Activar para usar SSH Tunel para conectar a la base de datos del
-         * servidor (Comentar la linia de BBDD servidor)
-         */
-//        int respuesta = JOptionPane.showConfirmDialog(null, "La conexion va a ser remota ?", "Conexion a la Base de Datos", JOptionPane.YES_NO_OPTION);
-//        if (respuesta == JOptionPane.YES_OPTION) {
-//            conexionRemota();
-//        } else {
-//            conexionLocal();
-//        }
         conexion(login.getNombre(), login.getPass(), login.getHost(), login.getPuerto(), login.getNombreBBDD());
         //conexion();
 
@@ -110,12 +122,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         setLayout(boxLayout);
 
         cardLayout = new CardLayout();
-        //JScrollPane scrollPane = new JScrollPane(jPanelBody);
-        //jPanelBody.setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
 
         jPanelBody.setLayout(cardLayout);
 
-        //jPanelBody.add(scrollPane, "ScrollPane");
         panelAjustes = new PanelAjustes(this, logica);
         panelLibroDiario = new PanelLibroDiario(this, logica);
         panelCaja = new PanelCaja(this, logica);
@@ -148,10 +157,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         menuEstadistica.addMenuListener(this);
         menuFacturas.addMenuListener(this);
         menuAyuda.addMenuListener(this);
-        
-        
-        //logica.setCaja();
-        //gestionarCaja = new GestionarCaja();
+
         jLabelVersion.setText(Main.GET_VERSION() + "");
     }
 
@@ -165,26 +171,17 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 
     private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
         logica = new LogicaNegocio(this, nombre, pass, host, puerto, nombreBBDD);
-        
+        if (!logica.conectBBDD(nombre, pass, host, puerto, nombreBBDD)) {
+            System.exit(0);
+            LOG.log(Level.WARNING, "Conexion NO establecida. Exit !");
+        }
+
     }
-    
-    public static void actualizarPanelCaja(){
+
+    public static void actualizarPanelCaja() {
         ((PanelCaja) panelCaja).actualizarCaja();
     }
 
-//    private void conexionLocal() {
-//        logica = new LogicaNegocio("proyecto", "proyecto", "192.168.0.160", 1521, "XE");
-//    }
-//
-//    private void conexionRemota() {
-//        SshTunel tunnel = new SshTunel();
-//        try {
-//            tunnel.go();
-//        } catch (Exception ex) {
-//            Exceptions.printStackTrace(ex);
-//        }
-//        logica = new LogicaNegocio("proyecto", "proyecto", "localhost", 5656, "XE");
-//    }
     public static void setLookAndFeel(LookAndFeel laf) {
         try {
             UIManager.setLookAndFeel(laf);
@@ -524,11 +521,12 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         try {
-            String url = "javadoc/index.html";
-            File htmlFile = new File(url);
-            Desktop.getDesktop().browse(htmlFile.toURI());
+            URI url = new URI("https://bahguta.ddns.net");
+            Desktop.getDesktop().browse(url);
+        } catch (URISyntaxException ex) {
+            LOG.log(Level.WARNING, ex.getMessage());
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            LOG.log(Level.WARNING, ex.getMessage());
         }
     }//GEN-LAST:event_jLabel4MouseClicked
 
@@ -578,36 +576,45 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 
     @Override
     public void menuSelected(MenuEvent me) {
-//        JMenu menu = (JMenu) me.getSource();
-//        selectedMenu(menu);
     }
 
     @Override
     public void menuDeselected(MenuEvent me) {
-//        JMenu menu = (JMenu) me.getSource();
-//        selectedMenu(menu);
     }
 
     @Override
     public void menuCanceled(MenuEvent me) {
-
     }
-    
+
     /**
      * Metodo para imprimir el logo por consola
      */
     public void imprimirLogo() {
 
-        try {
-            File banner = new File("src/Logica/banner.txt");
-            BufferedReader br = new BufferedReader(new FileReader(banner));
-            String st;
-            while ((st = br.readLine()) != null) {
-                System.out.println(st);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+                    File banner = new File("src/Logica/banner.txt");
+                    BufferedReader br = new BufferedReader(new FileReader(banner));
+                    String st;
+                    while ((st = br.readLine()) != null) {
+                        System.out.println(st);
+                    }
+                } catch (IOException e) {
+                    LOG.log(Level.WARNING, e.getMessage());
+                }
             }
-        } catch (IOException e) {
-            LOG.log(Level.WARNING, e.getMessage());
-        }
+        });
+
+    }
+    
+    /**
+     * Metodo para comprobar si un String 
+     */
+    public void dsf(){
+        
     }
 
 }
