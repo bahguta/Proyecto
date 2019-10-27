@@ -48,6 +48,8 @@ public class PanelCaja extends javax.swing.JPanel {
         listaLabelsH2.add(jLabelTotalDebeH2);
         listaLabelsH2.add(jLabelTotalHaberH2);
         
+        LogicaTemas.addJTable(jTable1);
+        
         LogicaTemas.addListJLabel("JLabelH1Caja", listaLabelsH1);
         LogicaTemas.addListJLabel("JLabelH2Caja", listaLabelsH2);
         

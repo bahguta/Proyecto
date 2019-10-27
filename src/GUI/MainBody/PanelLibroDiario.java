@@ -66,6 +66,8 @@ public class PanelLibroDiario extends javax.swing.JPanel {
         listaLabelsH2.add(jLabel5H2);
         listaLabelsH2.add(lblDebeH2);
         listaLabelsH2.add(lblHaberH2);
+        
+        LogicaTemas.addJTable(jTableLibroDiario);
 
         LogicaTemas.addListJLabel("JLabelH1LibroDiario", listaLabelsH1);
         LogicaTemas.addListJLabel("JLabelH2LibroDiario", listaLabelsH2);

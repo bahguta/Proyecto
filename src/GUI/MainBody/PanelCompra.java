@@ -5,8 +5,14 @@
  */
 package GUI.MainBody;
 
+import Dto.Factura;
+import Dto.Persona;
+import GUI.Dialog.DialogFactura;
+import GUI.Dialog.DialogPersona;
 import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
+import TableModels.FacturaTableModel;
+import TableModels.PersonasTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -22,7 +28,7 @@ public class PanelCompra extends javax.swing.JPanel {
 
     private LogicaNegocio logica;
     private List<JLabel> listaLabelsH2;
-
+    private JFrame parent;
     /**
      * Constructor
      */
@@ -30,14 +36,20 @@ public class PanelCompra extends javax.swing.JPanel {
         initComponents();
         setBorder(LogicaTemas.GET_TITLE_BORDER("Compras"));
 
+        this.parent = frame;
         this.logica = logica;
         
         listaLabelsH2 = new ArrayList<>();
         listaLabelsH2.add(jLabel1H2);
-        listaLabelsH2.add(jLabel2H2);
         listaLabelsH2.add(jLabel3H2);
 
+        LogicaTemas.addJTable(jTableProveedores);
+        LogicaTemas.addJTable(jTableFacturasProveedores);
+        
         LogicaTemas.addListJLabel("JLabelH2LibroDiario", listaLabelsH2);
+        
+        jTableProveedores.setModel(new PersonasTableModel(this.logica.getListaProveedores()));
+        jTableFacturasProveedores.setModel(new FacturaTableModel(new ArrayList<>()));
 
     }
 
@@ -50,41 +62,19 @@ public class PanelCompra extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButtonAdd = new javax.swing.JButton();
-        jButtonBorrar = new javax.swing.JButton();
-        jButtonHacerPedido = new javax.swing.JButton();
-        jButtonLimpiar = new javax.swing.JButton();
         jLabel1H2 = new javax.swing.JLabel();
-        jLabel2H2 = new javax.swing.JLabel();
-        jLabel3H2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableProveedores = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableProductosProveedor = new javax.swing.JTable();
+        jLabel3H2 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTableProductosUsuario = new javax.swing.JTable();
+        jTableFacturasProveedores = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(901, 500));
 
-        jButtonAdd.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonAdd.setText("Añadir");
-
-        jButtonBorrar.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonBorrar.setText("Borrar");
-
-        jButtonHacerPedido.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonHacerPedido.setText("Hacer Pedido");
-
-        jButtonLimpiar.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonLimpiar.setText("Limpiar");
-
+        jLabel1H2.setFont(LogicaTemas.TEXT_FONT);
         jLabel1H2.setText("Proveedores");
 
-        jLabel2H2.setText("Productos por proveedor");
-
-        jLabel3H2.setText("Productos a comprar");
-
-        jTableProveedores.setFont(LogicaTemas.TEXT_FONT_H1);
+        jTableProveedores.setFont(LogicaTemas.TEXT_FONT);
         jTableProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -96,24 +86,18 @@ public class PanelCompra extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTableProveedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableProveedoresMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableProveedores);
 
-        jTableProductosProveedor.setFont(LogicaTemas.TEXT_FONT_H1);
-        jTableProductosProveedor.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTableProductosProveedor);
+        jLabel3H2.setFont(LogicaTemas.TEXT_FONT);
+        jLabel3H2.setText("Facturas ");
 
-        jTableProductosUsuario.setFont(LogicaTemas.TEXT_FONT_H1);
-        jTableProductosUsuario.setModel(new javax.swing.table.DefaultTableModel(
+        jTableFacturasProveedores.setFont(LogicaTemas.TEXT_FONT);
+        jTableFacturasProveedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -124,7 +108,12 @@ public class PanelCompra extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTableProductosUsuario);
+        jTableFacturasProveedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableFacturasProveedoresMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTableFacturasProveedores);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -133,68 +122,68 @@ public class PanelCompra extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1H2)
-                        .addGap(0, 716, Short.MAX_VALUE)
-                        .addComponent(jLabel2H2))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 806, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3H2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonBorrar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonAdd))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonLimpiar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonHacerPedido))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1H2)
+                            .addComponent(jLabel3H2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1H2)
-                    .addComponent(jLabel2H2))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3H2)
-                    .addComponent(jButtonAdd)
-                    .addComponent(jButtonBorrar))
+                .addComponent(jLabel1H2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonHacerPedido)
-                    .addComponent(jButtonLimpiar))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3H2)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTableProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableProveedoresMouseClicked
+        if (jTableProveedores.getSelectedRow() != -1) {
+            int ID_persona = (int) jTableProveedores.getValueAt(jTableProveedores.getSelectedRow(), 0);
+            if (evt.getClickCount() > 1) {
+                Persona persona = logica.getPersonaPorID(ID_persona);
+                if (persona != null) {
+                    DialogPersona df = new DialogPersona(parent, true, logica, persona);
+                    df.setVisible(true);
+                }
+            } else {
+                jTableFacturasProveedores.setModel(new FacturaTableModel(logica.getListaFacturas(ID_persona)));
+            }
+        } else {
+
+        }
+    }//GEN-LAST:event_jTableProveedoresMouseClicked
+
+    private void jTableFacturasProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFacturasProveedoresMouseClicked
+        if (evt.getClickCount() > 1) {
+            if (jTableFacturasProveedores.getSelectedRow() != -1) {
+                int ID_factura = (int) jTableFacturasProveedores.getValueAt(jTableFacturasProveedores.getSelectedRow(), 0);
+                Factura factura = logica.getFacturaPorID(ID_factura);
+                if (factura != null) {
+                    DialogFactura df = new DialogFactura(parent, true, logica, factura);
+                    df.setVisible(true);
+                    jTableProveedores.setModel(new PersonasTableModel(logica.getListaProveedores()));
+                }
+            }
+        }
+    }//GEN-LAST:event_jTableFacturasProveedoresMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAdd;
-    private javax.swing.JButton jButtonBorrar;
-    private javax.swing.JButton jButtonHacerPedido;
-    private javax.swing.JButton jButtonLimpiar;
     private javax.swing.JLabel jLabel1H2;
-    private javax.swing.JLabel jLabel2H2;
     private javax.swing.JLabel jLabel3H2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTableProductosProveedor;
-    private javax.swing.JTable jTableProductosUsuario;
+    private javax.swing.JTable jTableFacturasProveedores;
     private javax.swing.JTable jTableProveedores;
     // End of variables declaration//GEN-END:variables
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelCompra.class);

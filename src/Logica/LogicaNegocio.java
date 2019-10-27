@@ -771,7 +771,6 @@ public class LogicaNegocio {
                 || nota.getFecha().equals(fechaInicio)
                 || nota.getFecha().equals(fechaFin))).forEachOrdered((nota) -> {
             lista.add(nota);
-            System.out.println(nota.toString());
         });
         return lista;
     }
@@ -947,7 +946,7 @@ public class LogicaNegocio {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("ID_NOTA", nota.getCodNota());
             JasperPrint print = JasperFillManager.fillReport("ireport/InformeNotas.jasper", parametros, conexion.getConexion());
-            JasperExportManager.exportReportToPdfFile(print, "ireport/InformeNotas.pdf");
+            JasperExportManager.exportReportToPdfFile(print, "informes/InformeNotas_" + System.currentTimeMillis() + ".pdf");
             if (Desktop.isDesktopSupported()) {
                 File myFile = new File("ireport/InformeNotas.pdf");
                 Desktop.getDesktop().open(myFile);
@@ -970,7 +969,7 @@ public class LogicaNegocio {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("Fecha", nota.getFecha());
             JasperPrint print = JasperFillManager.fillReport("ireport/InformeNotasFecha.jasper", parametros, conexion.getConexion());
-            JasperExportManager.exportReportToPdfFile(print, "ireport/InformeNotasFecha.pdf");
+            JasperExportManager.exportReportToPdfFile(print, "informes/InformeNotasFecha_" + System.currentTimeMillis() + ".pdf");
             if (Desktop.isDesktopSupported()) {
                 File myFile = new File("ireport/InformeNotasFecha.pdf");
                 Desktop.getDesktop().open(myFile);
@@ -993,7 +992,7 @@ public class LogicaNegocio {
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("ID_FACTURA", f.getCodFactura());
             JasperPrint print = JasperFillManager.fillReport("ireport/InformeFactura.jasper", parametros, conexion.getConexion());
-            JasperExportManager.exportReportToPdfFile(print, "ireport/InformeFactura.pdf");
+            JasperExportManager.exportReportToPdfFile(print, "informes/InformeFactura_" + System.currentTimeMillis() + ".pdf");
             if (Desktop.isDesktopSupported()) {
                 File myFile = new File("ireport/InformeFactura.pdf");
                 Desktop.getDesktop().open(myFile);
