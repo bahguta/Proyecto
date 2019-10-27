@@ -167,19 +167,19 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     public static double GET_VERSION() {
         return Main.VERSION;
     }
-
-    private void conexion() {
-        logica = new LogicaNegocio();
-    }
-
-    private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
-        logica = new LogicaNegocio(this, nombre, pass, host, puerto, nombreBBDD);
-        if (!logica.conectBBDD(nombre, pass, host, puerto, nombreBBDD)) {
-            System.exit(0);
-            logger.error("Conexion NO establecida. Exit !");
-        }
-
-    }
+//
+//    private void conexion() {
+//        logica = new LogicaNegocio();
+//    }
+//
+//    private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
+//        logica = new LogicaNegocio(this, nombre, pass, host, puerto, nombreBBDD);
+//        if (!logica.conectBBDD(nombre, pass, host, puerto, nombreBBDD)) {
+//            System.exit(0);
+//            logger.error("Conexion NO establecida. Exit !");
+//        }
+//
+//    }
 
     public static void actualizarPanelCaja() {
         ((PanelCaja) panelCaja).actualizarCaja();
