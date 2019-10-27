@@ -22,8 +22,6 @@ import java.awt.Graphics2D;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -549,7 +547,7 @@ public class PanelAjustes extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this,"Conexion NO cambiada, revisa los datos !");
             }
         } catch (NumberFormatException e) {
-            LOG.log(Level.WARNING, e.getMessage());
+            logger.error(e.getMessage());
         } catch (NullPointerException e){
             JOptionPane.showMessageDialog(this, "Error al intentar conectar a la base de datos.\\nRevisa los datos y intente de nuevo");
         }
@@ -625,5 +623,5 @@ public class PanelAjustes extends javax.swing.JPanel {
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JSlider sliderTexto1;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PanelAjustes.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelAjustes.class);
 }

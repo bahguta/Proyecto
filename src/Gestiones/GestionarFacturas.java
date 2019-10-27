@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import org.openide.util.Exceptions;
 
@@ -25,7 +24,7 @@ import org.openide.util.Exceptions;
  * @author Plam
  */
 public class GestionarFacturas {
-    private static final Logger LOG = Logger.getLogger(GestionarFacturas.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GestionarFacturas.class);
 
     private List<Factura> listaFacturas;
     private ConexionBBDD conexion;
@@ -47,6 +46,9 @@ public class GestionarFacturas {
      * @return retorna las filas actualizadas
      */
     public int delFactura(int idFactura) {
+        if (!conexion.isConexionExitosa()) {
+            return -1;
+        }
         String consulta = "delete from factura where ID_factura = " + idFactura;
         int filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Facturas borradas: " + filas);
@@ -76,6 +78,9 @@ public class GestionarFacturas {
             JFrame frame,
             GestionarInventario gestionarInventario) {
 
+        if (!conexion.isConexionExitosa()) {
+            return -1;
+        }
         int filas = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         try {
@@ -145,7 +150,10 @@ public class GestionarFacturas {
      * @return retorna una lista tipo Integer
      */
     private List<Integer> getIDFacturasNegocio() {
-        List<Integer> lista = null;
+        List<Integer> lista = new ArrayList<>();
+        if (!conexion.isConexionExitosa()) {
+            return lista;
+        }
         String consulta = "select distinct ID_factura from negocio where ID_PERSONA in (select ID_PERSONA from negocio) order by ID_factura";
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         if (resultado != null) {
@@ -173,6 +181,9 @@ public class GestionarFacturas {
      * @return retorna una lista con facturas tipo Factura
      */
     public List<Factura> getFacturasTypo(String type, LogicaNegocio logica) {
+        if (!conexion.isConexionExitosa()) {
+            return new ArrayList<>();
+        }
         refrescarFacturas();
         List<Factura> lista = new ArrayList<>();
         for (Factura factura : listaFacturas) {
@@ -244,6 +255,9 @@ public class GestionarFacturas {
      * @return returna una factura tipo Factura
      */
     public Factura getFacturaPorID(int ID_factura) {
+        if (!conexion.isConexionExitosa()) {
+            return null;
+        }
         refrescarFacturas();
         for (Factura factura : listaFacturas) {
             if (factura.getCodFactura() == ID_factura) {
@@ -257,6 +271,9 @@ public class GestionarFacturas {
      * Metodo para refrescar la lista de las facturas
      */
     public void refrescarFacturas() {
+        if (!conexion.isConexionExitosa()) {
+            return;
+        }
         String consulta = "select * from factura";
         //List<Factura> lista = new ArrayList<>();
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -306,6 +323,9 @@ public class GestionarFacturas {
      * @return retorna una lista tipo Factura
      */
     public List<Factura> getFacturasPorIDPersona(int ID_persona) {
+        if (!conexion.isConexionExitosa()) {
+            return new ArrayList<>();
+        }
         List<Producto> listaProductos = null;
         List<Factura> listaFact = null;
         try {

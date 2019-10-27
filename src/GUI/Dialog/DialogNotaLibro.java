@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -230,7 +229,9 @@ public class DialogNotaLibro extends javax.swing.JDialog {
      * @param evt 
      */
     private void jButtonOKNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKNotaActionPerformed
-
+        if (!logica.isConexionExitosa()) {
+            return;
+        }
         try {
             Date fecha = sdf.parse(jLabel1H2Fecha.getText().toString());
             String debe = jTextFieldDebeNota.getText();
@@ -284,5 +285,5 @@ public class DialogNotaLibro extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldDebeNota;
     private javax.swing.JTextField jTextFieldHaberNota;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(DialogNotaLibro.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(DialogNotaLibro.class);
 }

@@ -10,7 +10,6 @@ import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -229,6 +228,9 @@ public class DialogProducto extends javax.swing.JDialog {
      * @param evt 
      */
     private void btnOKProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKProductoActionPerformed
+        if (!logica.isConexionExitosa()) {
+            return;
+        }
         try {
             String nombre = jTextFieldNombre.getText();
             String peso = jTextFieldPeso.getText();
@@ -272,5 +274,5 @@ public class DialogProducto extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldPeso;
     private javax.swing.JTextField jTextFieldPrecio;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(DialogProducto.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(DialogProducto.class);
 }

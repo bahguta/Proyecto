@@ -9,7 +9,6 @@ import Dto.NotaLibroDiario;
 import Dto.Persona;
 import Dto.Producto;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -19,7 +18,7 @@ import javax.swing.JOptionPane;
  * @author Plam
  */
 public class GestionarCaja {
-    private static final Logger LOG = Logger.getLogger(GestionarCaja.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GestionarCaja.class);
 
     private double CAJA;
 

@@ -9,7 +9,6 @@ import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -198,5 +197,5 @@ public class PanelCompra extends javax.swing.JPanel {
     private javax.swing.JTable jTableProductosUsuario;
     private javax.swing.JTable jTableProveedores;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PanelCompra.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelCompra.class);
 }

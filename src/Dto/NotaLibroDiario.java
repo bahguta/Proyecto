@@ -6,7 +6,6 @@
 package Dto;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 /**
  * Objeto Nota del libro diario
@@ -16,7 +15,6 @@ import java.util.logging.Logger;
 public class NotaLibroDiario implements java.io.Serializable{
     
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(NotaLibroDiario.class.getName());
     
     private int codNota;
     private Date fecha;

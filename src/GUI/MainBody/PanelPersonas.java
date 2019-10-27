@@ -13,7 +13,6 @@ import TableModels.FacturaTableModel;
 import TableModels.PersonasTableModel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -381,5 +380,5 @@ public class PanelPersonas extends javax.swing.JPanel {
     private javax.swing.JTable jTableFacturas;
     private javax.swing.JTable jTablePersonas;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PanelPersonas.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelPersonas.class);
 }

@@ -17,9 +17,10 @@ import javax.swing.table.AbstractTableModel;
  * @author Plam
  */
 public class CajaTableModel extends AbstractTableModel{
-    
+
     
     private static DecimalFormat df = new DecimalFormat("#.##");
+    private static final long serialVersionUID = 1L;
     
     private List <NotaLibroDiario> listanotas;
     private String [] listaColumnas = new String [] {"ID_Nota", "Fecha", "Debe", "Haber", "Caja"};

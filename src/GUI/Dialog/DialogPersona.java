@@ -10,7 +10,6 @@ import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -248,6 +247,9 @@ public class DialogPersona extends javax.swing.JDialog {
      * @param evt 
      */
     private void jButtonOKClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKClienteActionPerformed
+        if (!logica.isConexionExitosa()) {
+            return;
+        }
         String nombre = jTextFieldNombreCliente.getText();
         String apellido = jTextFieldApellidoNuevoCliente.getText();
         String email = jTextFieldEmailCliente.getText();
@@ -312,5 +314,5 @@ public class DialogPersona extends javax.swing.JDialog {
     private javax.swing.JTextField jTextFieldNombreCliente;
     private javax.swing.JTextField jTextFieldTelefonoCliente;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(DialogPersona.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(DialogPersona.class);
 }
