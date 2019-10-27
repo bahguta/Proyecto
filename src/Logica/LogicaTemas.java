@@ -7,11 +7,13 @@ package Logica;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -27,7 +29,18 @@ public class LogicaTemas {
     public static Font BUTTON_FONT = new Font("Monospaced", Font.BOLD, 14);
     public static Font TEXT_FONT = new Font("Monospaced", Font.BOLD, 14);
     public static Font TEXT_FONT_H1 = new Font("Monospaced", Font.BOLD, 18);
-
+    public static List<JTable> LISTA_TABLES = new ArrayList<>();
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LogicaTemas.class);
+    
+    
+    /**
+     * Metodo para añadir un jtable a la lista para poder modificar el tamaño del texto
+     */
+    public static void addJTable(JTable table){
+        LISTA_TABLES.add(table);
+    }
+    
+    
     /**
      * Metodo para agregar un JLabel en un Map 
      * @param nombre
@@ -75,6 +88,9 @@ public class LogicaTemas {
         TEXT_FONT.deriveFont(sizeH2 * 2);
         TEXT_FONT_H1.deriveFont(sizeH2);
         BUTTON_FONT.deriveFont(sizeH2);
+        for (JTable jTable : LogicaTemas.LISTA_TABLES) {
+            jTable.setFont(TEXT_FONT);
+        }
     }
 
     /**
@@ -89,6 +105,5 @@ public class LogicaTemas {
         TitledBorder titledBorder = new TitledBorder(border);
         return titledBorder;
     }
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LogicaTemas.class);
 
 }

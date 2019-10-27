@@ -53,6 +53,9 @@ public class PanelPersonas extends javax.swing.JPanel {
         listaLabelsH2 = new ArrayList<>();
         listaLabelsH2.add(jLabel1H2);
         listaLabelsH2.add(jLabel2H2);
+        
+        LogicaTemas.addJTable(jTableFacturas);
+        LogicaTemas.addJTable(jTablePersonas);
 
         LogicaTemas.addListJLabel("JLabelH1Personas", listaLabelsH1);
         LogicaTemas.addListJLabel("JLabelH2Personas", listaLabelsH2);

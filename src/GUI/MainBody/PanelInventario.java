@@ -41,6 +41,8 @@ public class PanelInventario extends javax.swing.JPanel {
         listaLabelsH2 = new ArrayList<>();
         listaLabelsH2.add(jLabel1H2);
 
+        LogicaTemas.addJTable(jTableProductos);
+        
         LogicaTemas.addListJLabel("JLabelH2Inventario", listaLabelsH2);
 
         jTableProductos.setModel(new ProductoTableModel(this.logica.getListaProductos()));

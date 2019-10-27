@@ -5,11 +5,14 @@
  */
 package GUI.MainBody;
 
-import Dto.Producto;
+import Dto.Factura;
+import Dto.Persona;
+import GUI.Dialog.DialogFactura;
+import GUI.Dialog.DialogPersona;
 import Logica.LogicaNegocio;
 import Logica.LogicaTemas;
-import TableModels.PersonaCortoTableModel;
-import TableModels.ProductoTableModel;
+import TableModels.FacturaTableModel;
+import TableModels.PersonasTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -24,44 +27,32 @@ public class PanelVenta extends javax.swing.JPanel {
 
     private static final long serialVersionUID = 1L;
 
+    private JFrame parent;
+
     private List<JLabel> listaLabelsH2;
     private LogicaNegocio logica;
-    private PersonaCortoTableModel pctm; // para jtableClientes
-    private ProductoTableModel ptm; //para jtableProductosStock
-    private ProductoTableModel ptmpc; //para jtableProductosCliente
-
-    //vamos a hacer una copia de los productos de stock para simular 
-    //el movimiento de las cantidades, una vez finalizada la factura se procedera a restar la cantidad de cada producto del almacen
-    private List<Producto> listaStock;
-
-    private List<Producto> listaProductos; //para los productos que va a comprar el cliente 
 
     /**
      * Constructor
      */
     public PanelVenta(JFrame frame, LogicaNegocio logica) {
         initComponents();
-
+        this.parent = frame;
         setBorder(LogicaTemas.GET_TITLE_BORDER("Ventas"));
 
         this.logica = logica;
         listaLabelsH2 = new ArrayList<>();
         listaLabelsH2.add(jLabel1H2);
-        listaLabelsH2.add(jLabel2H2);
         listaLabelsH2.add(jLabel3H2);
+
+        LogicaTemas.addJTable(jTableClientes);
+        LogicaTemas.addJTable(jTableFacturasCliente);
 
         LogicaTemas.addListJLabel("JLabelH2LibroDiario", listaLabelsH2);
 
-        pctm = new PersonaCortoTableModel(this.logica.getListaClientes());
-        jTableClientes.setModel(pctm);
+        jTableClientes.setModel(new PersonasTableModel(this.logica.getListaClientes()));
+        jTableFacturasCliente.setModel(new FacturaTableModel(new ArrayList<>()));
 
-        listaProductos = new ArrayList<>();
-        ptmpc = new ProductoTableModel(listaProductos);
-        jTableProductosCliente.setModel(ptmpc);
-
-        listaStock = logica.getListaProductos();
-        ptm = new ProductoTableModel(listaStock);
-        jTableProductosStock.setModel(ptm);
     }
 
     /**
@@ -75,16 +66,9 @@ public class PanelVenta extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableClientes = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableProductosStock = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTableProductosCliente = new javax.swing.JTable();
-        jButtonAdd = new javax.swing.JButton();
-        jButtonBorrar = new javax.swing.JButton();
-        jButtonHacerPedido = new javax.swing.JButton();
-        jButtonLimpiar = new javax.swing.JButton();
+        jTableFacturasCliente = new javax.swing.JTable();
         jLabel1H2 = new javax.swing.JLabel();
-        jLabel2H2 = new javax.swing.JLabel();
         jLabel3H2 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(901, 500));
@@ -101,10 +85,15 @@ public class PanelVenta extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTableClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTableClientes);
 
-        jTableProductosStock.setFont(LogicaTemas.TEXT_FONT);
-        jTableProductosStock.setModel(new javax.swing.table.DefaultTableModel(
+        jTableFacturasCliente.setFont(LogicaTemas.TEXT_FONT);
+        jTableFacturasCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -115,49 +104,16 @@ public class PanelVenta extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTableProductosStock);
-
-        jTableProductosCliente.setFont(LogicaTemas.TEXT_FONT);
-        jTableProductosCliente.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane3.setViewportView(jTableProductosCliente);
-
-        jButtonAdd.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonAdd.setText("Añadir");
-        jButtonAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAddActionPerformed(evt);
+        jTableFacturasCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableFacturasClienteMouseClicked(evt);
             }
         });
-
-        jButtonBorrar.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonBorrar.setText("Borrar");
-        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBorrarActionPerformed(evt);
-            }
-        });
-
-        jButtonHacerPedido.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonHacerPedido.setText("Hacer Pedido");
-
-        jButtonLimpiar.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonLimpiar.setText("Limpiar");
+        jScrollPane3.setViewportView(jTableFacturasCliente);
 
         jLabel1H2.setText("Clientes");
 
-        jLabel2H2.setText("Productos en stock");
-
-        jLabel3H2.setText("Productos a vender");
+        jLabel3H2.setText("Facturas ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -165,146 +121,70 @@ public class PanelVenta extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonLimpiar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonHacerPedido))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 883, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3H2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonBorrar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonAdd))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
-                                .addGap(18, 18, 18))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1H2)
-                                .addGap(324, 324, 324)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2H2)))))
+                            .addComponent(jLabel1H2)
+                            .addComponent(jLabel3H2))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1H2)
-                    .addComponent(jLabel2H2))
+                .addComponent(jLabel1H2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButtonAdd)
-                        .addComponent(jButtonBorrar))
-                    .addComponent(jLabel3H2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addComponent(jLabel3H2)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonHacerPedido)
-                    .addComponent(jButtonLimpiar))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * Metodo para añadir un producto de los productos en Stock en la lista del
-     * cliente
-     *
-     * @param evt
-     */
-    private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
-        int id_producto = (Integer) jTableProductosStock.getValueAt(jTableProductosStock.getSelectedRow(), 0);
-        System.out.println(id_producto);
-        if (id_producto == -1) {
-            return;
-        }
-        //producto en stock
-        Producto p = logica.getProductoPorID(id_producto);
-        //listaProductos. //
-                Producto produc = null;
-
-        if (p != null && p.getCantidad() > 0) {
-            for (Producto producto : listaProductos) {
-                if (producto.getCodProducto() == p.getCodProducto()) {
-                    producto.setCantidad(producto.getCantidad() + 1);
-                    jTableProductosCliente.setModel(new ProductoTableModel(listaProductos));
-                    produc = listaStock.stream()
-                            .filter(prod -> {
-                                if (prod.getCodProducto() == p.getCodProducto()) {
-                                    prod.setCantidad(prod.getCantidad() - p.getCantidad());
-                                    return true;
-                                }
-                                return false;
-                            }).findFirst().get();
-                    return;
-                } else {
-                    p.setCantidad(1);
-                }
-            }
-
-            listaProductos.add(p);
-
-            //quitar el producto del inventario
-            jTableProductosCliente.setModel(new ProductoTableModel(listaProductos));
-        }
-
-    }//GEN-LAST:event_jButtonAddActionPerformed
-
-    /**
-     * Metodo para borrar un producto de la lista del cliente
-     *
-     * @param evt
-     */
-    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
-        if (jTableProductosCliente.getSelectedRow() == -1) {
-            return;
-        }
-        int id_producto = (Integer) jTableProductosCliente.getValueAt(jTableProductosCliente.getSelectedRow(), 0);
-
-        //borro el producto de la lista 
-        listaProductos.remove(ptmpc.getProducto(id_producto));
-        for (Producto producto : listaProductos) {
-            if (producto.getCodProducto() == id_producto) {
-                if (producto.getCantidad() - 1 <= 0) {
-                    producto.setCantidad(0);
+    private void jTableFacturasClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFacturasClienteMouseClicked
+        if (evt.getClickCount() > 1) {
+            if (jTableFacturasCliente.getSelectedRow() != -1) {
+                int ID_factura = (int) jTableFacturasCliente.getValueAt(jTableFacturasCliente.getSelectedRow(), 0);
+                Factura factura = logica.getFacturaPorID(ID_factura);
+                if (factura != null) {
+                    DialogFactura df = new DialogFactura(parent, true, logica, factura);
+                    df.setVisible(true);
+                    jTableClientes.setModel(new PersonasTableModel(logica.getListaClientes()));
                 }
             }
         }
-        //vuelvo a añadir la lista en el model del jtable
-        ptmpc = new ProductoTableModel(listaProductos);
-        jTableProductosCliente.setModel(ptmpc);
+    }//GEN-LAST:event_jTableFacturasClienteMouseClicked
 
-    }//GEN-LAST:event_jButtonBorrarActionPerformed
+    private void jTableClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableClientesMouseClicked
+        if (jTableClientes.getSelectedRow() != -1) {
+            int ID_persona = (int) jTableClientes.getValueAt(jTableClientes.getSelectedRow(), 0);
+            if (evt.getClickCount() > 1) {
+                Persona persona = logica.getPersonaPorID(ID_persona);
+                if (persona != null) {
+                    DialogPersona df = new DialogPersona(parent, true, logica, persona);
+                    df.setVisible(true);
+                }
+            } else {
+                jTableFacturasCliente.setModel(new FacturaTableModel(logica.getListaFacturas(ID_persona)));
+            }
+        } else {
+
+        }
+    }//GEN-LAST:event_jTableClientesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAdd;
-    private javax.swing.JButton jButtonBorrar;
-    private javax.swing.JButton jButtonHacerPedido;
-    private javax.swing.JButton jButtonLimpiar;
     private javax.swing.JLabel jLabel1H2;
-    private javax.swing.JLabel jLabel2H2;
     private javax.swing.JLabel jLabel3H2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableClientes;
-    private javax.swing.JTable jTableProductosCliente;
-    private javax.swing.JTable jTableProductosStock;
+    private javax.swing.JTable jTableFacturasCliente;
     // End of variables declaration//GEN-END:variables
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelVenta.class);
 }

@@ -56,6 +56,10 @@ public class PanelFacturas extends javax.swing.JPanel {
         listaLabelsH2.add(jLabel5H2);
         listaLabelsH2.add(jLabel1H2);
         listaLabelsH2.add(jLabel11H2);
+        
+        LogicaTemas.addJTable(jTableCliente);
+        LogicaTemas.addJTable(jTable1Productos);
+        LogicaTemas.addJTable(jTableFacturas);
 
         LogicaTemas.addListJLabel("JLabelH1Facturas", listaLabelsH1);
         LogicaTemas.addListJLabel("JLabelH2Facturas", listaLabelsH2);

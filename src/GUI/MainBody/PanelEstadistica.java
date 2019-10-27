@@ -43,6 +43,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
     private File barChart3d, lineChart, pieChart3d;
     private JFrame parent;
     private File ruta;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Constructor
@@ -53,6 +54,9 @@ public class PanelEstadistica extends javax.swing.JPanel {
         this.parent = parent;
 
         setBorder(LogicaTemas.GET_TITLE_BORDER("Estadistica"));
+        
+        jComboBoxFechaDesde.setSelectedItem(sdf.format(logica.getNotasFechaIn()));
+        jComboBoxFechaHasta.setSelectedItem(sdf.format(logica.getNotasFechaFin()));
 
         ruta = new File("img_estadistica");
         if (ruta.mkdir()) {
@@ -63,6 +67,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "La carpeta " + ruta.getPath() + " NO se ha creado\nRevisa los permisos del programa.");
         }
 
+        LogicaTemas.addJTable(jTableNotas);
     }
 
 
@@ -160,8 +165,8 @@ public class PanelEstadistica extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBoxHasta = new javax.swing.JComboBox<>();
+        jComboBoxFechaDesde = new javax.swing.JComboBox<>();
+        jComboBoxFechaHasta = new javax.swing.JComboBox<>();
         jButtonFiltrar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTableNotas = new javax.swing.JTable();
@@ -177,11 +182,11 @@ public class PanelEstadistica extends javax.swing.JPanel {
         jLabel2.setFont(LogicaTemas.TEXT_FONT);
         jLabel2.setText("hasta");
 
-        jComboBox1.setFont(LogicaTemas.BUTTON_FONT);
-        jComboBox1.setModel(logica.getFechasComboboxModel());
+        jComboBoxFechaDesde.setFont(LogicaTemas.BUTTON_FONT);
+        jComboBoxFechaDesde.setModel(logica.getFechasComboboxModel());
 
-        jComboBoxHasta.setFont(LogicaTemas.BUTTON_FONT);
-        jComboBoxHasta.setModel(logica.getFechasComboboxModel());
+        jComboBoxFechaHasta.setFont(LogicaTemas.BUTTON_FONT);
+        jComboBoxFechaHasta.setModel(logica.getFechasComboboxModel());
 
         jButtonFiltrar.setFont(LogicaTemas.BUTTON_FONT);
         jButtonFiltrar.setText("Filtrar");
@@ -220,14 +225,14 @@ public class PanelEstadistica extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxFechaDesde, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBoxHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxFechaHasta, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonFiltrar)
-                        .addGap(0, 496, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabelBarChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -244,14 +249,14 @@ public class PanelEstadistica extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBoxHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxFechaDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxFechaHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonFiltrar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelLineChart, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                    .addComponent(jLabelLineChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelPieChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabelBarChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -263,11 +268,11 @@ public class PanelEstadistica extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 901, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -277,10 +282,10 @@ public class PanelEstadistica extends javax.swing.JPanel {
      */
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         jLabelPieChart.setIcon(null);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        
         try {
-            Date fechaInicio = sdf.parse((String) jComboBox1.getSelectedItem());
-            Date fechaFin = sdf.parse((String) jComboBoxHasta.getSelectedItem());
+            Date fechaInicio = sdf.parse((String) jComboBoxFechaDesde.getSelectedItem());
+            Date fechaFin = sdf.parse((String) jComboBoxFechaHasta.getSelectedItem());
             jTableNotas.setModel(new LibroTableModel(logica.getNotasEntreFechas(fechaInicio, fechaFin)));
 
             estadisticaBarChart3d(fechaInicio, fechaFin);
@@ -297,6 +302,12 @@ public class PanelEstadistica extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
+    
+    /**
+     * Metodo para obtener 
+     */
+    
+    
     /**
      * Metodo para manejar los clicks a la table Notas. Genera Estadistica
      * @param evt 
@@ -321,8 +332,8 @@ public class PanelEstadistica extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonFiltrar;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBoxHasta;
+    private javax.swing.JComboBox<String> jComboBoxFechaDesde;
+    private javax.swing.JComboBox<String> jComboBoxFechaHasta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelBarChart;
