@@ -17,8 +17,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -58,9 +56,9 @@ public class PanelEstadistica extends javax.swing.JPanel {
 
         ruta = new File("img_estadistica");
         if (ruta.mkdir()) {
-            LOG.log(Level.INFO, "Carpeta " + ruta.getPath() + " creada con Exito");
+            logger.info("Carpeta " + ruta.getPath() + " creada con Exito");
         } else if (ruta.exists()) {
-            LOG.log(Level.INFO, "La carpeta img_estadistica existe !!! No se crea !");
+            logger.info("La carpeta img_estadistica existe !!! No se crea !");
         } else {
             JOptionPane.showMessageDialog(this, "La carpeta " + ruta.getPath() + " NO se ha creado\nRevisa los permisos del programa.");
         }
@@ -91,7 +89,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         try {
             ChartUtilities.saveChartAsJPEG(pieChart3d, chart, 600, 400);
         } catch (IOException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
@@ -119,7 +117,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         try {
             ChartUtilities.saveChartAsJPEG(barChart3d, barChart, 600, 400);
         } catch (IOException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
     
@@ -145,7 +143,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         try {
             ChartUtilities.saveChartAsJPEG(lineChart, barChart, 600, 400);
         } catch (IOException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
@@ -295,7 +293,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
             jLabelLineChart.setIcon(img3);
 
         } catch (ParseException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
@@ -335,5 +333,5 @@ public class PanelEstadistica extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTableNotas;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PanelEstadistica.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelEstadistica.class);
 }

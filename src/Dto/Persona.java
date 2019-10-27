@@ -5,8 +5,6 @@
  */
 package Dto;
 
-import java.util.logging.Logger;
-
 /**
  * Objeto Persona
  *
@@ -15,7 +13,6 @@ import java.util.logging.Logger;
 public class Persona implements java.io.Serializable{
     
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(Persona.class.getName());
     
     private int cod;
     private String nombre;

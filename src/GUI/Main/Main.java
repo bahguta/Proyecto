@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -42,6 +40,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
 import org.openide.util.Exceptions;
 
 /**
@@ -51,7 +51,7 @@ import org.openide.util.Exceptions;
  */
 public class Main extends javax.swing.JFrame implements MenuListener {
 
-    private static final Logger LOG = Logger.getLogger(Main.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Main.class);
 
     public final static int MIN_LARGO = 1400;
     public final static int MIN_ALTO = 900;
@@ -79,10 +79,14 @@ public class Main extends javax.swing.JFrame implements MenuListener {
      * Constructor:
      */
     public Main() {
+        BasicConfigurator.configure();
         imprimirLogo();
-        Login login = new Login(this, true);
+        LogicaTemas logicaTemas = new LogicaTemas();
+        logica = new LogicaNegocio();
+        ConexionBBDD login = new ConexionBBDD(this, true, logica);
         login.setVisible(true);
-
+        
+        
 //        /**
 //         * Metodo para cerrar la aplicacion por si no se establece conexion con
 //         * la base de datos
@@ -97,13 +101,12 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 //            }
 //
 //        });
+//        if (login != null) {
+//            usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
+//        }
 
-        if (login != null) {
-            usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
-        }
-        
         //Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/icono.png"));
-
+        
         initComponents();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
@@ -111,9 +114,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         setIconImage(img);
         //this.setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
 
-        LogicaTemas logicaTemas = new LogicaTemas();
+        
 
-        conexion(login.getNombre(), login.getPass(), login.getHost(), login.getPuerto(), login.getNombreBBDD());
+        //conexion(login.getNombre(), login.getPass(), login.getHost(), login.getPuerto(), login.getNombreBBDD());
         //conexion();
 
         BoxLayout boxLayout = new BoxLayout(getContentPane(), BoxLayout.Y_AXIS);
@@ -173,7 +176,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         logica = new LogicaNegocio(this, nombre, pass, host, puerto, nombreBBDD);
         if (!logica.conectBBDD(nombre, pass, host, puerto, nombreBBDD)) {
             System.exit(0);
-            LOG.log(Level.WARNING, "Conexion NO establecida. Exit !");
+            logger.error("Conexion NO establecida. Exit !");
         }
 
     }
@@ -524,9 +527,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             URI url = new URI("https://bahguta.ddns.net");
             Desktop.getDesktop().browse(url);
         } catch (URISyntaxException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         } catch (IOException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }//GEN-LAST:event_jLabel4MouseClicked
 
@@ -542,11 +545,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         javax.swing.UIManager.setLookAndFeel(new SyntheticaBlackEyeLookAndFeel()); //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-
-                new Main().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            PropertyConfigurator.configure("src/Logica/log4j.properties");
+            new Main().setVisible(true);
         });
     }
 
@@ -600,21 +601,22 @@ public class Main extends javax.swing.JFrame implements MenuListener {
                     BufferedReader br = new BufferedReader(new FileReader(banner));
                     String st;
                     while ((st = br.readLine()) != null) {
-                        System.out.println(st);
+                        logger.info(st);
                     }
                 } catch (IOException e) {
-                    LOG.log(Level.WARNING, e.getMessage());
+
+                    logger.error(e.getMessage());
                 }
             }
         });
 
     }
-    
+
     /**
-     * Metodo para comprobar si un String 
+     * Metodo para comprobar si un String
      */
-    public void dsf(){
-        
+    public void dsf() {
+
     }
 
 }

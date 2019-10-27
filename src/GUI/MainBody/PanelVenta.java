@@ -12,7 +12,6 @@ import TableModels.PersonaCortoTableModel;
 import TableModels.ProductoTableModel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -235,7 +234,7 @@ public class PanelVenta extends javax.swing.JPanel {
         }
         //producto en stock
         Producto p = logica.getProductoPorID(id_producto);
-        listaProductos. //
+        //listaProductos. //
                 Producto produc = null;
 
         if (p != null && p.getCantidad() > 0) {
@@ -250,7 +249,7 @@ public class PanelVenta extends javax.swing.JPanel {
                                     return true;
                                 }
                                 return false;
-                            }).findFirst();
+                            }).findFirst().get();
                     return;
                 } else {
                     p.setCantidad(1);
@@ -307,5 +306,5 @@ public class PanelVenta extends javax.swing.JPanel {
     private javax.swing.JTable jTableProductosCliente;
     private javax.swing.JTable jTableProductosStock;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PanelVenta.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelVenta.class);
 }

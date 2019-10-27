@@ -6,7 +6,6 @@
 package GUI.MainBody;
 
 import Logica.LogicaTemas;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -270,5 +269,5 @@ public class PanelAyuda extends javax.swing.JPanel {
     private javax.swing.JTextArea jTextAreaAyuda;
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PanelAyuda.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelAyuda.class);
 }

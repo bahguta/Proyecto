@@ -89,4 +89,6 @@ public class LogicaTemas {
         TitledBorder titledBorder = new TitledBorder(border);
         return titledBorder;
     }
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LogicaTemas.class);
+
 }

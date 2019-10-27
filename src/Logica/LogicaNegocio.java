@@ -22,8 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -42,7 +40,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class LogicaNegocio {
 
-    private static final Logger LOG = Logger.getLogger(LogicaNegocio.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LogicaNegocio.class);
 
     // gestiones 
     private ConexionBBDD conexion;
@@ -51,13 +49,28 @@ public class LogicaNegocio {
     private GestionarFacturas gestionarFacturas;
     private GestionarNotasLibro gestionarNotasLibro;
     private GestionarCaja gestionarCaja;
-    
+
     //ruta para los informes que va a crear
     private File rutaInformes;
     //comprueba si esta establecida la conexion con la base de datos 
     //devuelve true si existe una conexion con base de datos y false en caso contrario
     private static boolean isConexion = false;
 
+    private Usuario usuario = null;
+    
+    
+    
+    public LogicaNegocio(){
+        conexion = new ConexionBBDD();
+        this.gestionarPersonas = new GestionarPersonas(conexion);
+        this.gestionarFacturas = new GestionarFacturas(conexion);
+        this.gestionarInventario = new GestionarInventario(conexion);
+        this.gestionarNotasLibro = new GestionarNotasLibro(conexion);
+        this.gestionarCaja = new GestionarCaja();
+        
+    }
+    
+    
     /**
      * Constructor Datos necesarios para la conexion a la base de datos
      *
@@ -72,8 +85,7 @@ public class LogicaNegocio {
         this.conexion = new ConexionBBDD();
         //inicializo la conexion 
         //this.conexion.conexionBBDD(IP, puerto, nombreBBDD, usuario, password);
-        
-        
+
         //creo las clases de gestionar 
         this.gestionarPersonas = new GestionarPersonas(conexion);
         this.gestionarFacturas = new GestionarFacturas(conexion);
@@ -85,37 +97,15 @@ public class LogicaNegocio {
 
         this.rutaInformes = new File("informes");
         if (rutaInformes.mkdir()) {
-            LOG.log(Level.INFO, "Carpeta informes creada con exito");
+            logger.info("Carpeta informes creada con exito");
         } else if (rutaInformes.exists()) {
-            LOG.log(Level.INFO, "La carpeta Informes existe !!! No se crea !");
+            logger.info("La carpeta Informes existe !!! No se crea !");
         } else {
             JOptionPane.showMessageDialog(frame, "Carpeta" + rutaInformes.getPath() + " NO creada\nRevisa los persmisos del programa.");
 
         }
     }
-    
-    public boolean conectBBDD(String usuario, String password, String IP, int puerto, String nombreBBDD){
-        if(this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)){
-            LogicaNegocio.isConexion = true;
-            return true;
-        }
-        return false; 
-    }
-
-    public static boolean isIsConexion() {
-        return LogicaNegocio.isConexion;
-    }
-
-    public static void setIsConexion(boolean isConexion) {
-        LogicaNegocio.isConexion = isConexion;
-    }
-
-    
-    
-    public LogicaNegocio() {
-        this.conexion = null;
-
-    }
+   
 
     /**
      *
@@ -128,6 +118,36 @@ public class LogicaNegocio {
      *
      *
      */
+    
+    /**
+     * Metodo para conectar a la base de datos con MySQL
+     * 
+     * @param usuario
+     * @param password
+     * @param IP
+     * @param puerto
+     * @param nombreBBDD
+     * @return 
+     */
+    public boolean conectBBDD(String usuario, String password, String IP, int puerto, String nombreBBDD) {
+        if (this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)) {
+            LogicaNegocio.isConexion = true;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Metodo para comprobar si hay conexion con la bbdd
+     * 
+     * @return 
+     */
+    public boolean isConexionExitosa() {
+        return conexion.isConexionExitosa();
+    }
+    
+    
+    
     /**
      * Metodo para cambiar la conexion de la base de datos
      *
@@ -139,13 +159,12 @@ public class LogicaNegocio {
      * @return
      */
     public boolean cambiarConexion(String usuario, String password, String IP, int puerto, String nombreBBDD) {
-        ConexionBBDD conn = new ConexionBBDD();
-        if (conn.conexionBBDD(IP, puerto, nombreBBDD, usuario, password)) {
-            conexion = conn;
+        if (conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)) {
             return true;
         }
         return false;
     }
+    
 
     /**
      *
@@ -158,6 +177,7 @@ public class LogicaNegocio {
      *
      *
      */
+    
     /**
      * Metodo para añadir un usuario
      *
@@ -166,9 +186,14 @@ public class LogicaNegocio {
      * @param userRole
      * @return
      */
+    
+    public void setUsuario(Usuario u){
+        this.usuario = u;
+    }
+    
+    
     public int addUsuario(String nombre, String pass, String userRole) {
-        String consulta = "insert into usuario (userID, nombre, pass, userRole) values ("
-                + "ID_usuario_seq.nextVal,"
+        String consulta = "insert into usuario (nombre, pass, userRole) values ("
                 + "'" + nombre + "', "
                 + "'" + pass + "',"
                 + "'" + userRole + "')";
@@ -177,27 +202,141 @@ public class LogicaNegocio {
     }
 
     /**
-     * Metodo para obtener un usuario
-     *
-     * @param nombre
-     * @param pass
-     * @return
+     * Metodo para comprobar si 2 parolas son iguales
+     */
+    
+    
+    
+    
+    
+    /**
+     * Metodo para cripar una constraseña
+     */
+    public String criptPass(char[] pass) {
+        // Generate Salt. The generated value can be stored in DB. 
+        String salt = PasswordUtils.getSalt(30);
+
+        // Protect user's password. The generated value can be stored in DB.
+        String mySecurePassword = PasswordUtils.generateSecurePassword(pass.toString(), salt);
+        return mySecurePassword;
+    }
+
+    /**
+     * Metodo para registrar un usuario
      */
     public Usuario getUsuario(String nombre, String pass) {
-        String consulta = "Select * from usuario where nombre = '" + nombre + "' and pass = '" + pass + "'";
-        ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        if (resultado != null) {
+
+        if (!conexion.isConexionExitosa()) {
+            String consulta = "select * from usuario where nombre = '" + nombre + "' and pass = '" + pass + "'";
+            ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             try {
                 if (resultado.next()) {
-                    Usuario u = new Usuario(resultado.getString("Nombre"), resultado.getString("Pass"));
-                    return u;
-                }
+                    if (PasswordUtils.verifyUserPassword(pass, resultado.getString("passCripted"), resultado.getString("salt"))) {
+                        usuario = new Usuario(
+                            resultado.getInt("ID_usuario"),
+                            resultado.getString("nombre"),
+                            resultado.getString("pass"),
+                            resultado.getString("passCripted"),
+                            resultado.getString("salt"),
+                            resultado.getString("UserRole"));
+                    } 
+                    
+                } 
             } catch (SQLException e) {
-                e.getMessage();
+                logger.error(e.getMessage());
             }
+            
         }
-        return null;
+        return usuario;
+
+//        String salt = PasswordUtils.getSalt(30);
+//        String passCripted = PasswordUtils.generateSecurePassword(pass, salt);
+//
+//        if (PasswordUtils.verifyUserPassword(pass, pass, salt)) {
+//
+//        }
+//
+//        //Usuario u = new Usuario();
+//        u.setNombre(nombre);
+//        u.setPass(pass);
+//        u.setPassCripted();
+//        u.setSalt(salt);
+//
+
+//        return filas;
     }
+    
+    public boolean registrarAdmin(String nombre, String pass){
+        String salt = PasswordUtils.getSalt(30);
+        String passCripted = PasswordUtils.generateSecurePassword(pass, salt);
+        
+        String consulta = "insert into usuario (nombre, pass, passCripted, salt, userRole) values ("
+                + "'" + nombre + "', "
+                + "'" + pass + "', "
+                + "'" + passCripted + "',"
+                + "'" + salt + "',"
+                + "'admin')";
+        int filas = 0;
+        if (conexion != null) {
+            filas = conexion.ejecutarStatementNOSELECT(salt, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            logger.info("Admin registrado con exito !");
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean registrarUsuario(String nombre, String pass){
+        String salt = PasswordUtils.getSalt(30);
+        String passCripted = PasswordUtils.generateSecurePassword(pass, salt);
+        String consulta = "insert into usuario (nombre, pass, passCripted, salt, userRole) values ("
+                + "'" + nombre + "', "
+                + "'" + pass + "', "
+                + "'" + passCripted + "',"
+                + "'" + salt + "',"
+                + "'usuario')";
+        int filas = 0;
+        if (conexion != null) {
+            filas = conexion.ejecutarStatementNOSELECT(salt, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            logger.info("Usuario registrado con exito !");
+            return true;
+        } else {
+            logger.info("Conexion NULL");
+        }
+        return false;
+    }
+    
+
+//    /**
+//     * Metodo para obtener un usuario
+//     *
+//     * @param nombre
+//     * @param pass
+//     * @return
+//     */
+//    public Usuario getUsuario(String nombre, String pass) throws NullPointerException {
+//        String consulta = "Select * from usuario where nombre = '" + nombre + "' and pass = '" + pass + "'";
+//        ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+//        Usuario u = null;
+//        if (resultado != null) {
+//            try {
+//                if (resultado.next()) {
+//                    u = new Usuario(
+//                            resultado.getInt("ID_usuario"),
+//                            resultado.getString("nombre"),
+//                            resultado.getString("pass"),
+//                            resultado.getString("passCripted"),
+//                            resultado.getString("salt"),
+//                            resultado.getString("userRole"));
+//                    if (u.getNombre().equals(nombre) && u.getPass().equals(pass)) {
+//                        return u;
+//                    }
+//                }
+//            } catch (SQLException e) {
+//                logger.error(e.getMessage());
+//            }
+//        }
+//        return u;
+//    }
 
     /**
      *
@@ -896,6 +1035,8 @@ public class LogicaNegocio {
     public String getBBDDName() {
         return conexion.getBBDDName();
     }
+    
+    
 
     /**
      * Leer fichero Tablas
@@ -916,9 +1057,9 @@ public class LogicaNegocio {
                 conexion.ejecutarStatementNOSELECT(q, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             }
         } catch (FileNotFoundException e) {
-            LOG.log(Level.WARNING, "Fichero NO encontrado !!!");
+            logger.error("Fichero NO encontrado !!!");
         } catch (IOException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         } finally {
             if (br != null) {
                 try {
@@ -929,7 +1070,4 @@ public class LogicaNegocio {
         }
     }
 
-    
 }
-
-

@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.openide.util.Exceptions;
 
 /**
@@ -21,6 +19,7 @@ import org.openide.util.Exceptions;
  * @author Plam
  */
 public class GestionarInventario {
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GestionarInventario.class);
 
     private List<Producto> listaProductos;
     private ConexionBBDD conexion;
@@ -42,6 +41,9 @@ public class GestionarInventario {
      * @return retorna una lista tipo Producto
      */
     public List<Producto> getListaProductos() {
+        if (!conexion.isConexionExitosa()) {
+            return new ArrayList<>();
+        }
         refrescarListaProductos();
         return this.listaProductos;
     }
@@ -53,6 +55,9 @@ public class GestionarInventario {
      * @return retorna una lista tipo Producto
      */
     public List<Producto> getProductosPorFactura(int ID_FACTURA) {
+        if (!conexion.isConexionExitosa()) {
+            return new ArrayList<>();
+        }
         List<Producto> lista = new ArrayList<>();
         String consulta = "select p.ID_producto , p.nombre, p.precio, p.peso, n.cantidad from producto p inner join negocio n on p.id_producto = n.id_producto and n.id_factura = " + ID_FACTURA;
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -80,6 +85,9 @@ public class GestionarInventario {
      * @return retorna la lista de los productos
      */
     private void refrescarListaProductos() {
+        if (!conexion.isConexionExitosa()) {
+            return;
+        }
         try {
             String consulta = "select * from producto";
             ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -96,7 +104,7 @@ public class GestionarInventario {
                 } //end while
             } //end if
         } catch (SQLException ex) {
-            LOG.log(Level.WARNING,ex.getMessage());
+            logger.error(ex.getMessage());
         }
     }
 
@@ -110,9 +118,13 @@ public class GestionarInventario {
      * @return returna las filas actualizadas
      */
     public int addProducto(String nombre, double precio, double peso, int cantidad) {
+        int filas = -1;
+        if (!conexion.isConexionExitosa()) {
+            return filas;
+        }
         String consulta = "insert into producto (nombre, peso, precio, cantidad) "
                 + "values ('" + nombre + "', " + peso + ", " + precio + ", " + cantidad + ")";
-        int filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Productos insertados: " + filas);
         refrescarListaProductos();
         return filas;
@@ -125,7 +137,10 @@ public class GestionarInventario {
      * @return returna las filas actualizadas
      */
     public int borrarProducto(int codProducto) {
-        int filas = 0;
+        int filas = -1;
+        if (!conexion.isConexionExitosa()) {
+            return filas;
+        }
         String consulta = "delete from producto where ID_producto =" + codProducto;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         refrescarListaProductos();
@@ -160,6 +175,9 @@ public class GestionarInventario {
      * @return retorna un producto tipo Producto, en caso contrario retorna null
      */
     public Producto getProducto(int codProducto){
+        if (!conexion.isConexionExitosa()) {
+            return null;
+        }
         refrescarListaProductos();
         for (Producto producto : listaProductos) {
             if (producto.getCodProducto() == codProducto) {
@@ -180,6 +198,9 @@ public class GestionarInventario {
      * @return retorna las filas actualizadas
      */
     public int modificarProducto(int codProducto, String nombre, double precio, double peso, int cantidad) {
+        if (!conexion.isConexionExitosa()) {
+            return -1;
+        }
         int filas = 0;
         String consulta = "update producto set nombre = '" + nombre + "', peso = " + peso + ", precio =" + precio + ", cantidad = " + cantidad + " where ID_producto = " + codProducto;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -187,6 +208,5 @@ public class GestionarInventario {
         System.out.println("Productos actualizados: " + filas);
         return filas;
     }
-    private static final Logger LOG = Logger.getLogger(GestionarInventario.class.getName());
 
 }

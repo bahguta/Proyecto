@@ -16,12 +16,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- * Dialog para el manejo de un factura 
+ * Dialog para el manejo de un factura
  *
  * @author Plam
  */
@@ -50,41 +49,40 @@ public class DialogFactura extends javax.swing.JDialog {
 
         this.parent = parent;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        ptm = new PersonasTableModel(logica.getListaPersonas());
-        jComboBoxPersonas.setModel(logica.getPersonasComboBoxModel());
-        jComboBoxProductos.setModel(logica.getProductosComboBoxModel());
-        
-        if (f != null) {
-            this.factura = f;
-            jLabelH2FechaNuevaFactura.setText("- " + sdf.format(this.factura.getFecha()) + " -");
-            listaProductos = this.factura.getListaProductos();
-            
-            Persona p = logica.getPersonaPorIDFactura(this.factura.getCodFactura());
+        if (logica.isConexionExitosa()) {
 
-            String nombre = p.getNombre() + " " + p.getApellido();
-            jComboBoxPersonas.setSelectedItem(nombre);
-            System.out.println(nombre);
-            
-            jTextAreaTrabajos.setText(this.factura.getTrabajos());
-            jLabel1H2PrecioTotal.setText("" + this.factura.getPrecio());
+            ptm = new PersonasTableModel(logica.getListaPersonas());
+            jComboBoxPersonas.setModel(logica.getPersonasComboBoxModel());
+            jComboBoxProductos.setModel(logica.getProductosComboBoxModel());
 
-            prodtm = new ProductoTableModel(listaProductos);
-            
-            jButtonNuevoProducto.setVisible(false);
-            jButtonNuevaPersona.setVisible(false);
-            jButtonAddProductoFactura.setVisible(false);
-            jButtonBorrarProductoFactura.setVisible(false);
-            jButtonNuevaFactura.setVisible(false);
-        } else {
-            jLabelH2FechaNuevaFactura.setText(sdf.format(new Date()));
-            listaProductos = new ArrayList<>();
-            prodtm = new ProductoTableModel(listaProductos);
+            if (f != null) {
+                this.factura = f;
+                jLabelH2FechaNuevaFactura.setText("- " + sdf.format(this.factura.getFecha()) + " -");
+                listaProductos = this.factura.getListaProductos();
+
+                Persona p = logica.getPersonaPorIDFactura(this.factura.getCodFactura());
+
+                String nombre = p.getNombre() + " " + p.getApellido();
+                jComboBoxPersonas.setSelectedItem(nombre);
+                System.out.println(nombre);
+
+                jTextAreaTrabajos.setText(this.factura.getTrabajos());
+                jLabel1H2PrecioTotal.setText("" + this.factura.getPrecio());
+
+                prodtm = new ProductoTableModel(listaProductos);
+
+                jButtonNuevoProducto.setVisible(false);
+                jButtonNuevaPersona.setVisible(false);
+                jButtonAddProductoFactura.setVisible(false);
+                jButtonBorrarProductoFactura.setVisible(false);
+                jButtonNuevaFactura.setVisible(false);
+            } else {
+                jLabelH2FechaNuevaFactura.setText(sdf.format(new Date()));
+                listaProductos = new ArrayList<>();
+                prodtm = new ProductoTableModel(listaProductos);
+            }
         }
-
         jTableProductos.setModel(prodtm);
-
-        
-        
 
         listaLabelsH1 = new ArrayList<>();
         listaLabelsH1.add(jLabel1H1DialogNuevaFactura);
@@ -325,8 +323,8 @@ public class DialogFactura extends javax.swing.JDialog {
 
     /**
      * Metodo para agregar una nueva vactura en la base de datos
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaFacturaActionPerformed
         String nombre = (String) jComboBoxPersonas.getSelectedItem();
@@ -335,15 +333,16 @@ public class DialogFactura extends javax.swing.JDialog {
         System.out.println("DialogFactura - " + p.toString());
         if (p != null) {
             String trabajos = jTextAreaTrabajos.getText();
-            if (logica.addFactura(precioTotal, p.getCodPersona(), listaProductos, trabajos, parent) != 0){
-            dispose();
+            if (logica.addFactura(precioTotal, p.getCodPersona(), listaProductos, trabajos, parent) != 0) {
+                dispose();
             }
-        } 
+        }
     }//GEN-LAST:event_jButtonNuevaFacturaActionPerformed
 
     /**
      * Metodo para cerrar el dialogo
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonCancelarNuevaFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarNuevaFacturaActionPerformed
         dispose();
@@ -351,8 +350,8 @@ public class DialogFactura extends javax.swing.JDialog {
 
     /**
      * Metodo para añadir un producto nuevo a la lista de la factura
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonAddProductoFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddProductoFacturaActionPerformed
         String nomProducto = (String) jComboBoxProductos.getSelectedItem();
@@ -380,12 +379,16 @@ public class DialogFactura extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonAddProductoFacturaActionPerformed
 
     /**
-     * Metodo para borrar un producto de la lista de la factura 
-     * 
-     * @param evt 
+     * Metodo para borrar un producto de la lista de la factura
+     *
+     * @param evt
      */
     private void jButtonBorrarProductoFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarProductoFacturaActionPerformed
-        int ID_producto = (int) jTableProductos.getValueAt(jTableProductos.getSelectedRow(), 0);
+        int ID_producto = -1;
+        ID_producto = (int) jTableProductos.getValueAt(jTableProductos.getSelectedRow(), 0);
+        if (ID_producto == -1) {
+            return;
+        }
         for (int i = 0; i < listaProductos.size(); i++) {
             if (listaProductos.get(i).getCodProducto() == ID_producto) {
                 precioTotal -= listaProductos.get(i).getPrecio();
@@ -399,7 +402,8 @@ public class DialogFactura extends javax.swing.JDialog {
 
     /**
      * Metodo para agregar una nueva persona por si no existe en el JComboBox
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonNuevaPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPersonaActionPerformed
         DialogPersona dialog = new DialogPersona(parent, true, logica, null);
@@ -408,8 +412,10 @@ public class DialogFactura extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonNuevaPersonaActionPerformed
 
     /**
-     * Metodo para agregar un nuevo producto por si el producto no aparece en el jCombobox
-     * @param evt 
+     * Metodo para agregar un nuevo producto por si el producto no aparece en el
+     * jCombobox
+     *
+     * @param evt
      */
     private void jButtonNuevoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevoProductoActionPerformed
         DialogProducto dialog = new DialogProducto(parent, true, logica, null);
@@ -418,8 +424,9 @@ public class DialogFactura extends javax.swing.JDialog {
     }//GEN-LAST:event_jButtonNuevoProductoActionPerformed
 
     /**
-     * Metodo para imprimir en pantalla una factura en pdf 
-     * @param evt 
+     * Metodo para imprimir en pantalla una factura en pdf
+     *
+     * @param evt
      */
     private void btnImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprimirActionPerformed
         if (factura != null) {
@@ -429,11 +436,12 @@ public class DialogFactura extends javax.swing.JDialog {
 
     /**
      * Metodo estatico para obtener una instancia nueva de DialogFactura.class
+     *
      * @param parent
      * @param modal
      * @param logica
      * @param f
-     * @return 
+     * @return
      */
     public static DialogFactura newInstance(JFrame parent, boolean modal, LogicaNegocio logica, Factura f) {
         return new DialogFactura(parent, modal, logica, f);
@@ -462,5 +470,5 @@ public class DialogFactura extends javax.swing.JDialog {
     private javax.swing.JTable jTableProductos;
     private javax.swing.JTextArea jTextAreaTrabajos;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(DialogFactura.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(DialogFactura.class);
 }

@@ -19,8 +19,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -416,7 +414,7 @@ public class PanelLibroDiario extends javax.swing.JPanel {
             lblDebeH2.setText(String.format("%.2f", getTotatDebeEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
             lblHaberH2.setText(String.format("%.2f", getTotatHaberEntreFechas(sdf.parse(fechaIn), sdf.parse(fechaFi))));
         } catch (ParseException ex) {
-            LOG.log(Level.WARNING, ex.getMessage());
+            logger.error(ex.getMessage());
         }
 
     }//GEN-LAST:event_jButtonNuevaNotaActionPerformed
@@ -507,5 +505,5 @@ public class PanelLibroDiario extends javax.swing.JPanel {
     private javax.swing.JLabel lblDebeH2;
     private javax.swing.JLabel lblHaberH2;
     // End of variables declaration//GEN-END:variables
-    private static final Logger LOG = Logger.getLogger(PanelLibroDiario.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(PanelLibroDiario.class);
 }

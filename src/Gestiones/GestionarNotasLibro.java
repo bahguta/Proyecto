@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import org.openide.util.Exceptions;
 
 /**
@@ -21,7 +20,7 @@ import org.openide.util.Exceptions;
  * @author Plam
  */
 public class GestionarNotasLibro {
-    private static final Logger LOG = Logger.getLogger(GestionarNotasLibro.class.getName());
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GestionarNotasLibro.class);
 
     private List<NotaLibroDiario> listaNotas;
     private ConexionBBDD conexion;
@@ -43,6 +42,9 @@ public class GestionarNotasLibro {
      * @return returna la nota tipo NotaLibroDiario
      */
     public NotaLibroDiario getNota(int codNoda){
+        if (!conexion.isConexionExitosa()) {
+            return null;
+        }
         refrescarListaNotas();
         for (int i = 0; i < listaNotas.size(); i++) {
             if (listaNotas.get(i).getCodNota() == codNoda) {
@@ -58,6 +60,9 @@ public class GestionarNotasLibro {
      * @return retorna las filas actualizadas 
      */
     public int borrarNota(int codNota){
+        if (!conexion.isConexionExitosa()) {
+            return -1;
+        }
         int filas = 0;
         String consulta = "delete from nota where ID_nota = " + codNota;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -76,6 +81,9 @@ public class GestionarNotasLibro {
      * @return  retorna las filas actualizadas 
      */
     public int addNota(Date fecha, Double debe, Double haber, String detalle) {
+        if (!conexion.isConexionExitosa()) {
+            return -1;
+        }
         int filas = 0;
         String consulta = "insert into nota (fecha, detalle, debe, haber) values ('" + sdf.format(fecha) + "','" + detalle + "', " + debe + ", " + haber + ")";
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -94,6 +102,9 @@ public class GestionarNotasLibro {
      * @return  retorna las filas actualizadas
      */
     public int moidifcarNota(int ID_nota, String detalle, Double debe, Double haber) {
+        if (!conexion.isConexionExitosa()) {
+            return -1;
+        }
         int filas = 0;
         String consulta = "update nota set  detalle = '" + detalle + "', debe = " + debe + ", haber = " + haber + " where id_nota = " + ID_nota;
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -107,6 +118,9 @@ public class GestionarNotasLibro {
      * @return  retorna una lista tipo NotaLibroDiario
      */
     public List<NotaLibroDiario> getListaNotas() {
+        if (!conexion.isConexionExitosa()) {
+            return new ArrayList<>();
+        }
         refrescarListaNotas();
         return listaNotas;
     }
@@ -115,6 +129,9 @@ public class GestionarNotasLibro {
      * Metodo para refrescar la lista de las notas
      */
     private void refrescarListaNotas() {
+        if (!conexion.isConexionExitosa()) {
+            return ;
+        }
         String consulta = "select * from nota";
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         if (resultado != null) {
@@ -143,6 +160,9 @@ public class GestionarNotasLibro {
      * @return  retorna la fecha tipo Date
      */
     public Date getFechaIn() {
+        if (!conexion.isConexionExitosa()) {
+            return new Date();
+        }
         refrescarListaNotas();
         Date fechaIn = null;
         if (listaNotas != null && !listaNotas.isEmpty()) {
@@ -161,6 +181,9 @@ public class GestionarNotasLibro {
      * @return  retorna la fecha tipo Date
      */
     public Date getFechaFin() {
+        if (!conexion.isConexionExitosa()) {
+            return new Date();
+        }
         Date fechaFin = null;
         if (listaNotas != null) {
             fechaFin = listaNotas.get(0).getFecha();

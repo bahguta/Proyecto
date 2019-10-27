@@ -11,13 +11,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 /**
  *
  * @author plam
  */
 public class ConexionBBDD {
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ConexionBBDD.class);
 
     private Connection conexion = null;
     private Statement stmtSQL = null;
@@ -29,59 +29,65 @@ public class ConexionBBDD {
     private String bdName;
     private boolean isConnected = false;
 
+    public ConexionBBDD() {
+        this.user = "";
+        this.pass = "";
+        this.host = "";
+        this.puerto = 0;
+        this.bdName = "";
+                
+    }
+    
+ 
+
     //abre una conexion a la base de datos con MySql
     public boolean conexionBBDDMySql(String nomEqui, int puerto, String nomBBDD, String usr, String pwd) {
-        host = nomEqui;
-        user = usr;
-        pass = pwd;
+        this.host = nomEqui;
+        this.user = usr;
+        this.pass = pwd;
         this.puerto = puerto;
-        bdName = nomBBDD;
+        this.bdName = nomBBDD;
 
-        System.out.println("------------------------");
-        System.out.println("Conectando a la BBDD ...");
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
-            System.out.println("-----------------------------------------------------------------------------------");
-            System.out.println("Error con el driver,comprueba que lo has metido en el proyecto y que es el correcto");
+            logger.error("-----------------------------------------------------------------------------------");
+            logger.error("Error con el driver,comprueba que lo has metido en el proyecto y que es el correcto");
             return false;
         }
-
-        //defino la url que se usará para la conexion; 1521 para oracle
-        //jdbc:mysql://localhost:3306/karthicraj","mysql","mysql"
+        
         String url = "jdbc:mysql://" + nomEqui + ":" + puerto + "/" + nomBBDD;
-        System.out.println(url);
+        logger.info("Conectando a " + url + " ...");
+       
         try {
             //creo la conexion
             conexion = DriverManager.getConnection(url, usr, pwd);
             if (conexion != null) {
-                System.out.println("------------------------------");
-                System.out.println("Conexión establecida con exito");
+                logger.info("Conexión establecida con exito");
                 isConnected = true;
-                return true;
+                return isConnected;
             }
         } catch (SQLException ex) {
             //System.out.println("Fallo en la conexion; verificar BBDD, nombre equipo, usuario o contraseña");
-            System.out.println("Error al conectar con la BBDD, compruebe si está levantada");
+            logger.error("Error al conectar con la BBDD, compruebe si está levantada", ex);
             //System.exit(1);
             return false;
         }
         return false;
 
     }
-
+    
+    /**
+     * Metodo para comprobar si la conexion con la base de datos es exitosa
+     * 
+     * @return  true en caso de exito 
+     */
     public boolean isConexionExitosa() {
         return isConnected;
     }
 
-    public void conexionBBDD(Object o) {
-        if (o == null) {
-            isConnected = false;
-        }
-    }
-
     //abre una conexion a la base de datos con Oracle
-    public boolean conexionBBDD(String nomEqui, int puerto, String nomBBDD, String usr, String pwd) {
+    public boolean conexionBBDDOracle(String nomEqui, int puerto, String nomBBDD, String usr, String pwd) {
         host = nomEqui;
         user = usr;
         pass = pwd;
@@ -93,8 +99,7 @@ public class ConexionBBDD {
         try {
             Class.forName("oracle.jdbc.OracleDriver");
         } catch (ClassNotFoundException ex) {
-            System.out.println("-----------------------------------------------------------------------------------");
-            System.out.println("Error con el driver,comprueba que lo has metido en el proyecto y que es el correcto");
+            logger.error("Error con el driver,comprueba que lo has metido en el proyecto y que es el correcto");
             return false;
         }
 
@@ -108,12 +113,10 @@ public class ConexionBBDD {
                 System.out.println("------------------------------");
                 System.out.println("Conexión establecida con exito");
                 isConnected = true;
-                return true;
+                return isConnected;
             }
         } catch (SQLException ex) {
-            //System.out.println("Fallo en la conexion; verificar BBDD, nombre equipo, usuario o contraseña");
-            System.out.println("Error al conectar con la BBDD, compruebe si está levantada");
-            //System.exit(1);
+            logger.error("Error al conectar con la BBDD, compruebe si está levantada");
             return false;
         }
         return false;
@@ -153,29 +156,30 @@ public class ConexionBBDD {
                 conexion.close();
             }
         } catch (SQLException ex) {
-            //Logger.getLogger(MetodosBBDD.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error al cerrar la conexion a la BBDD");
+            logger.error("Error al cerrar la conexion a la BBDD");
         } finally {
+            logger.info("Conexion cerrada con exito !");
             isConnected = false;
         }
     }
 
     //metodo para ejecutar una Statement SELECT
-    public ResultSet ejecutarStatementSELECT(String sql, int tipoResultado, int tipoActualizacion) {
+    public ResultSet ejecutarStatementSELECT(String sql, int tipoResultado, int tipoActualizacion)  {
+        ResultSet juegoResultados = null;
         if (!isConnected) {
             return null;
         }
-        ResultSet juegoResultados = null;
+        
         try {
             // Para crear un Statement
             if (conexion == null) {
-                System.out.println("conexion null");
+                logger.info("conexion null");
             } else {
                 stmtSQL = conexion.createStatement();
                 juegoResultados = stmtSQL.executeQuery(sql);
             }
         } catch (SQLException ex) {
-            System.out.println("Error en la consulta Statement, comprobar la SQL1");
+            logger.error("Error en la consulta Statement, comprobar la SQL1");
 
         }
         return juegoResultados;
@@ -192,7 +196,7 @@ public class ConexionBBDD {
             stmtSQL = conexion.createStatement(tipoResultado, tipoActualizacion);
             numFilasResultadoConsulta = stmtSQL.executeUpdate(sql);
         } catch (SQLException ex) {
-            System.out.println("Error en la consulta Statement, comprobar la SQL2");
+            logger.error("Error en la consulta Statement, comprobar la SQL2");
         }
         return numFilasResultadoConsulta;
     }
@@ -207,12 +211,12 @@ public class ConexionBBDD {
         try {
             // Para crear un PreparedStatement para ejecutar posteriormente
             if (conexion == null) {
-                System.out.println("conexion null");
+                logger.info("conexion null");
             } else {
                 pstmtSQL = conexion.prepareStatement(sql, tipoResultado, tipoActualizacion);
             }
         } catch (SQLException ex) {
-            System.out.println("Error en la consulta Statement, comprobar la SQL3");
+            logger.error("Error en la consulta Statement, comprobar la SQL3");
 
         }
 
@@ -228,7 +232,7 @@ public class ConexionBBDD {
         try {
             resultadoConsulta = pstmtSQL.executeQuery();
         } catch (SQLException ex) {
-            System.out.println("Error en la consulta Statement, comprobar la SQL4");
+            logger.error("Error en la consulta Statement, comprobar la SQL4");
         }
         return resultadoConsulta;
     }
@@ -243,7 +247,7 @@ public class ConexionBBDD {
         try {
             numFilasAfectadasSQL = pstmtSQL.executeUpdate();
         } catch (SQLException ex) {
-            System.out.println("Error en la consulta Statement, comprobar la SQL5");
+            logger.error("Error en la consulta Statement, comprobar la SQL5");
         }
         return numFilasAfectadasSQL;
     }
@@ -271,6 +275,5 @@ public class ConexionBBDD {
     public void setPstmtSQL(PreparedStatement pstmtSQL) {
         this.pstmtSQL = pstmtSQL;
     }
-    private static final Logger LOG = Logger.getLogger(ConexionBBDD.class.getName());
 
 }
