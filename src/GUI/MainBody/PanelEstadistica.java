@@ -313,7 +313,10 @@ public class PanelEstadistica extends javax.swing.JPanel {
      * @param evt 
      */
     private void jTableNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableNotasMouseClicked
-        if (jTableNotas.getSelectedRow() == -1) {
+        if (jTableNotas.getSelectedRow() == -1 ) {
+            return;
+        }
+        if (jTableNotas.getValueAt(jTableNotas.getSelectedRow(), 0) == null) {
             return;
         }
         int ID_nota = (int) jTableNotas.getValueAt(jTableNotas.getSelectedRow(), 0);

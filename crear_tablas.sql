@@ -1,103 +1,62 @@
 
-DROP table persona cascade constraint;
-DROP TABLE factura cascade constraint;
-DROP TABLE producto cascade constraint;
-DROP TABLE nota cascade constraint;
-DROP TABLE negocio cascade constraint;
+create database if not exists proyecto;
+use proyecto;
+DROP table if exists usuario;
+DROP table if exists persona ;
+DROP TABLE if exists factura;
+DROP TABLE if exists producto;
+DROP TABLE if exists nota;
+DROP TABLE if exists negocio;
 
+CREATE TABLE usuario (
+    pass varchar(500) NOT NULL
+);
 
 
 CREATE TABLE persona (
-    ID_PERSONA        NUMBER NOT NULL,
-    nombre   VARCHAR2(15),
-    apellido      VARCHAR2(30),
-	direccion  VARCHAR2(50),
-	telefono number,
-	email VARCHAR2(50),
-	type VARCHAR2(20)
+    ID_PERSONA        integer NOT NULL PRIMARY KEY auto_increment,
+    nombre   VARCHAR(15),
+    apellido      VARCHAR(30),
+	direccion  VARCHAR(50),
+	telefono integer,
+	email VARCHAR(50),
+	type VARCHAR(20)
 );
 
 
    
 CREATE TABLE producto(
-	ID_producto       NUMBER NOT NULL,	
-	nombre VARCHAR2(20), 
-	precio NUMBER(10,2), 
-	peso NUMBER(10,3),
-    cantidad NUMBER
+	ID_producto     integer NOT NULL PRIMARY KEY auto_increment,	
+	nombre VARCHAR(20) NOT NULL, 
+	precio decimal(10,2) NOT NULL, 
+	peso decimal(10,3) NOT NULL,
+    cantidad integer NOT NULL
 );
 
 
 CREATE TABLE factura (
-	ID_factura        NUMBER NOT NULL,	
-    fecha Date,
-    trabajo VARCHAR2(500),
-	precio NUMBER(10,2)
+	ID_factura   integer NOT NULL PRIMARY KEY auto_increment,	
+    fecha Date NOT NULL,
+    trabajo VARCHAR(500) NOT NULL,
+	precio decimal(10,2) NOT NULL
 );
 
-commit;
 CREATE TABLE nota (
-	ID_nota NUMBER NOT NULL,
-	fecha Date,
-	detalle VARCHAR2(500),
-	debe NUMBER(10,2),
-	haber NUMBER(10,2)
+	ID_nota integer NOT NULL PRIMARY KEY auto_increment,
+	fecha Date NOT NULL,
+	detalle VARCHAR(500) NOT NULL,
+	debe decimal(10,2) NOT NULL,
+	haber decimal(10,2) NOT NULL
 );
 
 CREATE TABLE  negocio (
-	ID_factura NUMBER NOT NULL,
-	ID_persona NUMBER NOT NULL,
-	ID_producto NUMBER NOT NULL,
-    cantidad NUMBER
+	ID_factura integer NOT NULL,
+	ID_persona integer NOT NULL,
+	ID_producto integer NOT NULL,
+    cantidad integer NOT NULL
+
 );
 
-
-
-drop sequence ID_persona_seq;
-drop sequence ID_producto_seq;
-drop sequence ID_factura_seq;
-drop sequence ID_nota_seq;
-
-
-
-create sequence ID_persona_seq
-	start with 1 
-	maxvalue 10000
-	INCREMENT by 1;
-	
-create sequence ID_producto_seq
-	start with 1 
-	maxvalue 10000
-	INCREMENT by 1; 
-
-create sequence ID_factura_seq
-	start with 1 
-	maxvalue 10000
-	INCREMENT by 1; 
-	
-create sequence ID_nota_seq
-	start with 1 
-	maxvalue 10000
-	INCREMENT by 1; 
-
-	
-	
-	
-	
-ALTER TABLE persona ADD CONSTRAINT pk_id_persona PRIMARY KEY ( ID_persona);	
-ALTER TABLE producto ADD CONSTRAINT pk_id_producto PRIMARY KEY ( ID_producto);
-ALTER TABLE factura ADD CONSTRAINT pk_id_factura PRIMARY KEY ( ID_factura);
-ALTER TABLE nota ADD CONSTRAINT pk_id_nota PRIMARY KEY ( ID_nota);
-
-
-
-
-ALTER TABLE negocio ADD CONSTRAINT fk_id_persona FOREIGN key (ID_persona) REFERENCES persona (ID_persona)
-	ON DELETE CASCADE;
-ALTER TABLE negocio ADD CONSTRAINT fk_id_producto FOREIGN key (ID_producto) REFERENCES producto (ID_producto)
-	ON DELETE CASCADE;
-ALTER TABLE negocio ADD CONSTRAINT fk_id_factura FOREIGN key (ID_factura) REFERENCES factura (ID_factura)
-	ON DELETE CASCADE;
 
 
 

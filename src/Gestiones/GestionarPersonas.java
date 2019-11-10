@@ -6,12 +6,14 @@
 package Gestiones;
 
 import Dto.Persona;
+import Dto.Usuario;
 import Logica.ConexionBBDD;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import org.openide.util.Exceptions;
 
 /**
  * Gestionar Personas
@@ -24,7 +26,7 @@ public class GestionarPersonas {
 
     private List<Persona> listaPersonas;
     private ConexionBBDD conexion;
-    //private GestionarFacturas gestionarFacturas;
+    private boolean existeLaTabla = false;
 
     public GestionarPersonas(List<Persona> listaPersonas, ConexionBBDD conexion) {
         this.listaPersonas = listaPersonas;
@@ -50,7 +52,6 @@ public class GestionarPersonas {
         refrescarListaPersonas();
         for (Persona persona : listaPersonas) {
             if (nombre.contains(persona.getNombre()) && nombre.contains(persona.getApellido())) {
-                System.out.println("Persona enconrada: " + persona.toString());
                 return persona;
             }
         }
@@ -207,6 +208,7 @@ public class GestionarPersonas {
             String consulta = "select * from persona";
             ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             if (resultado != null) {
+                existeLaTabla = true;
                 this.listaPersonas.clear();
                 while (resultado.next()) {
                     this.listaPersonas.add(new Persona(
@@ -218,6 +220,8 @@ public class GestionarPersonas {
                             resultado.getString(6),
                             resultado.getString(7)));
                 }
+            } else {
+                existeLaTabla = false;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -246,5 +250,51 @@ public class GestionarPersonas {
         System.out.println("Personas insertadas: " + filas);
 
         return filas;
+    }
+    
+    
+    /**
+     * Metodo para añadir un usuario en la BBDD
+     * @param nombre
+     * @param pass
+     * @return 
+     */
+    public int addUsuario(String pass) {
+        String consulta = "insert into usuario (pass) values ('" + pass +  "')";
+        int filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        return filas;
+    }
+    
+    public Usuario getUsuario(){
+        Usuario u = null;
+        try {
+            
+            String consulta = "select * from usuario";
+            ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            if (resultado.next()) {
+                try {
+                    if (null != resultado.getString(1)) {
+                        u = new Usuario(resultado.getString(1));
+                    }
+                } catch (SQLException ex) {
+                    Exceptions.printStackTrace(ex);
+                }
+            }
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return u;
+    }
+    
+    public int cambiarPass(String pass){
+        String consulta = "update persona set pass = '" + pass + "'";
+        int filas = conexion.ejecutarStatementNOSELECT(pass, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        logger.info("Filas actualizadas en BBDD: " + filas);
+        return filas;
+    }
+    
+    public boolean isExisteLaTabla() {
+        refrescarListaPersonas();
+        return existeLaTabla;
     }
 }

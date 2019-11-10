@@ -23,6 +23,7 @@ public class GestionarInventario {
 
     private List<Producto> listaProductos;
     private ConexionBBDD conexion;
+    private boolean existeLaTabla = false;
 
     /**
      * Constructor
@@ -92,6 +93,7 @@ public class GestionarInventario {
             String consulta = "select * from producto";
             ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             if (resultado != null) {
+                existeLaTabla = true;
                 listaProductos = new ArrayList<>();
                 while (resultado.next()) {
                     listaProductos.add(
@@ -102,7 +104,9 @@ public class GestionarInventario {
                                     resultado.getDouble("peso"),
                                     resultado.getInt("cantidad")));
                 } //end while
-            } //end if
+            }  else {
+                existeLaTabla = false;
+            }
         } catch (SQLException ex) {
             logger.error(ex.getMessage());
         }
@@ -207,6 +211,11 @@ public class GestionarInventario {
         refrescarListaProductos();
         System.out.println("Productos actualizados: " + filas);
         return filas;
+    }
+    
+     public boolean isExisteLaTabla() {
+        refrescarListaProductos();
+        return existeLaTabla;
     }
 
 }

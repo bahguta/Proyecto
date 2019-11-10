@@ -10,7 +10,7 @@ package Dto;
  *
  * @author Plam
  */
-public class Persona implements java.io.Serializable{
+public class Persona extends Object implements java.io.Serializable{
     
     private static final long serialVersionUID = 1L;
     
