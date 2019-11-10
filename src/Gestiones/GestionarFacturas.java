@@ -28,6 +28,7 @@ public class GestionarFacturas {
 
     private List<Factura> listaFacturas;
     private ConexionBBDD conexion;
+    private boolean existeLaTabla = false;
 
     /**
      * Constructor
@@ -125,23 +126,6 @@ public class GestionarFacturas {
         return filas;
     }
 
-//    private List<Integer> getPersonasPorType(String type) {
-//        List<Integer> lista = null;
-//        String consulta = "select distinct ID_PERSONA from negocio order by ID_PERSONA";
-//        ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//
-//        if (resultado != null) {
-//            try {
-//                lista = new ArrayList<>();
-//                while (resultado.next()) {
-//                    lista.add(resultado.findColumn("ID_PERSONA"));
-//                }
-//            } catch (SQLException ex) {
-//                Exceptions.printStackTrace(ex);
-//            }
-//        }
-//        return lista;
-//    }
     /**
      * Metodo auxiliar para obtener una lista tipo Integer con todos los ID de
      * las facturas de la lista. Este metodo esta usado en el metodo
@@ -196,58 +180,7 @@ public class GestionarFacturas {
         return lista;
     }
 
-//    
-//    
-//    public List<Factura> getFacturasTypo(String type, LogicaNegocio logica) {
-//        List<Factura> listaFact = new ArrayList<>();
-//        List<Producto> listaProductos = null;
-//        List<Integer> listaIDFacturas = getIDFacturasNegocio();
-//        int ID_persona = 0;
-//        try {
-//            for (Integer ID_factura : listaIDFacturas) {
-//                System.out.println(ID_factura);
-//                String cons = "select ID_persona, ID_producto, cantidad from negocio where ID_factura = " + ID_factura + " order by ID_persona";
-//                ResultSet resultadocons = conexion.ejecutarStatementSELECT(cons, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//                if (resultadocons != null) {
-//                    listaProductos = new ArrayList<>();
-//                    while (resultadocons.next()) {
-//
-//                        if (ID_persona != resultadocons.getInt("ID_persona")) {
-//                            ID_persona = resultadocons.getInt("ID_persona");
-//                            int ID_producto = resultadocons.getInt("ID_producto");
-//                            int cantidad = resultadocons.getInt("cantidad");
-//                            Producto p = logica.getProductoPorID(ID_producto);
-//
-//                            listaProductos.add(new Producto(
-//                                    p.getCodProducto(),
-//                                    p.getNombre(),
-//                                    p.getPrecio(),
-//                                    p.getPeso(),
-//                                    cantidad
-//                            ));
-//
-//                            String conFacturas = "select * from factura where ID_factura = " + ID_factura;
-//                            ResultSet resultadoFacturas = conexion.ejecutarStatementSELECT(conFacturas, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//
-//                            if (resultadoFacturas.next() && logica.getPersonaPorID(ID_persona).getTipo().equals(type)) {
-//
-//                                listaFact.add(new Factura(
-//                                        ID_factura,
-//                                        resultadoFacturas.getDate("fecha"),
-//                                        resultadoFacturas.getString("trabajo"),
-//                                        listaProductos,
-//                                        resultadoFacturas.getDouble("precio")));
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return listaFact;
-//    }
+
     /**
      * Metodo para obtener una factura por su ID
      *
@@ -278,6 +211,7 @@ public class GestionarFacturas {
         //List<Factura> lista = new ArrayList<>();
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         if (resultado != null) {
+            existeLaTabla = true;
             listaFacturas.clear();
             try {
                 while (resultado.next()) {
@@ -307,7 +241,9 @@ public class GestionarFacturas {
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);
             }
-        } //end if
+        }  else {
+            existeLaTabla = false;
+        }
     }
 
     public List<Factura> getTodasLasFacturas() {
@@ -325,7 +261,7 @@ public class GestionarFacturas {
     public List<Factura> getFacturasPorIDPersona(int ID_persona) {
         if (!conexion.isConexionExitosa()) {
             return new ArrayList<>();
-        }
+        } 
         List<Producto> listaProductos = null;
         List<Factura> listaFact = null;
         try {
@@ -364,4 +300,15 @@ public class GestionarFacturas {
         }
         return listaFact;
     }
+
+    public List<Factura> getListaFacturas() {
+        return listaFacturas;
+    }
+
+    public boolean isExisteLaTabla() {
+        refrescarFacturas();
+        return existeLaTabla;
+    }
+    
+    
 }

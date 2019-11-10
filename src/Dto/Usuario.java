@@ -14,36 +14,13 @@ public class Usuario implements java.io.Serializable{
 
     private static final long serialVersionUID = 1L;
     
-    private int ID_usuario;
-    private String nombre;
     private String pass;
-    private String passCripted;
-    private String salt;
-    private String userRole;
+    private boolean admin; 
 
-    public Usuario(int ID_usuario, String nombre, String pass, String passCripted, String salt, String userRole) {
-        this.ID_usuario = ID_usuario;
-        this.nombre = nombre;
+
+    public Usuario(String pass) {
         this.pass = pass;
-        this.passCripted = passCripted;
-        this.salt = salt;
-        this.userRole = userRole;
-    }
-
-    public int getID_usuario() {
-        return ID_usuario;
-    }
-
-    public void setID_usuario(int ID_usuario) {
-        this.ID_usuario = ID_usuario;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.admin = false;
     }
 
     public String getPass() {
@@ -54,33 +31,17 @@ public class Usuario implements java.io.Serializable{
         this.pass = pass;
     }
 
-    public String getPassCripted() {
-        return passCripted;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setPassCripted(String passCripted) {
-        this.passCripted = passCripted;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public String getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     @Override
     public String toString() {
-        return "Usuario{" + "ID_usuario=" + ID_usuario + ", nombre=" + nombre + ", pass=" + pass + ", passCripted=" + passCripted + ", salt=" + salt + ", userRole=" + userRole + '}';
+        return "Usuario{" + "pass=" + pass + ", admin=" + admin + '}';
     }
 
     

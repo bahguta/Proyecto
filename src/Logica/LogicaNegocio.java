@@ -11,15 +11,24 @@ import Gestiones.*;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
@@ -29,6 +38,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.openide.util.Exceptions;
 
 /**
  * Logica de Negocio.<br> Es el controlador del modelo MVC , es el responsable
@@ -42,6 +52,12 @@ public class LogicaNegocio {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LogicaNegocio.class);
 
+    private static String RUTA_PRODUCTOS = "productos.txt";
+    private static String RUTA_FACTURAS = "facturas.txt";
+    private static String RUTA_PERSONAS = "personas.txt";
+    private static String RUTA_USUARIO = "usuario.txt";
+    private static String RUTA_NEGOCIO = "negocio.txt";
+
     // gestiones 
     private ConexionBBDD conexion;
     private GestionarInventario gestionarInventario;
@@ -52,25 +68,22 @@ public class LogicaNegocio {
 
     //ruta para los informes que va a crear
     private File rutaInformes;
+    private Usuario usuario;
     //comprueba si esta establecida la conexion con la base de datos 
     //devuelve true si existe una conexion con base de datos y false en caso contrario
     private static boolean isConexion = false;
 
-    private Usuario usuario = null;
-    
-    
-    
-    public LogicaNegocio(){
+
+    public LogicaNegocio() {
         conexion = new ConexionBBDD();
         this.gestionarPersonas = new GestionarPersonas(conexion);
         this.gestionarFacturas = new GestionarFacturas(conexion);
         this.gestionarInventario = new GestionarInventario(conexion);
         this.gestionarNotasLibro = new GestionarNotasLibro(conexion);
-        this.gestionarCaja = new GestionarCaja();
-        
+        this.gestionarCaja = new GestionarCaja(conexion);
+
     }
-    
-    
+
     /**
      * Constructor Datos necesarios para la conexion a la base de datos
      *
@@ -81,7 +94,6 @@ public class LogicaNegocio {
      * @param nombreBBDD
      */
     public LogicaNegocio(JFrame frame, String usuario, String password, String IP, int puerto, String nombreBBDD) {
-        //creo la clase conexion
         this.conexion = new ConexionBBDD();
         //inicializo la conexion 
         //this.conexion.conexionBBDD(IP, puerto, nombreBBDD, usuario, password);
@@ -91,8 +103,9 @@ public class LogicaNegocio {
         this.gestionarFacturas = new GestionarFacturas(conexion);
         this.gestionarInventario = new GestionarInventario(conexion);
         this.gestionarNotasLibro = new GestionarNotasLibro(conexion);
-        this.gestionarCaja = new GestionarCaja();
+        this.gestionarCaja = new GestionarCaja(conexion);
 
+        //actualizo la caja 
         actualizarCaja();
 
         this.rutaInformes = new File("informes");
@@ -105,66 +118,6 @@ public class LogicaNegocio {
 
         }
     }
-   
-
-    /**
-     *
-     *
-     *
-     *
-     * Gestionar Conexion BBDD
-     *
-     *
-     *
-     *
-     */
-    
-    /**
-     * Metodo para conectar a la base de datos con MySQL
-     * 
-     * @param usuario
-     * @param password
-     * @param IP
-     * @param puerto
-     * @param nombreBBDD
-     * @return 
-     */
-    public boolean conectBBDD(String usuario, String password, String IP, int puerto, String nombreBBDD) {
-        if (this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)) {
-            LogicaNegocio.isConexion = true;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Metodo para comprobar si hay conexion con la bbdd
-     * 
-     * @return 
-     */
-    public boolean isConexionExitosa() {
-        return conexion.isConexionExitosa();
-    }
-    
-    
-    
-    /**
-     * Metodo para cambiar la conexion de la base de datos
-     *
-     * @param usuario
-     * @param password
-     * @param IP
-     * @param puerto
-     * @param nombreBBDD
-     * @return
-     */
-    public boolean cambiarConexion(String usuario, String password, String IP, int puerto, String nombreBBDD) {
-        if (conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)) {
-            return true;
-        }
-        return false;
-    }
-    
 
     /**
      *
@@ -177,166 +130,65 @@ public class LogicaNegocio {
      *
      *
      */
-    
     /**
-     * Metodo para añadir un usuario
+     * Metodo para añadir usuario
      *
      * @param nombre
      * @param pass
      * @param userRole
      * @return
      */
-    
-    public void setUsuario(Usuario u){
-        this.usuario = u;
-    }
-    
-    
-    public int addUsuario(String nombre, String pass, String userRole) {
-        String consulta = "insert into usuario (nombre, pass, userRole) values ("
-                + "'" + nombre + "', "
-                + "'" + pass + "',"
-                + "'" + userRole + "')";
-        int filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        return filas;
+    /**
+     * Metodo para generar una contraseña criptada
+     */
+    public String cryptWithMD5(String pass) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] passBytes = pass.getBytes();
+            md.reset();
+            byte[] digested = md.digest(passBytes);
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < digested.length; i++) {
+                sb.append(Integer.toHexString(0xff & digested[i]));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
      * Metodo para comprobar si 2 parolas son iguales
      */
-    
-    
-    
-    
-    
-    /**
-     * Metodo para cripar una constraseña
-     */
-    public String criptPass(char[] pass) {
-        // Generate Salt. The generated value can be stored in DB. 
-        String salt = PasswordUtils.getSalt(30);
-
-        // Protect user's password. The generated value can be stored in DB.
-        String mySecurePassword = PasswordUtils.generateSecurePassword(pass.toString(), salt);
-        return mySecurePassword;
-    }
-
-    /**
-     * Metodo para registrar un usuario
-     */
-    public Usuario getUsuario(String nombre, String pass) {
-
-        if (!conexion.isConexionExitosa()) {
-            String consulta = "select * from usuario where nombre = '" + nombre + "' and pass = '" + pass + "'";
-            ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                if (resultado.next()) {
-                    if (PasswordUtils.verifyUserPassword(pass, resultado.getString("passCripted"), resultado.getString("salt"))) {
-                        usuario = new Usuario(
-                            resultado.getInt("ID_usuario"),
-                            resultado.getString("nombre"),
-                            resultado.getString("pass"),
-                            resultado.getString("passCripted"),
-                            resultado.getString("salt"),
-                            resultado.getString("UserRole"));
-                    } 
-                    
-                } 
-            } catch (SQLException e) {
-                logger.error(e.getMessage());
-            }
-            
-        }
-        return usuario;
-
-//        String salt = PasswordUtils.getSalt(30);
-//        String passCripted = PasswordUtils.generateSecurePassword(pass, salt);
-//
-//        if (PasswordUtils.verifyUserPassword(pass, pass, salt)) {
-//
-//        }
-//
-//        //Usuario u = new Usuario();
-//        u.setNombre(nombre);
-//        u.setPass(pass);
-//        u.setPassCripted();
-//        u.setSalt(salt);
-//
-
-//        return filas;
-    }
-    
-    public boolean registrarAdmin(String nombre, String pass){
-        String salt = PasswordUtils.getSalt(30);
-        String passCripted = PasswordUtils.generateSecurePassword(pass, salt);
+    public boolean son2PassIguales(String pass) {
+        Usuario usuario = gestionarPersonas.getUsuario();
+        //si el resultado es null significa que no hay usuario, 
+        //o sea no se ha establecido contraseña nunca 
         
-        String consulta = "insert into usuario (nombre, pass, passCripted, salt, userRole) values ("
-                + "'" + nombre + "', "
-                + "'" + pass + "', "
-                + "'" + passCripted + "',"
-                + "'" + salt + "',"
-                + "'admin')";
-        int filas = 0;
-        if (conexion != null) {
-            filas = conexion.ejecutarStatementNOSELECT(salt, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            logger.info("Admin registrado con exito !");
+        if (null == usuario) {
+            gestionarPersonas.addUsuario(pass);
+            return true;
+        } else if (pass.equals(usuario.getPass())) {
             return true;
         }
         return false;
     }
-    
-    public boolean registrarUsuario(String nombre, String pass){
-        String salt = PasswordUtils.getSalt(30);
-        String passCripted = PasswordUtils.generateSecurePassword(pass, salt);
-        String consulta = "insert into usuario (nombre, pass, passCripted, salt, userRole) values ("
-                + "'" + nombre + "', "
-                + "'" + pass + "', "
-                + "'" + passCripted + "',"
-                + "'" + salt + "',"
-                + "'usuario')";
-        int filas = 0;
-        if (conexion != null) {
-            filas = conexion.ejecutarStatementNOSELECT(salt, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            logger.info("Usuario registrado con exito !");
-            return true;
-        } else {
-            logger.info("Conexion NULL");
-        }
-        return false;
-    }
-    
 
-//    /**
-//     * Metodo para obtener un usuario
-//     *
-//     * @param nombre
-//     * @param pass
-//     * @return
-//     */
-//    public Usuario getUsuario(String nombre, String pass) throws NullPointerException {
-//        String consulta = "Select * from usuario where nombre = '" + nombre + "' and pass = '" + pass + "'";
-//        ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-//        Usuario u = null;
-//        if (resultado != null) {
-//            try {
-//                if (resultado.next()) {
-//                    u = new Usuario(
-//                            resultado.getInt("ID_usuario"),
-//                            resultado.getString("nombre"),
-//                            resultado.getString("pass"),
-//                            resultado.getString("passCripted"),
-//                            resultado.getString("salt"),
-//                            resultado.getString("userRole"));
-//                    if (u.getNombre().equals(nombre) && u.getPass().equals(pass)) {
-//                        return u;
-//                    }
-//                }
-//            } catch (SQLException e) {
-//                logger.error(e.getMessage());
-//            }
-//        }
-//        return u;
-//    }
+    /**
+     * Metodo para cambiar la constraseña del administrador
+     */
+    public int cambiarPass(String pass, String newPass) {
+        if (son2PassIguales(pass)) {
+            return gestionarPersonas.cambiarPass(newPass);
+        }
+        return -1;
+    }
+
+    public Usuario getUsuario() {
+        usuario =  gestionarPersonas.getUsuario();
+        return usuario;
+    }
 
     /**
      *
@@ -757,7 +609,7 @@ public class LogicaNegocio {
     }
 
     /**
-     * Metodo para obtener una lista con las notas del libro diario entre 2
+     * Metodo para obtener una lista con las notas del libro diario entre dos
      * fechas
      *
      * @param fechaInicio fecha inicio de la busqueda
@@ -1034,20 +886,88 @@ public class LogicaNegocio {
     public String getBBDDName() {
         return conexion.getBBDDName();
     }
-    
-    
 
+    /**
+     * Metodo para conectar a la base de datos con MySQL
+     *
+     * @param usuario
+     * @param password
+     * @param IP
+     * @param puerto
+     * @param nombreBBDD
+     * @return
+     */
+    public boolean conectBBDD(String usuario, String password, String IP, int puerto, String nombreBBDD) {
+        if (this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)) {
+            LogicaNegocio.isConexion = true;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Metodo para comprobar si hay conexion con la bbdd
+     *
+     * @return
+     */
+    public boolean isConexionExitosa() {
+        return conexion.isConexionExitosa();
+    }
+
+    /**
+     * Metodo para cambiar la conexion
+     */
+    public boolean cambiarConexion(String usuario, String password, String IP, int puerto, String nombreBBDD, boolean cargarRegistros) {
+        if (cargarRegistros) {
+            cargarRegistrosIniciales();
+
+        }
+        if (this.conexion.conexionBBDDMySql(IP, puerto, nombreBBDD, usuario, password)) {
+            if (hayQueCrearTablas()) {
+                cargarTablas();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Metodo para comprobar si hay que crear las tablas
+     *
+     * @return
+     */
+    public boolean hayQueCrearTablas() {
+        if (gestionarPersonas.isExisteLaTabla()
+                || gestionarNotasLibro.isExisteLaTabla()
+                || gestionarInventario.isExisteLaTabla()
+                || gestionarFacturas.isExisteLaTabla()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     * Gestionar Ficheros
+     *
+     *
+     *
+     *
+     */
     /**
      * Leer fichero Tablas
      */
-    private void cargarTablasSQL() {
-        String sqlFichero = "crear_tablas.sql";
+    private boolean cargarTablasSQL(String rutaFichero) {
+        //String sqlFichero = "crear_tablas.sql";
         BufferedReader br = null;
         String cadena = "";
         String ficheroCompleto = "";
         String[] query;
         try {
-            br = new BufferedReader(new FileReader(sqlFichero));
+            br = new BufferedReader(new FileReader(rutaFichero));
             while ((cadena = br.readLine()) != null) {
                 ficheroCompleto += cadena;
             }
@@ -1055,6 +975,7 @@ public class LogicaNegocio {
             for (String q : query) {
                 conexion.ejecutarStatementNOSELECT(q, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             }
+            return true;
         } catch (FileNotFoundException e) {
             logger.error("Fichero NO encontrado !!!");
         } catch (IOException ex) {
@@ -1067,6 +988,235 @@ public class LogicaNegocio {
                 }
             }
         }
+        return false;
+    }
+
+    public boolean cargarRegistrosIniciales() {
+        return cargarTablasSQL("registros.sql");
+    }
+
+    public boolean cargarTablas() {
+        return cargarTablasSQL("crear_tablas.sql");
+    }
+
+    public boolean crearCopiaSeguridad() {
+        try {
+            List<NotaLibroDiario> listaNotas = gestionarNotasLibro.getListaNotas();
+            List<Producto> listaProductos = gestionarInventario.getListaProductos();
+            List<Factura> listaFacturas = gestionarFacturas.getListaFacturas();
+            List<Persona> listaPersonas = gestionarPersonas.getListaPersonas();
+            Usuario u = gestionarPersonas.getUsuario();
+            List<int[]> listaNegocio = gestionarCaja.getArrayNegocio();
+            if (crearFichero(listaNotas, listaProductos, listaFacturas, listaPersonas, u, listaNegocio)) {
+                return true;
+            }
+
+        } catch (SQLException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return false;
+    }
+
+    /**
+     * Metodo para guardar todas las tablas en un fichero
+     *
+     * @param listaNotas
+     * @param listaProductos
+     * @param listaFacturas
+     * @param listaPersonas
+     * @param u
+     * @param listaNegocio
+     * @return
+     */
+    private boolean crearFichero(List<NotaLibroDiario> listaNotas,
+            List<Producto> listaProductos,
+            List<Factura> listaFacturas,
+            List<Persona> listaPersonas,
+            Usuario u,
+            List<int[]> listaNegocio) {
+
+        if (escribirListas(RUTA_PRODUCTOS, listaProductos)
+                && escribirListas(RUTA_FACTURAS, listaFacturas)
+                && escribirListas(RUTA_PERSONAS, listaPersonas)
+                && escribirUsuario(RUTA_USUARIO)
+                && escribirNegocio(RUTA_NEGOCIO, listaNegocio)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean escribirUsuario(String fichero) {
+        try {
+            final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(fichero)));
+            oos.writeObject(getUsuario());
+            try {
+                oos.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+            return true;
+        } catch (FileNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return false;
+    }
+
+    private boolean escribirNegocio(String fichero, List<int[]> lista) {
+        try {
+            final FileWriter fw = new FileWriter(new File(fichero));
+            lista.stream().forEach(n -> {
+                for (int i : n) {
+                    try {
+                        fw.write(i);
+                    } catch (IOException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+            });
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+            return true;
+        } catch (FileNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+
+        return false;
+    }
+
+    private boolean escribirListas(String fichero, List lista) {
+        try {
+            final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(fichero)));
+            lista.stream().forEach(o -> {
+                try {
+                    oos.writeObject(o);
+                } catch (IOException ex) {
+                    logger.error(ex.getMessage());
+                }
+            });
+            try {
+                oos.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+            return true;
+        } catch (FileNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return false;
+    }
+
+    private Usuario getDatosUsuario(String fichero) {
+        Usuario u = new Usuario("");
+        try {
+            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fichero)));
+            u = (Usuario) ois.readObject();
+            try {
+                ois.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+
+        } catch (FileNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ClassNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return u;
+    }
+
+    private List<int[]> getNegocio(String fichero) {
+        List<int[]> lista = new ArrayList<>();
+
+        try {
+            final FileReader fr = new FileReader(new File(fichero));
+            int[] registro = {fr.read(), fr.read(), fr.read(), fr.read()};
+            while (registro != null) {
+                lista.add(registro);
+                registro = new int[]{fr.read(), fr.read(), fr.read(), fr.read()};
+            }
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+        } catch (FileNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return lista;
+    }
+
+    public List getList(String fichero) {
+        List lista = new LinkedList();
+        try {
+            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fichero)));
+
+            Object o = null;
+            while ((o = ois.readObject()) != null) {
+                lista.add(o);
+            }
+
+            try {
+                ois.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+
+        } catch (FileNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex) {
+            Exceptions.printStackTrace(ex);
+        } catch (ClassNotFoundException ex) {
+            Exceptions.printStackTrace(ex);
+        }
+        return lista;
+    }
+
+    private List<Persona> getRegistrosPersonas() {
+        List<Persona> lista = getList(RUTA_PERSONAS);
+        return lista;
+    }
+
+    private List<Factura> getRegistrosFactura() {
+        List<Factura> lista = getList(RUTA_FACTURAS);
+        return lista;
+    }
+
+    private List<Producto> getRegistrosProducto() {
+        List<Producto> lista = getList(RUTA_PRODUCTOS);
+        return lista;
+    }
+
+    private Usuario getRegistroUsuario() {
+        return getDatosUsuario(RUTA_USUARIO);
+    }
+
+    private List<int[]> getRegistrosNegocio() {
+        return getNegocio(RUTA_NEGOCIO);
+    }
+
+    public boolean cargarRegistros() {
+        crearCopiaSeguridad();
+        getRegistroUsuario().toString();
+        getRegistrosFactura().stream().forEach(f -> f.toString());
+        getRegistrosNegocio().stream().forEach(neg -> Arrays.toString(neg));
+        getRegistrosPersonas().stream().forEach(per -> per.toString());
+        getRegistrosProducto().stream().forEach(p -> p.toString());
+        return true;
+
     }
 
 }

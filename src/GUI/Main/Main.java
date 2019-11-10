@@ -546,7 +546,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            PropertyConfigurator.configure("src/Logica/log4j.properties");
+            PropertyConfigurator.configure("lib/log4j.properties");
             new Main().setVisible(true);
         });
     }
@@ -597,7 +597,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             public void run() {
                 try {
                     Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-                    File banner = new File("src/Logica/banner.txt");
+                    File banner = new File("lib/banner.txt");
                     BufferedReader br = new BufferedReader(new FileReader(banner));
                     String st;
                     while ((st = br.readLine()) != null) {
@@ -609,13 +609,6 @@ public class Main extends javax.swing.JFrame implements MenuListener {
                 }
             }
         });
-
-    }
-
-    /**
-     * Metodo para comprobar si un String
-     */
-    public void dsf() {
 
     }
 

@@ -3,53 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/Bundle.properties</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Main/ConexionBBDD.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarFacturas.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarCaja.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/ProductoTableModel.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/NotaLibroDiario.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogFactura.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/LibroTableModel.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Main/package-info.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarNotasLibro.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelVenta.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelInventario.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelLibroDiario.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelPersonas.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/package-info.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelEstadistica.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarPersonas.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/PasswordUtils.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelCompra.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/Persona.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelCaja.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/LogicaTemas.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarInventario.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelAjustes.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/Usuario.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelFacturas.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/banner.txt</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/package-info.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/Factura.java</file>
+            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/log4j.properties</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Main/Main.java</file>
             <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/LogicaNegocio.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/GestionarNotasLibro.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/CajaTableModel.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/package-info.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelVenta.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelLibroDiario.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelInventario.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelPersonas.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelAyuda.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogPersona.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogProducto.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/package-info.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogRegistrar.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/TableModels/PersonaCortoTableModel.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/ConexionBBDD.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/DialogNotaLibro.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelCaja.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/package-info.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/MainBody/PanelFacturas.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Gestiones/package-info.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Dto/Producto.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/GUI/Dialog/package-info.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/img/package-info.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/StretchIcon.java</file>
-            <file>file:/D:/Proyectos/NetBeans/Proyecto/Proyecto_develop/src/Logica/log4j.properties</file>
         </group>
     </open-files>
 </project-private>

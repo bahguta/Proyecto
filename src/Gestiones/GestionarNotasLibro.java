@@ -25,6 +25,7 @@ public class GestionarNotasLibro {
     private List<NotaLibroDiario> listaNotas;
     private ConexionBBDD conexion;
     private SimpleDateFormat sdf;
+    private boolean existeLaTabla;
 
     /**
      * Constructor
@@ -135,10 +136,13 @@ public class GestionarNotasLibro {
         String consulta = "select * from nota";
         ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         if (resultado != null) {
+            existeLaTabla = true;
             try {
+                //creo la lista si no esta inicializada 
                 if (listaNotas == null) {
                     listaNotas = new ArrayList<>();
                 }
+                //vacio la lista para obtener resultados actuales 
                 listaNotas.clear();
                 while (resultado.next()) {
                     listaNotas.add(new NotaLibroDiario(
@@ -151,6 +155,8 @@ public class GestionarNotasLibro {
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);
             }
+        } else {
+            existeLaTabla = false;
         }
 
     }
@@ -196,4 +202,8 @@ public class GestionarNotasLibro {
         return fechaFin;
     }
 
+    public boolean isExisteLaTabla() {
+        refrescarListaNotas();
+        return existeLaTabla;
+    }
 }

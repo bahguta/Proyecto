@@ -8,9 +8,14 @@ package Gestiones;
 import Dto.NotaLibroDiario;
 import Dto.Persona;
 import Dto.Producto;
+import Logica.ConexionBBDD;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.openide.util.Exceptions;
 
 /**
  * Gestionar Caja
@@ -20,10 +25,12 @@ import javax.swing.JOptionPane;
 public class GestionarCaja {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GestionarCaja.class);
 
+    private ConexionBBDD conexion;
     private double CAJA;
 
-    public GestionarCaja() {
+    public GestionarCaja(ConexionBBDD conexion) {
         this.CAJA = 0;
+        this.conexion = conexion;
     }
     /**
      * Metodo para gestionar la venta y la compra de la empresa.<br>
@@ -104,7 +111,20 @@ public class GestionarCaja {
         this.CAJA = valor;
     }
 
-   
-    
+   public List<int[]> getArrayNegocio() throws SQLException{
+       List<int[]> lista = new ArrayList<int[]>();
+       String consulta = "select * from negocio";
+       ResultSet resultado = conexion.ejecutarStatementSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+       while (resultado.next()) {
+           try {
+               int [] registro = {resultado.getInt(1), resultado.getInt(2), resultado.getInt(3), resultado.getInt(4)};
+               lista.add(registro);
+           } catch (SQLException ex) {
+               Exceptions.printStackTrace(ex);
+           }
+       }
+       return lista;
+   }
+
 
 }

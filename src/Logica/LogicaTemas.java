@@ -16,6 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  * Esta clase hace la logica de la vista , cambiar colores y tamaño de texto
@@ -90,6 +91,11 @@ public class LogicaTemas {
         BUTTON_FONT.deriveFont(sizeH2);
         for (JTable jTable : LogicaTemas.LISTA_TABLES) {
             jTable.setFont(TEXT_FONT);
+            DefaultTableCellRenderer d = new DefaultTableCellRenderer();
+            d.setFont(TEXT_FONT);
+            d.setBorder(GET_TITLE_BORDER("some nombre"));
+            jTable.setDefaultRenderer(JTable.class, d);
+            
         }
     }
 
