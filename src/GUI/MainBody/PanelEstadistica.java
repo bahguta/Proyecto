@@ -15,11 +15,12 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -30,11 +31,14 @@ import org.jfree.data.general.DefaultPieDataset;
 
 /**
  * Panel Estadistica
+ *
  * @author Plam
  */
 public class PanelEstadistica extends javax.swing.JPanel {
 
     private static final long serialVersionUID = 1L;
+
+    private static final String RUTA_ESTADISTICA = "estadistica";
 
     private LogicaNegocio logica;
     private List<JLabel> listaLabelsH1;
@@ -53,27 +57,37 @@ public class PanelEstadistica extends javax.swing.JPanel {
         initComponents();
         this.parent = parent;
 
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Estadistica"));
-        
-        jComboBoxFechaDesde.setSelectedItem(sdf.format(logica.getNotasFechaIn()));
-        jComboBoxFechaHasta.setSelectedItem(sdf.format(logica.getNotasFechaFin()));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("ESTADISTICA"));
 
-        ruta = new File("img_estadistica");
-        if (ruta.mkdir()) {
-            logger.info("Carpeta " + ruta.getPath() + " creada con Exito");
-        } else if (ruta.exists()) {
-            logger.info("La carpeta img_estadistica existe !!! No se crea !");
+        if (null != logica.getNotasFechaIn() && null != logica.getNotasFechaFin()) {
+            jComboBoxFechaDesde.setSelectedItem(sdf.format(logica.getNotasFechaIn()));
+            jComboBoxFechaHasta.setSelectedItem(sdf.format(logica.getNotasFechaFin()));
         } else {
-            JOptionPane.showMessageDialog(this, "La carpeta " + ruta.getPath() + " NO se ha creado\nRevisa los permisos del programa.");
+            jComboBoxFechaDesde.setSelectedItem(new GregorianCalendar(2000, 01, 01));
+            jComboBoxFechaHasta.setSelectedItem(Calendar.getInstance().getTime());
         }
 
+        logica.crearCarpeta(RUTA_ESTADISTICA);
+        ruta = new File(RUTA_ESTADISTICA);
         LogicaTemas.addJTable(jTableNotas);
     }
 
+    /**
+     * Metodo para actualizar el panel de estadistica, se refrescara la lista de
+     * las notas y las fechas para la busqueda
+     */
+    public void actualizarPanelEstadistica() {
+        jComboBoxFechaDesde.setSelectedIndex(-1);
+        jComboBoxFechaHasta.setSelectedIndex(-1);
+        Date fechaInicio = logica.getNotasFechaIn();
+        Date fechaFin = logica.getNotasFechaFin();
+        jTableNotas.setModel(new LibroTableModel(logica.getNotasEntreFechas(fechaInicio, fechaFin)));
+    }
 
     /**
-     * Metodo para generar la estadistica tipo PiePlot3d 
-     * @param nota 
+     * Metodo para generar la estadistica tipo PiePlot3d
+     *
+     * @param nota
      */
     public void estadisticaPieChart3d(NotaLibroDiario nota) {
         DefaultPieDataset dataset = new DefaultPieDataset();
@@ -89,7 +103,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         if (pieChart3d != null && pieChart3d.exists()) {
             pieChart3d.delete();
         }
-        rutaPieChart3d = ruta.getPath() + "/pie_Chart3D" + "_" + System.currentTimeMillis() + ".jpeg";
+        rutaPieChart3d = RUTA_ESTADISTICA + File.separator + "pie_Chart3D" + "_" + System.currentTimeMillis() + ".jpeg";
         pieChart3d = new File(rutaPieChart3d);
         try {
             ChartUtilities.saveChartAsJPEG(pieChart3d, chart, 600, 400);
@@ -100,8 +114,9 @@ public class PanelEstadistica extends javax.swing.JPanel {
 
     /**
      * Metodo para generar la estadistica tipo BarChart3D
+     *
      * @param fechaInicio
-     * @param fechaFin 
+     * @param fechaFin
      */
     public void estadisticaBarChart3d(Date fechaInicio, Date fechaFin) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -116,7 +131,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         if (barChart3d != null && barChart3d.exists()) {
             barChart3d.delete();
         }
-        rutaBarChart3d = ruta.getPath() + "/barChart2d" + "_" + System.currentTimeMillis() + ".jpeg";
+        rutaBarChart3d = RUTA_ESTADISTICA + File.separator + "barChart2d" + "_" + System.currentTimeMillis() + ".jpeg";
         barChart3d = new File(rutaBarChart3d);
 
         try {
@@ -125,11 +140,12 @@ public class PanelEstadistica extends javax.swing.JPanel {
             logger.error(ex.getMessage());
         }
     }
-    
+
     /**
      * Metodo para generar la estadistica tipo LineChart
+     *
      * @param fechaInicio
-     * @param fechaFin 
+     * @param fechaFin
      */
     public void estadisticaLineChart(Date fechaInicio, Date fechaFin) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -143,7 +159,7 @@ public class PanelEstadistica extends javax.swing.JPanel {
         if (lineChart != null && lineChart.exists()) {
             lineChart.delete();
         }
-        rutaLineChart = ruta.getPath() + "/lineChart" + "_" + System.currentTimeMillis() + ".jpeg";
+        rutaLineChart = RUTA_ESTADISTICA + File.separator + "lineChart" + "_" + System.currentTimeMillis() + ".jpeg";
         lineChart = new File(rutaLineChart);
         try {
             ChartUtilities.saveChartAsJPEG(lineChart, barChart, 600, 400);
@@ -278,11 +294,12 @@ public class PanelEstadistica extends javax.swing.JPanel {
 
     /**
      * Metodo para filtrar las notas del libro diario entre dos fechas
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButtonFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFiltrarActionPerformed
         jLabelPieChart.setIcon(null);
-        
+
         try {
             Date fechaInicio = sdf.parse((String) jComboBoxFechaDesde.getSelectedItem());
             Date fechaFin = sdf.parse((String) jComboBoxFechaHasta.getSelectedItem());
@@ -302,18 +319,16 @@ public class PanelEstadistica extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonFiltrarActionPerformed
 
-    
     /**
-     * Metodo para obtener 
+     * Metodo para obtener
      */
-    
-    
     /**
      * Metodo para manejar los clicks a la table Notas. Genera Estadistica
-     * @param evt 
+     *
+     * @param evt
      */
     private void jTableNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableNotasMouseClicked
-        if (jTableNotas.getSelectedRow() == -1 ) {
+        if (jTableNotas.getSelectedRow() == -1) {
             return;
         }
         if (jTableNotas.getValueAt(jTableNotas.getSelectedRow(), 0) == null) {

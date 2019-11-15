@@ -15,17 +15,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,7 +35,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import org.openide.util.Exceptions;
 
 /**
  * Logica de Negocio.<br> Es el controlador del modelo MVC , es el responsable
@@ -52,11 +48,15 @@ public class LogicaNegocio {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(LogicaNegocio.class);
 
-    private static String RUTA_PRODUCTOS = "productos.txt";
-    private static String RUTA_FACTURAS = "facturas.txt";
-    private static String RUTA_PERSONAS = "personas.txt";
-    private static String RUTA_USUARIO = "usuario.txt";
-    private static String RUTA_NEGOCIO = "negocio.txt";
+    //rutas ficheros
+    private static String RUTA_PRODUCTOS = "datos" + File.separator + "productos.txt";
+    private static String RUTA_FACTURAS = "datos" + File.separator + "facturas.txt";
+    private static String RUTA_PERSONAS = "datos" + File.separator + "personas.txt";
+    private static String RUTA_USUARIO = "datos" + File.separator + "usuario.txt";
+    private static String RUTA_NEGOCIO = "datos" + File.separator + "negocio.txt";
+    private static String RUTA_NOTAS = "datos" + File.separator + "notas.txt";
+    private static String RUTA_REGISTROS_INICIALES = "datos" + File.separator + "registros.sql";
+    private static String RUTA_CREAR_TABLAS = "datos" + File.separator + "crear_tablas.sql";
 
     // gestiones 
     private ConexionBBDD conexion;
@@ -73,7 +73,6 @@ public class LogicaNegocio {
     //devuelve true si existe una conexion con base de datos y false en caso contrario
     private static boolean isConexion = false;
 
-
     public LogicaNegocio() {
         conexion = new ConexionBBDD();
         this.gestionarPersonas = new GestionarPersonas(conexion);
@@ -82,6 +81,10 @@ public class LogicaNegocio {
         this.gestionarNotasLibro = new GestionarNotasLibro(conexion);
         this.gestionarCaja = new GestionarCaja(conexion);
 
+        //creo las carpetas necesarias para el funcionamiento del programa
+        crearCarpeta("ireport");
+        crearCarpeta("informes");
+        crearCarpeta("datos");
     }
 
     /**
@@ -104,6 +107,12 @@ public class LogicaNegocio {
         this.gestionarInventario = new GestionarInventario(conexion);
         this.gestionarNotasLibro = new GestionarNotasLibro(conexion);
         this.gestionarCaja = new GestionarCaja(conexion);
+
+        //creo las carpetas necesarias para el funcionamiento del programa
+        //crearCarpeta("ireport");
+        crearCarpeta("informes");
+        crearCarpeta("datos");
+        crearCarpeta("estadistica");
 
         //actualizo la caja 
         actualizarCaja();
@@ -162,14 +171,15 @@ public class LogicaNegocio {
      * Metodo para comprobar si 2 parolas son iguales
      */
     public boolean son2PassIguales(String pass) {
-        Usuario usuario = gestionarPersonas.getUsuario();
+        //Usuario usuario = gestionarPersonas.getUsuario();
         //si el resultado es null significa que no hay usuario, 
         //o sea no se ha establecido contraseña nunca 
-        
-        if (null == usuario) {
-            gestionarPersonas.addUsuario(pass);
+        getUsuarioRegistro();
+        if (null == this.usuario) {
+            gestionarPersonas.addUsuario(cryptWithMD5(pass));
+            getUsuarioRegistro();
             return true;
-        } else if (pass.equals(usuario.getPass())) {
+        } else if (cryptWithMD5(pass).equals(this.usuario.getPass())) {
             return true;
         }
         return false;
@@ -178,16 +188,29 @@ public class LogicaNegocio {
     /**
      * Metodo para cambiar la constraseña del administrador
      */
-    public int cambiarPass(String pass, String newPass) {
-        if (son2PassIguales(pass)) {
-            return gestionarPersonas.cambiarPass(newPass);
+    public int cambiarPass(String passActual, String newpass) {
+        if (son2PassIguales(passActual)) {
+            return gestionarPersonas.cambiarPass(cryptWithMD5(newpass));
         }
         return -1;
     }
 
+    /**
+     * Metodo para obtener el usuario del sistema
+     *
+     * @return
+     */
     public Usuario getUsuario() {
-        usuario =  gestionarPersonas.getUsuario();
         return usuario;
+    }
+
+    /**
+     * Metodo para obtener el usuario desde la BBDD
+     *
+     * @return
+     */
+    private void getUsuarioRegistro() throws NullPointerException {
+        this.usuario = gestionarPersonas.getUsuario();
     }
 
     /**
@@ -322,24 +345,31 @@ public class LogicaNegocio {
      * @param g
      * @return
      */
-    public boolean ventaCompra(JFrame frame, Persona p, Factura f, double precio, GestionarInventario g) {
-        String trabajos = "#" + p.getCodPersona() + " " + p.getNombre() + " " + p.getApellido() + " - " + f.getTrabajos();
-        if (!gestionarCaja.ventaCompra(frame, p, f.getListaProductos(), precio, g)) {
-            System.out.println("ventaCompra false");
-            return false;
+    public boolean ventaCompra(Persona p, Factura f, double precio, GestionarInventario g) {
+        if (f != null) {
+            System.out.println(p.getCodPersona());
+            System.out.println(p.getNombre());
+            System.out.println(p.getApellido());
+            System.out.println(f.getTrabajos());
+            String trabajos = "#" + p.getCodPersona() + " " + p.getNombre() + " " + p.getApellido() + " - " + f.getTrabajos();
+            if (!gestionarCaja.ventaCompra(p, f.getListaProductos(), precio, g)) {
+                System.out.println("ventaCompra false");
+                return false;
+            }
+            System.out.println(f.toString());
+            System.out.println(p);
+            if (p.getTipo().equalsIgnoreCase("cliente")) {
+                System.out.println("venta cliente");
+                gestionarNotasLibro.addNota(f.getFecha(), 0d, precio, trabajos);
+            } else {
+                System.out.println("compra proveedor");
+                gestionarNotasLibro.addNota(f.getFecha(), precio, 0d, trabajos);
+            }
+            actualizarCaja();
+            Main.actualizarPaneles();
+            return true;
         }
-        System.out.println(f.toString());
-        System.out.println(p);
-        if (p.getTipo().equalsIgnoreCase("cliente")) {
-            System.out.println("venta cliente");
-            gestionarNotasLibro.addNota(f.getFecha(), 0d, precio, trabajos);
-        } else {
-            System.out.println("compra proveedor");
-            gestionarNotasLibro.addNota(f.getFecha(), precio, 0d, trabajos);
-        }
-        actualizarCaja();
-        Main.actualizarPanelCaja();
-        return true;
+        return false;
     }
 
     /**
@@ -427,7 +457,7 @@ public class LogicaNegocio {
      * @return retorna un int - las filas actualizadas en la base de datos
      */
     public int addFactura(double precio, int ID_persona, List<Producto> listaProductos, String trabajos, JFrame frame) {
-        return gestionarFacturas.addFactura(precio, ID_persona, listaProductos, trabajos, this, frame, gestionarInventario);
+        return gestionarFacturas.addFactura(precio, ID_persona, listaProductos, trabajos, this, gestionarInventario);
     }
 
     /**
@@ -818,12 +848,20 @@ public class LogicaNegocio {
      */
     public void imprimirInformeNotasFecha(NotaLibroDiario nota) {
         try {
+            //creo las carpetas pos si no existen 
+            //crearCarpetasEFicheros("ireport", "InformeNotasFecha.jasper");
+            //crearCarpetasEFicheros("informes", "InformeNotasFecha_" + System.currentTimeMillis() + ".pdf");
+
+            String rutaJasper = "ireport" + File.separator + "InformeNotasFecha.jasper";
+            String rutaPDF = "informes" + File.separator + "InformeNotasFecha_" + System.currentTimeMillis() + ".pdf";
+
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("Fecha", nota.getFecha());
-            JasperPrint print = JasperFillManager.fillReport("ireport/InformeNotasFecha.jasper", parametros, conexion.getConexion());
-            JasperExportManager.exportReportToPdfFile(print, "informes/InformeNotasFecha_" + System.currentTimeMillis() + ".pdf");
+
+            JasperPrint print = JasperFillManager.fillReport(rutaJasper, parametros, conexion.getConexion());
+            JasperExportManager.exportReportToPdfFile(print, rutaPDF);
             if (Desktop.isDesktopSupported()) {
-                File myFile = new File("ireport/InformeNotasFecha.pdf");
+                File myFile = new File(rutaPDF);
                 Desktop.getDesktop().open(myFile);
             }
         } catch (JRException e) {
@@ -841,12 +879,15 @@ public class LogicaNegocio {
      */
     public void imprimirInformeFactura(Factura f) {
         try {
+            String rutaJasper = "ireport" + File.separator + "InformeFactura.jasper";
+            String rutaPDF = "informes" + File.separator + "InformeFactura_" + System.currentTimeMillis() + ".pdf";
+
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("ID_FACTURA", f.getCodFactura());
-            JasperPrint print = JasperFillManager.fillReport("ireport/InformeFactura.jasper", parametros, conexion.getConexion());
-            JasperExportManager.exportReportToPdfFile(print, "informes/InformeFactura_" + System.currentTimeMillis() + ".pdf");
+            JasperPrint print = JasperFillManager.fillReport(rutaJasper, parametros, conexion.getConexion());
+            JasperExportManager.exportReportToPdfFile(print, rutaPDF);
             if (Desktop.isDesktopSupported()) {
-                File myFile = new File("ireport/InformeFactura.pdf");
+                File myFile = new File(rutaPDF);
                 Desktop.getDesktop().open(myFile);
             }
         } catch (JRException e) {
@@ -958,10 +999,46 @@ public class LogicaNegocio {
      *
      */
     /**
+     * Metodo para crear carpeta
+     *
+     * @param fichero el nombre del fichero que se va a crear
+     */
+    public void crearCarpeta(String fichero) {
+        File rutaDir = new File(fichero);
+        if (!rutaDir.exists()) {
+            rutaDir.mkdir();
+        }
+    }
+
+    /**
+     * Metodo para crear carpetas y fichero
+     *
+     * @param dirPath la ruta (relativa o absoluta)
+     * @param fichero el nombre del fichero que se va a crear
+     * @return
+     */
+    public File crearCarpetasEFicheros(String dirPath, String fichero) {
+        File ruta = null;
+        try {
+            File rutaDir = new File(dirPath);
+            if (!rutaDir.exists()) {
+                rutaDir.mkdirs();
+            }
+            File RutaFichero = new File(fichero);
+            if (!ruta.exists()) {
+                ruta.createNewFile();
+            }
+            ruta = new File(dirPath, fichero);
+        } catch (Exception e) {
+            logger.error("error al crear el fichero", e);
+        }
+        return ruta;
+    }
+
+    /**
      * Leer fichero Tablas
      */
     private boolean cargarTablasSQL(String rutaFichero) {
-        //String sqlFichero = "crear_tablas.sql";
         BufferedReader br = null;
         String cadena = "";
         String ficheroCompleto = "";
@@ -991,28 +1068,39 @@ public class LogicaNegocio {
         return false;
     }
 
+    /**
+     * Metodo para cargar registros iniciales desde un fichero SQL
+     *
+     * @return
+     */
     public boolean cargarRegistrosIniciales() {
-        return cargarTablasSQL("registros.sql");
+        return cargarTablasSQL(RUTA_REGISTROS_INICIALES);
     }
 
+    /**
+     * Metodo para crear las tablas en una base de datos, se carga desde un
+     * fichero sql
+     *
+     * @return
+     */
     public boolean cargarTablas() {
-        return cargarTablasSQL("crear_tablas.sql");
+        return cargarTablasSQL(RUTA_CREAR_TABLAS);
     }
 
+    /**
+     * Metodo para crear copia de seguridad
+     *
+     * @return
+     */
     public boolean crearCopiaSeguridad() {
-        try {
-            List<NotaLibroDiario> listaNotas = gestionarNotasLibro.getListaNotas();
-            List<Producto> listaProductos = gestionarInventario.getListaProductos();
-            List<Factura> listaFacturas = gestionarFacturas.getListaFacturas();
-            List<Persona> listaPersonas = gestionarPersonas.getListaPersonas();
-            Usuario u = gestionarPersonas.getUsuario();
-            List<int[]> listaNegocio = gestionarCaja.getArrayNegocio();
-            if (crearFichero(listaNotas, listaProductos, listaFacturas, listaPersonas, u, listaNegocio)) {
-                return true;
-            }
-
-        } catch (SQLException ex) {
-            Exceptions.printStackTrace(ex);
+        List<NotaLibroDiario> listaNotas = gestionarNotasLibro.getListaNotas();
+        List<Producto> listaProductos = gestionarInventario.getListaProductos();
+        List<Factura> listaFacturas = gestionarFacturas.getListaFacturas();
+        List<Persona> listaPersonas = gestionarPersonas.getListaPersonas();
+        List<Negocio> listaNegocio = gestionarCaja.getListaNegocio();
+        Usuario u = gestionarPersonas.getUsuario();
+        if (crearFichero(listaNotas, listaProductos, listaFacturas, listaPersonas, u, listaNegocio)) {
+            return true;
         }
         return false;
     }
@@ -1028,14 +1116,15 @@ public class LogicaNegocio {
      * @param listaNegocio
      * @return
      */
-    private boolean crearFichero(List<NotaLibroDiario> listaNotas,
-            List<Producto> listaProductos,
-            List<Factura> listaFacturas,
-            List<Persona> listaPersonas,
+    private boolean crearFichero(List listaNotas,
+            List listaProductos,
+            List listaFacturas,
+            List listaPersonas,
             Usuario u,
-            List<int[]> listaNegocio) {
+            List<Negocio> listaNegocio) {
 
         if (escribirListas(RUTA_PRODUCTOS, listaProductos)
+                && escribirListas(RUTA_NOTAS, listaNotas)
                 && escribirListas(RUTA_FACTURAS, listaFacturas)
                 && escribirListas(RUTA_PERSONAS, listaPersonas)
                 && escribirUsuario(RUTA_USUARIO)
@@ -1046,10 +1135,22 @@ public class LogicaNegocio {
         return false;
     }
 
+    /**
+     * Metodo para escribir el usuario en un fichero
+     *
+     * @param fichero la ruta del fichero para guardar el usuario
+     * @return
+     */
     private boolean escribirUsuario(String fichero) {
         try {
             final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(fichero)));
-            oos.writeObject(getUsuario());
+            if (null == gestionarPersonas.getUsuario()) {
+
+                oos.writeObject(new Usuario(""));
+            } else {
+                oos.writeObject(gestionarPersonas.getUsuario());
+            }
+            logger.info("Usuario " + gestionarPersonas.getUsuario().toString());
             try {
                 oos.close();
             } catch (IOException ex) {
@@ -1057,46 +1158,62 @@ public class LogicaNegocio {
             }
             return true;
         } catch (FileNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info("Datos no encontrados ", ex);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex.getMessage(), ex);
         }
         return false;
     }
 
-    private boolean escribirNegocio(String fichero, List<int[]> lista) {
+    /**
+     * Metodo para escribir el negocio del programa
+     *
+     * @param fichero la ruta del fichero para guardar el negocio
+     * @return
+     */
+    private boolean escribirNegocio(String fichero, List<Negocio> lista) {
         try {
-            final FileWriter fw = new FileWriter(new File(fichero));
-            lista.stream().forEach(n -> {
-                for (int i : n) {
+            final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(fichero)));
+            if (null != lista && !lista.isEmpty()) {
+                lista.stream().forEach(n -> {
                     try {
-                        fw.write(i);
+                        oos.writeObject(n);
+                        logger.info("Negocio " + n.toString());
                     } catch (IOException ex) {
-                        Exceptions.printStackTrace(ex);
+                        logger.error(ex.getMessage(), ex);
                     }
-                }
-            });
+                });
+            }
+
             try {
-                fw.close();
+                oos.close();
             } catch (IOException ex) {
                 logger.error(ex.getMessage());
             }
             return true;
         } catch (FileNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info("Datos no encontrados ", ex);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex.getMessage(), ex);
         }
 
         return false;
     }
 
+    /**
+     * Metodo para escribir el lista en un fichero
+     *
+     * @param fichero la ruta del fichero para guardar la lista
+     * @param lista la lista que se va a escribir
+     * @return
+     */
     private boolean escribirListas(String fichero, List lista) {
         try {
             final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File(fichero)));
             lista.stream().forEach(o -> {
                 try {
                     oos.writeObject(o);
+                    logger.info("objeto " + o.toString());
                 } catch (IOException ex) {
                     logger.error(ex.getMessage());
                 }
@@ -1108,18 +1225,26 @@ public class LogicaNegocio {
             }
             return true;
         } catch (FileNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info("Datos no encontrados ", ex);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex);
         }
         return false;
     }
 
-    private Usuario getDatosUsuario(String fichero) {
+    /**
+     * Metodo para obtener el usuario desde fichero
+     *
+     * @return retorna el usuario
+     */
+    private Usuario getDatosUsuario() {
         Usuario u = new Usuario("");
         try {
-            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fichero)));
-            u = (Usuario) ois.readObject();
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(RUTA_USUARIO)));
+            if (ois.available() > 0) {
+                u = (Usuario) ois.readObject();
+            }
+
             try {
                 ois.close();
             } catch (IOException ex) {
@@ -1127,46 +1252,57 @@ public class LogicaNegocio {
             }
 
         } catch (FileNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info("Datos no encontrados ", ex);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex);
         } catch (ClassNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex);
         }
         return u;
     }
 
-    private List<int[]> getNegocio(String fichero) {
-        List<int[]> lista = new ArrayList<>();
+    /**
+     * Metodo para obtener el negocio del programa
+     *
+     * @return retorna el negocio
+     */
+    private List<Negocio> getNegocio() {
+        List<Negocio> lista = new ArrayList<>();
 
         try {
-            final FileReader fr = new FileReader(new File(fichero));
-            int[] registro = {fr.read(), fr.read(), fr.read(), fr.read()};
-            while (registro != null) {
-                lista.add(registro);
-                registro = new int[]{fr.read(), fr.read(), fr.read(), fr.read()};
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(RUTA_NEGOCIO)));
+            Negocio n = null;
+            while ((n = (Negocio) ois.readObject()) != null) {
+                lista.add(n);
             }
+
             try {
-                fr.close();
+                ois.close();
             } catch (IOException ex) {
                 logger.error(ex.getMessage());
             }
         } catch (FileNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info("Datos no encontrados ", ex);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            logger.error(ex);
         }
         return lista;
     }
 
-    public List getList(String fichero) {
-        List lista = new LinkedList();
+    /**
+     * Metodo para obtener la lista de las personas desde un fichero
+     *
+     * @return retorna la lista de las personas
+     */
+    private List<Persona> getListPersonas() {
+        List<Persona> lista = new LinkedList<>();
         try {
-            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(fichero)));
-
-            Object o = null;
-            while ((o = ois.readObject()) != null) {
-                lista.add(o);
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(RUTA_PERSONAS)));
+            Persona p = null;
+            while ((p = (Persona) ois.readObject()) != null) {
+                lista.add(p);
             }
 
             try {
@@ -1176,47 +1312,257 @@ public class LogicaNegocio {
             }
 
         } catch (FileNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error("Fichero no encontrado", ex);
         } catch (IOException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex.getMessage());
         } catch (ClassNotFoundException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.error(ex.getMessage());
         }
         return lista;
     }
 
+    /**
+     * Metodo para obtener la lista de las facturas desde un fichero
+     *
+     * @return retorna la lista de las facturas
+     */
+    private List<Factura> getListFacturas() {
+        List<Factura> lista = new LinkedList<>();
+        try {
+            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(RUTA_FACTURAS)));
+            Factura f = null;
+            while ((f = (Factura) ois.readObject()) != null) {
+                lista.add(f);
+            }
+
+            try {
+                ois.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+
+        } catch (FileNotFoundException ex) {
+            logger.error("Fichero no encontrado", ex);
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            logger.error(ex.getMessage());
+        }
+        return lista;
+    }
+
+    /**
+     * Metodo para obtener la lista de los productos desde un fichero
+     *
+     * @return retorna la lista de los productos
+     */
+    private List<Producto> getListProductos() {
+        List<Producto> lista = new LinkedList<>();
+        try {
+            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(RUTA_PRODUCTOS)));
+            Producto p = null;
+            while ((p = (Producto) ois.readObject()) != null) {
+                lista.add(p);
+            }
+
+            try {
+                ois.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+
+        } catch (FileNotFoundException ex) {
+            logger.error("Fichero no encontrado", ex);
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            logger.error(ex.getMessage());
+        }
+        return lista;
+    }
+
+    /**
+     * Metodo para obtener la lista de las notas desde un fichero
+     *
+     * @return retorna la lista de las notas
+     */
+    private List<NotaLibroDiario> getListNotas() {
+        List<NotaLibroDiario> lista = new LinkedList<>();
+        try {
+            final ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File(RUTA_NOTAS)));
+            NotaLibroDiario n = null;
+            while ((n = (NotaLibroDiario) ois.readObject()) != null) {
+                lista.add(n);
+            }
+            try {
+                ois.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+
+        } catch (FileNotFoundException ex) {
+            logger.error("Fichero no encontrado", ex);
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+        } catch (ClassNotFoundException ex) {
+            logger.error(ex.getMessage());
+        }
+        return lista;
+    }
+
+    /**
+     * Metodos para obtener el registro de las personas desde un fichero
+     *
+     * @return
+     */
     private List<Persona> getRegistrosPersonas() {
-        List<Persona> lista = getList(RUTA_PERSONAS);
-        return lista;
+        if (null == getListPersonas()) {
+            return new ArrayList<>();
+        }
+        return getListPersonas();
     }
 
+    /**
+     * Metodos para obtener el registro de las facturas desde un fichero
+     *
+     * @return
+     */
     private List<Factura> getRegistrosFactura() {
-        List<Factura> lista = getList(RUTA_FACTURAS);
-        return lista;
+        if (null == getListFacturas()) {
+            return new ArrayList<>();
+        }
+        return getListFacturas();
     }
 
+    /**
+     * Metodos para obtener el registro de los productos desde un fichero
+     *
+     * @return
+     */
     private List<Producto> getRegistrosProducto() {
-        List<Producto> lista = getList(RUTA_PRODUCTOS);
-        return lista;
+        if (null == getListProductos()) {
+            return new ArrayList<>();
+        }
+        return getListProductos();
     }
 
+    /**
+     * Metodos para obtener el registro de las notas desde un fichero
+     *
+     * @return
+     */
+    private List<NotaLibroDiario> getRegistrosNota() {
+        if (null == getListNotas()) {
+            return new ArrayList<>();
+        }
+        return getListNotas();
+    }
+
+    /**
+     * Metodos para obtener el registro del usuario desde un fichero
+     *
+     * @return
+     */
     private Usuario getRegistroUsuario() {
-        return getDatosUsuario(RUTA_USUARIO);
+        if (null == getDatosUsuario()) {
+            return new Usuario("");
+        }
+        return getDatosUsuario();
     }
 
-    private List<int[]> getRegistrosNegocio() {
-        return getNegocio(RUTA_NEGOCIO);
+    /**
+     * Metodos para obtener el registro del negocio desde un fichero
+     *
+     * @return
+     */
+    private List<Negocio> getRegistrosNegocio() {
+        if (null == getNegocio()) {
+            return new ArrayList<>();
+        }
+        return getNegocio();
     }
 
+    /**
+     * Metodo para cargar todos los registros desde ficheros y guardarlos en la
+     * bbdd
+     *
+     * @return
+     */
     public boolean cargarRegistros() {
-        crearCopiaSeguridad();
-        getRegistroUsuario().toString();
-        getRegistrosFactura().stream().forEach(f -> f.toString());
-        getRegistrosNegocio().stream().forEach(neg -> Arrays.toString(neg));
-        getRegistrosPersonas().stream().forEach(per -> per.toString());
-        getRegistrosProducto().stream().forEach(p -> p.toString());
-        return true;
+        cargarTablas();
+        logger.info("Cargando registros ... ");
 
+        logger.info("NOTAS DEL LIBRO DIARIO: ");
+        getRegistrosNota().forEach(nota -> {
+            gestionarNotasLibro.addNota(nota.getFecha(), nota.getDebe(), nota.getHaber(), nota.getDetalle());
+            logger.info("Nota: " + nota.toString());
+        });
+
+        logger.info("PERSONAS: ");
+        getRegistrosPersonas().forEach(per -> {
+            gestionarPersonas.addPersona(per.getNombre(), per.getApellido(), per.getDireccion(), per.getTelefono(), per.getEmail(), per.getTipo());
+            logger.info("Persona: " + per.toString());
+        });
+
+        logger.info("PRODUCTOS: ");
+        getRegistrosProducto().forEach(p -> {
+            gestionarInventario.addProducto(p.getNombre(), p.getPrecio(), p.getPeso(), p.getCantidad());
+            logger.info("Producto: " + p.toString());
+        });
+        logger.info("NEGOCIO:");
+
+        List<Negocio> listaNegocio = getRegistrosNegocio();
+        listaNegocio.forEach(neg -> {
+            gestionarCaja.addNegocio(neg.getID_factura(), neg.getID_persona(), neg.getID_producto(), neg.getCantidad());
+            logger.info("Negocio: " + neg.toString());
+
+        });
+
+        logger.info("FACTURAS:");
+        getRegistrosFactura().forEach(f -> {
+            final int id_persona = listaNegocio.stream().filter(fac -> fac.getID_factura() == fac.getID_factura()).findFirst().get().getID_persona();
+            if (getListaPersonas().stream().anyMatch(p -> p.getCodPersona() == id_persona)) {
+                gestionarFacturas.addFactura(f.getPrecio(), id_persona,
+                        f.getListaProductos(), f.getTrabajos(), this, gestionarInventario);
+                logger.info("Factura: " + f.toString());
+            }
+        });
+
+        logger.info("USUARIOS:");
+        this.usuario = getRegistroUsuario();
+        logger.info("Usuario: " + this.usuario.toString());
+
+        //actualizo las listas 
+        actualizarListas();
+        return true;
+    }
+
+    /**
+     * Metodo para borrar todos los registros
+     *
+     * @return
+     */
+    public int borrarRegistros() {
+        int filas = 0;
+        filas += gestionarFacturas.borrarFacturas();
+        filas += gestionarInventario.borrarProductos();
+        filas += gestionarNotasLibro.borrarNotas();
+        filas += gestionarPersonas.borrarPersonas();
+        filas += gestionarCaja.borrarNegocio();
+        return filas;
+    }
+
+    /**
+     * Metodo para actualizar las listas y despues actualizar los paneles
+     */
+    private void actualizarListas() {
+        gestionarCaja.refrescarNegocio();
+        gestionarFacturas.refrescarFacturas();
+        gestionarInventario.refrescarListaProductos();
+        gestionarNotasLibro.refrescarListaNotas();
+        gestionarPersonas.refrescarListaPersonas();
+        this.usuario = gestionarPersonas.getUsuario();
+        Main.actualizarPaneles();
     }
 
 }

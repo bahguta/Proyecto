@@ -29,6 +29,7 @@ public class PanelVenta extends javax.swing.JPanel {
 
     private JFrame parent;
 
+    //lista para todos labels para manejar el tamaño del texto
     private List<JLabel> listaLabelsH2;
     private LogicaNegocio logica;
 
@@ -38,7 +39,7 @@ public class PanelVenta extends javax.swing.JPanel {
     public PanelVenta(JFrame frame, LogicaNegocio logica) {
         initComponents();
         this.parent = frame;
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Ventas"));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("VENTAS"));
 
         this.logica = logica;
         listaLabelsH2 = new ArrayList<>();
@@ -146,6 +147,11 @@ public class PanelVenta extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo para actuar cuando el usuario a echo un click sobre la tabla de las facturas
+     * Si se ha echo 2 veces click , se abre una ventana con la informacion de la factura
+     * @param evt 
+     */
     private void jTableFacturasClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableFacturasClienteMouseClicked
         if (evt.getClickCount() > 1) {
             if (jTableFacturasCliente.getSelectedRow() != -1) {
@@ -160,6 +166,23 @@ public class PanelVenta extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jTableFacturasClienteMouseClicked
 
+    
+    /**
+     * Metodo para actualizar Panel Venta,
+     * se refrescara la lista de clientes y se limpiara la tabla de las facturas
+     *  evt 
+     */
+    public void actualizarPanelVenta(){
+        jTableClientes.setModel(new PersonasTableModel(logica.getListaClientes()));
+        jTableFacturasCliente.setModel(new FacturaTableModel(new ArrayList<>()));
+        
+    }
+    
+    /**
+     * Metodo para actuar cuando el usuario a echo un click sobre la tabla de clientes
+     * Si se ha echo 2 veces click , se abre una ventana con la informacion del cliente
+     * @param evt 
+     */
     private void jTableClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableClientesMouseClicked
         if (jTableClientes.getSelectedRow() != -1) {
             int ID_persona = (int) jTableClientes.getValueAt(jTableClientes.getSelectedRow(), 0);
@@ -172,9 +195,7 @@ public class PanelVenta extends javax.swing.JPanel {
             } else {
                 jTableFacturasCliente.setModel(new FacturaTableModel(logica.getListaFacturas(ID_persona)));
             }
-        } else {
-
-        }
+        } 
     }//GEN-LAST:event_jTableClientesMouseClicked
 
 

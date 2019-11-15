@@ -15,15 +15,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JFrame;
 import org.openide.util.Exceptions;
 
 /**
  * Gestionar Facturas
- * 
+ *
  * @author Plam
  */
 public class GestionarFacturas {
+
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GestionarFacturas.class);
 
     private List<Factura> listaFacturas;
@@ -76,7 +76,6 @@ public class GestionarFacturas {
             List<Producto> listaProductos,
             String trabajo,
             LogicaNegocio logica,
-            JFrame frame,
             GestionarInventario gestionarInventario) {
 
         if (!conexion.isConexionExitosa()) {
@@ -99,23 +98,20 @@ public class GestionarFacturas {
             ResultSet resultado = conexion.ejecutarStatementSELECT(consultaNextID, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             if (resultado.next()) {
                 ID_factura = resultado.getInt(1);
-            }
-
-            if (logica.ventaCompra(frame, logica.getPersonaPorID(ID_persona), getFacturaPorID(ID_factura), precio, gestionarInventario)) {
-
-                //insertando los registros de los productos en la tabla negocio 
-                for (Producto producto : listaProductos) {
-                    String subConsulta = "insert into negocio (ID_factura, ID_persona, ID_producto, cantidad ) values (" + ID_factura + " , " + ID_persona + ", " + producto.getCodProducto() + ", " + producto.getCantidad() + ")";
-                    productosInsertados = conexion.ejecutarStatementNOSELECT(subConsulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                System.out.println("ID_persona" + ID_persona);
+                if (logica.ventaCompra(logica.getPersonaPorID(ID_persona), getFacturaPorID(ID_factura), precio, gestionarInventario)) {
+                    //insertando los registros de los productos en la tabla negocio 
+                    for (Producto producto : listaProductos) {
+                        String subConsulta = "insert into negocio (ID_factura, ID_persona, ID_producto, cantidad ) values (" + ID_factura + " , " + ID_persona + ", " + producto.getCodProducto() + ", " + producto.getCantidad() + ")";
+                        productosInsertados = conexion.ejecutarStatementNOSELECT(subConsulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                        logger.info("Facturas insertadas: " + filas);
+                        logger.info("Productos insertados para factura con ID " + ID_factura + ": " + productosInsertados + " productos");
+                    }
+                } else {
+                    conexion.ejecutarStatementNOSELECT("rollback", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                    return -1;
                 }
-            } else {
-                conexion.ejecutarStatementNOSELECT("rollback", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                return -1;
-
             }
-            //
-            System.out.println("Facturas insertadas: " + filas);
-            System.out.println("Productos insertados para factura con ID " + ID_factura + ": " + productosInsertados + " productos");
 
             //commit
             conexion.ejecutarStatementNOSELECT("commit", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -124,6 +120,10 @@ public class GestionarFacturas {
             Exceptions.printStackTrace(ex);
         }
         return filas;
+    }
+
+    private Factura getFactura(int ID_Factura) {
+        return listaFacturas.stream().filter(f -> f.getCodFactura() == ID_Factura).findFirst().get();
     }
 
     /**
@@ -171,7 +171,6 @@ public class GestionarFacturas {
         refrescarFacturas();
         List<Factura> lista = new ArrayList<>();
         for (Factura factura : listaFacturas) {
-            //System.out.println(logica.getPersonaPorIDFactura(factura.getCodFactura()).toString());
             if (logica.getPersonaPorIDFactura(factura.getCodFactura()) != null
                     && logica.getPersonaPorIDFactura(factura.getCodFactura()).getTipo().equalsIgnoreCase(type)) {
                 lista.add(factura);
@@ -179,7 +178,6 @@ public class GestionarFacturas {
         }
         return lista;
     }
-
 
     /**
      * Metodo para obtener una factura por su ID
@@ -241,7 +239,7 @@ public class GestionarFacturas {
             } catch (SQLException ex) {
                 Exceptions.printStackTrace(ex);
             }
-        }  else {
+        } else {
             existeLaTabla = false;
         }
     }
@@ -261,7 +259,7 @@ public class GestionarFacturas {
     public List<Factura> getFacturasPorIDPersona(int ID_persona) {
         if (!conexion.isConexionExitosa()) {
             return new ArrayList<>();
-        } 
+        }
         List<Producto> listaProductos = null;
         List<Factura> listaFact = null;
         try {
@@ -309,6 +307,10 @@ public class GestionarFacturas {
         refrescarFacturas();
         return existeLaTabla;
     }
-    
-    
+
+    public int borrarFacturas() {
+        String consulta = "delete from factura";
+        return conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+    }
+
 }

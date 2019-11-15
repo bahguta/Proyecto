@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 package Dto;
+
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
+
 /**
  * Objeto Factura 
  * 

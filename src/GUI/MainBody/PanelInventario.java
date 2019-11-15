@@ -36,7 +36,7 @@ public class PanelInventario extends javax.swing.JPanel {
         this.frame = frame;
         this.logica = logica;
 
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Inventario"));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("INVENTARIO"));
         
         listaLabelsH2 = new ArrayList<>();
         listaLabelsH2.add(jLabel1H2);
@@ -180,6 +180,15 @@ public class PanelInventario extends javax.swing.JPanel {
         jTableProductos.setModel(new ProductoTableModel(logica.getListaProductos()));
     }//GEN-LAST:event_jButtonCambiarProductoActionPerformed
 
+    /**
+     * Metodo para actualizar pantalla inventario,
+     * se refrescara la lista de los productos
+     */
+    public void actualizarPanelInventario(){
+        jTableProductos.setModel(new ProductoTableModel(logica.getListaProductos()));
+        
+    }
+    
     /**
      * Metodo para crear un producto. Se abre ventana nueva
      * @param evt 
