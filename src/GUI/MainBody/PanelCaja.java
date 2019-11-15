@@ -33,7 +33,7 @@ public class PanelCaja extends javax.swing.JPanel {
     public PanelCaja(JFrame frame, LogicaNegocio logica) {
         initComponents();
 
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Caja"));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("CAJA"));
         
         
         this.logica = logica;
@@ -53,7 +53,7 @@ public class PanelCaja extends javax.swing.JPanel {
         LogicaTemas.addListJLabel("JLabelH1Caja", listaLabelsH1);
         LogicaTemas.addListJLabel("JLabelH2Caja", listaLabelsH2);
         
-        actualizarCaja();
+        actualizarPanelCaja();
         
     }
     
@@ -61,7 +61,7 @@ public class PanelCaja extends javax.swing.JPanel {
      * Metodo para actualizar la caja.<br>
      * Recoge las factura y las notas diarias, hace los calculos y asigna el valor a la caja.
      */
-    public void actualizarCaja(){
+    public void actualizarPanelCaja(){
         ctm = new CajaTableModel(logica.getNotaLibroDiarios());
         jTable1.setModel(ctm);
         jLabelTotalDebeH2.setText(String.format("%.2f", ctm.getTotalDebe()));

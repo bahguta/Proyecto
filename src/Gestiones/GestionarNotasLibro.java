@@ -91,6 +91,7 @@ public class GestionarNotasLibro {
         System.out.println("Notas Insertadas: " + filas);
         System.out.println(sdf.format(fecha));
         refrescarListaNotas();
+        conexion.ejecutarStatementNOSELECT("commit", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         return filas;
     }
 
@@ -129,7 +130,7 @@ public class GestionarNotasLibro {
     /**
      * Metodo para refrescar la lista de las notas
      */
-    private void refrescarListaNotas() {
+    public void refrescarListaNotas() {
         if (!conexion.isConexionExitosa()) {
             return ;
         }
@@ -205,5 +206,10 @@ public class GestionarNotasLibro {
     public boolean isExisteLaTabla() {
         refrescarListaNotas();
         return existeLaTabla;
+    }
+    
+    public int borrarNotas(){
+        String consulta = "delete from nota";
+        return conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 }

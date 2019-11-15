@@ -85,7 +85,7 @@ public class GestionarInventario {
      *
      * @return retorna la lista de los productos
      */
-    private void refrescarListaProductos() {
+    public void refrescarListaProductos() {
         if (!conexion.isConexionExitosa()) {
             return;
         }
@@ -131,6 +131,7 @@ public class GestionarInventario {
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Productos insertados: " + filas);
         refrescarListaProductos();
+        conexion.ejecutarStatementNOSELECT("commit", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         return filas;
     }
 
@@ -216,6 +217,11 @@ public class GestionarInventario {
      public boolean isExisteLaTabla() {
         refrescarListaProductos();
         return existeLaTabla;
+    }
+     
+     public int borrarProductos(){
+        String consulta = "delete from producto";
+        return conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 
 }

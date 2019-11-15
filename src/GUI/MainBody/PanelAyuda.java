@@ -54,7 +54,7 @@ public class PanelAyuda extends javax.swing.JPanel {
     public PanelAyuda(JFrame frame) {
         initComponents();
 
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Ayuda"));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("AYUDA"));
         
         jTree1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         jTree1.addTreeSelectionListener(new TreeSelectionListener() {

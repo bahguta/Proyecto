@@ -34,7 +34,7 @@ public class PanelCompra extends javax.swing.JPanel {
      */
     public PanelCompra(JFrame frame, LogicaNegocio logica) {
         initComponents();
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Compras"));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("COMPRAS"));
 
         this.parent = frame;
         this.logica = logica;
@@ -146,6 +146,18 @@ public class PanelCompra extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    /**
+     * Metodo para actualizar el panel de compra, 
+     * se refresca la lista de los proveedores y se limpan los resultados de table facturas
+     */
+    public void actualizarPanelCompra(){
+        jTableProveedores.setModel(new PersonasTableModel(logica.getListaProveedores()));
+        //agrego a la tabla una nueva lista para limpiar los resultados
+        jTableFacturasProveedores.setModel(new FacturaTableModel(new ArrayList<>()));
+    }
+    
+    
     private void jTableProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableProveedoresMouseClicked
         if (jTableProveedores.getSelectedRow() != -1) {
             int ID_persona = (int) jTableProveedores.getValueAt(jTableProveedores.getSelectedRow(), 0);

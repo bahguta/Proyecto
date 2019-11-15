@@ -44,7 +44,7 @@ public class PanelFacturas extends javax.swing.JPanel {
         this.parent = parent;
         this.logica = logica;
 
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Facturas"));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("FACTURAS"));
 
         jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
 
@@ -224,7 +224,7 @@ public class PanelFacturas extends javax.swing.JPanel {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 133, Short.MAX_VALUE)
+                                .addGap(0, 61, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jComboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -266,15 +266,15 @@ public class PanelFacturas extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1H2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonImprimir)
@@ -294,6 +294,23 @@ public class PanelFacturas extends javax.swing.JPanel {
         jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
     }//GEN-LAST:event_jButtonNuevaFacturaActionPerformed
 
+    /**
+     * Metodo para actualizad panel Facturas,
+     * se refresca la lista de las facturas y se limpiaran las tablas 
+     * de cliente y productos
+     * 
+     */
+    public void actualizarPanelFacturas(){
+        jComboBoxTipo.setSelectedIndex(0);
+        //refresco la lista de las facturas
+        jTableFacturas.setModel(new FacturaTableModel(logica.getTodasLasFacturas()));
+        //limpio las tablas cliente y productos
+        jTable1Productos.setModel(new ProductoTableModel(new ArrayList<>()));
+        jTableCliente.setModel(new PersonaCortoTableModel(new ArrayList<>()));
+    }
+    
+    
+    
     /**
      * Metodo para editar una factura 
      * @param evt 

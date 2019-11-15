@@ -91,6 +91,7 @@ public class GestionarPersonas {
         }
         return null;
     }
+  
 
     /**
      * Metodo para obtener una persona buscada por el codigo de factura
@@ -200,7 +201,7 @@ public class GestionarPersonas {
     /**
      * Metodo para refrescar la lista de las personas
      */
-    private void refrescarListaPersonas() {
+    public void refrescarListaPersonas() {
         if (!conexion.isConexionExitosa()) {
             return;
         }
@@ -247,6 +248,7 @@ public class GestionarPersonas {
         String consulta = "insert into persona (nombre, apellido, direccion, telefono, email, type) values ('" + nombre + "', '" + apellido + "', '" + direccion + "', " + telefono + ", '" + email + "', '" + tipo + "')";
         filas = conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         refrescarListaPersonas();
+        conexion.ejecutarStatementNOSELECT("commit", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         System.out.println("Personas insertadas: " + filas);
 
         return filas;
@@ -296,5 +298,10 @@ public class GestionarPersonas {
     public boolean isExisteLaTabla() {
         refrescarListaPersonas();
         return existeLaTabla;
+    }
+    
+    public int borrarPersonas(){
+        String consulta = "delete from persona";
+        return conexion.ejecutarStatementNOSELECT(consulta, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
 }

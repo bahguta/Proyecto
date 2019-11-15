@@ -42,7 +42,6 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
-import org.openide.util.Exceptions;
 
 /**
  *
@@ -53,8 +52,8 @@ public class Main extends javax.swing.JFrame implements MenuListener {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Main.class);
 
-    public final static int MIN_LARGO = 1400;
-    public final static int MIN_ALTO = 900;
+    private final static int MIN_LARGO = 1400;
+    private final static int MIN_ALTO = 900;
     private static double VERSION = 1.0;
     private static final long serialVersionUID = 1L;
 
@@ -62,7 +61,9 @@ public class Main extends javax.swing.JFrame implements MenuListener {
     private GestionarCaja gestionarCaja = null;
 
     private CardLayout cardLayout;
-    private static JPanel panelAjustes, panelAjuste,
+    
+    private static JPanel 
+            panelAjustes,
             panelLibroDiario,
             panelCaja,
             panelInventario,
@@ -72,62 +73,42 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             panelEstadistica,
             panelFacturas,
             panelAyuda;
+    
     private Usuario usuario;
-    // private JScrollPane scrollPane;
 
     /**
      * Constructor:
      */
     public Main() {
+        //metodo para configuracion rapida por defecto para libreria log4f
         BasicConfigurator.configure();
+        //imprimo el logo 
         imprimirLogo();
-        LogicaTemas logicaTemas = new LogicaTemas();
+        //inicializo la logica de negocio
         logica = new LogicaNegocio();
-        ConexionBBDD login = new ConexionBBDD(this, true, logica);
+        //inicializo la logica para manejar la vista del programa
+        LogicaTemas logicaTemas = new LogicaTemas();
+        //muesto la pantalla de conexion inicial
+        ConexionInicial login = new ConexionInicial(this, true, logica);
         login.setVisible(true);
-        
-        
-//        /**
-//         * Metodo para cerrar la aplicacion por si no se establece conexion con
-//         * la base de datos
-//         */
-//        login.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosed(WindowEvent we) {
-//                super.windowClosed(we);
-//                if (!LogicaNegocio.isIsConexion()) {
-//                    System.exit(0);
-//                }
-//            }
-//
-//        });
-//        if (login != null) {
-//            usuario = new Usuario(login.getNombreLogin(), login.getPassLogin());
-//        }
 
-        //Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/img/icono.png"));
-        
+        //inicializo el frame 
         initComponents();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        // agrego icono al frame
         Image img = new ImageIcon(getClass().getResource("/img/icono.png")).getImage();
         setIconImage(img);
-        //this.setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
-
         
-
-        //conexion(login.getNombre(), login.getPass(), login.getHost(), login.getPuerto(), login.getNombreBBDD());
-        //conexion();
-
+        //agrego box layout al frame
         BoxLayout boxLayout = new BoxLayout(getContentPane(), BoxLayout.Y_AXIS);
-        //boxLayout.getTarget().setMinimumSize(new Dimension(MIN_LARGO, MIN_ALTO));
-
         setLayout(boxLayout);
 
+        //agrego un card layout al panel central para manejar los eventos de los menus 
         cardLayout = new CardLayout();
-
         jPanelBody.setLayout(cardLayout);
 
+        //inicializo los paneles secundarios
         panelAjustes = new PanelAjustes(this, logica);
         panelLibroDiario = new PanelLibroDiario(this, logica);
         panelCaja = new PanelCaja(this, logica);
@@ -139,6 +120,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         panelFacturas = new PanelFacturas(this, logica);
         panelAyuda = new PanelAyuda(this);
 
+        //lleno panel central con todos los paneles del programa
         jPanelBody.add(panelLibroDiario, "panelLibroDiario");
         jPanelBody.add(panelAjustes, "panelAjustes");
         jPanelBody.add(panelCaja, "panelCaja");
@@ -150,6 +132,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         jPanelBody.add(panelFacturas, "panelFacturas");
         jPanelBody.add(panelAyuda, "panelAyuda");
 
+        //agrego a todos los menus el menu listener
         menuAjustes.addMenuListener(this);
         menuLibro.addMenuListener(this);
         menuCaja.addMenuListener(this);
@@ -161,30 +144,38 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         menuFacturas.addMenuListener(this);
         menuAyuda.addMenuListener(this);
 
+        //la version del programa
         jLabelVersion.setText(Main.GET_VERSION() + "");
     }
 
+    /**
+     * Metodo para obtener la version del programa
+     * @return 
+     */
     public static double GET_VERSION() {
         return Main.VERSION;
     }
-//
-//    private void conexion() {
-//        logica = new LogicaNegocio();
-//    }
-//
-//    private void conexion(String nombre, String pass, String host, int puerto, String nombreBBDD) {
-//        logica = new LogicaNegocio(this, nombre, pass, host, puerto, nombreBBDD);
-//        if (!logica.conectBBDD(nombre, pass, host, puerto, nombreBBDD)) {
-//            System.exit(0);
-//            logger.error("Conexion NO establecida. Exit !");
-//        }
-//
-//    }
 
-    public static void actualizarPanelCaja() {
-        ((PanelCaja) panelCaja).actualizarCaja();
+
+    /**
+     * Metodo para actualizar la informacion a todos los paneles
+     */
+    public static void actualizarPaneles() {
+        ((PanelCaja) panelCaja).actualizarPanelCaja();
+        ((PanelCompra) panelCompra).actualizarPanelCompra();
+        ((PanelEstadistica) panelEstadistica).actualizarPanelEstadistica();
+        ((PanelFacturas) panelFacturas).actualizarPanelFacturas();
+        ((PanelInventario) panelInventario).actualizarPanelInventario();
+        ((PanelLibroDiario) panelLibroDiario).actualiarPanelLibroDiario();
+        ((PanelPersonas) panelPersonas).actualizarPanelPersonas();
+        ((PanelVenta) panelVenta).actualizarPanelVenta();
     }
 
+    /**
+     * Metodo para cambiar la vista del programa
+     *
+     * @param laf
+     */
     public static void setLookAndFeel(LookAndFeel laf) {
         try {
             UIManager.setLookAndFeel(laf);
@@ -199,7 +190,7 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             SwingUtilities.updateComponentTreeUI(panelPersonas);
             SwingUtilities.updateComponentTreeUI(panelVenta);
         } catch (UnsupportedLookAndFeelException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info("error al aplicar la vista ", ex);
         }
 
     }
@@ -481,6 +472,21 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    
+    /**
+     * 
+     * 
+     * 
+     * 
+     * Metodos para cambiar de panel , controlado por cardLayout
+     * 
+     * 
+     * 
+     * 
+     * 
+     */
 
     private void menuLibroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLibroMouseClicked
         cardLayout.show(jPanelBody, "panelLibroDiario");
@@ -522,6 +528,10 @@ public class Main extends javax.swing.JFrame implements MenuListener {
         cardLayout.show(jPanelBody, "panelAyuda");
     }//GEN-LAST:event_menuAyudaMouseClicked
 
+    /**
+     * Metodo para abrir en navegador la API del programa 
+     * @param evt 
+     */
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         try {
             URI url = new URI("https://bahguta.ddns.net");
@@ -610,6 +620,19 @@ public class Main extends javax.swing.JFrame implements MenuListener {
             }
         });
 
+    }
+
+    public static void refrescarPaneles() {
+        panelAjustes.repaint();
+        panelAyuda.repaint();
+        panelCaja.repaint();
+        panelCompra.repaint();
+        panelEstadistica.repaint();
+        panelFacturas.repaint();
+        panelInventario.repaint();
+        panelLibroDiario.repaint();
+        panelPersonas.repaint();
+        panelVenta.repaint();
     }
 
 }

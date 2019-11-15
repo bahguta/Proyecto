@@ -41,7 +41,7 @@ public class PanelPersonas extends javax.swing.JPanel {
         initComponents();
         this.parent = parent;
 
-        setBorder(LogicaTemas.GET_TITLE_BORDER("Personas"));
+        setBorder(LogicaTemas.GET_TITLE_BORDER("PERSONAS"));
 
         personaTableModel = new PersonasTableModel(logica.getListaPersonas());
         jTablePersonas.setModel(personaTableModel);
@@ -199,7 +199,7 @@ public class PanelPersonas extends javax.swing.JPanel {
                                 .addComponent(jButtoneditarPersona)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonNuevaPersona))
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)))
@@ -248,6 +248,18 @@ public class PanelPersonas extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    /**
+     * Metodo para actualizar Panel Personas,
+     * se refrescara la lista de las personas
+     */
+    public void actualizarPanelPersonas(){
+        jComboBox.setSelectedIndex(0);
+        jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
+        jTableFacturas.setModel(new FacturaTableModel(new ArrayList<>()));
+    }
+    
+    
     /**
      * Metodo para manejar los click de la table de las personas
      * @param evt 
