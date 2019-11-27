@@ -40,7 +40,6 @@ public class GestionarCaja {
      * Si la persona es un cliente se produce una venta y si es un proveedor<br>
      * se produce una compra
      *
-     * @param frame frame para poder mostrar Dialog Box
      * @param p persona la que compra o a la que se vende
      * @param lista lista de productos en caso de venta
      * @param precio el precio de la venta/compra

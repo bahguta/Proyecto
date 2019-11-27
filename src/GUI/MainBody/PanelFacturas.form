@@ -109,7 +109,6 @@
                   <Component id="jButtonEditarFactura" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonNuevaFactura" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

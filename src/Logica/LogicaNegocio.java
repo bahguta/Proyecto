@@ -6,7 +6,7 @@
 package Logica;
 
 import Dto.*;
-import GUI.Main.Main;
+import GUI.Main.App;
 import Gestiones.*;
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -338,7 +338,6 @@ public class LogicaNegocio {
     /**
      * Metodo para hacer la venta - compra
      *
-     * @param frame
      * @param p
      * @param f
      * @param precio
@@ -366,7 +365,7 @@ public class LogicaNegocio {
                 gestionarNotasLibro.addNota(f.getFecha(), precio, 0d, trabajos);
             }
             actualizarCaja();
-            Main.actualizarPaneles();
+            App.actualizarPaneles();
             return true;
         }
         return false;
@@ -1562,7 +1561,7 @@ public class LogicaNegocio {
         gestionarNotasLibro.refrescarListaNotas();
         gestionarPersonas.refrescarListaPersonas();
         this.usuario = gestionarPersonas.getUsuario();
-        Main.actualizarPaneles();
+        App.actualizarPaneles();
     }
 
 }

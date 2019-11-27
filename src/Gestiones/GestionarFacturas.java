@@ -65,7 +65,6 @@ public class GestionarFacturas {
      * @param listaProductos la lista de los productos que contiene la factura
      * @param trabajo Las actividades que se han echo para la factura
      * @param logica el objeto logica para gestionar los datos de la factura
-     * @param frame frame para poder mostrar Dialog Box
      * @param gestionarInventario el objeto gestionarInventarios para obtener
      * datos para la factura
      * @return retorna las filas actualizadas
