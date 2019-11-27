@@ -279,8 +279,7 @@ public class PanelFacturas extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonImprimir)
                     .addComponent(jButtonEditarFactura)
-                    .addComponent(jButtonNuevaFactura))
-                .addContainerGap())
+                    .addComponent(jButtonNuevaFactura)))
         );
     }// </editor-fold>//GEN-END:initComponents
 

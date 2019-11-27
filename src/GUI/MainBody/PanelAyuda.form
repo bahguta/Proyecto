@@ -31,7 +31,7 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jScrollPane2" min="-2" pref="288" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jScrollPane3" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -74,7 +74,7 @@
             </Property>
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="Software para gestionar el inventario, clientes, proveedores, notas del libro diario y facturas para PYMES.El programa ha sido desarrollado para realizar el proyecto del modulo &quot;Desarrollo de Aplicaciones Multiplataforma&quot; instituto - IES Juan Jose Calvo Miguel - Sotrondio.&#xa;&#xa;Tutor: Julia Paz Triana Toribio"/>
+            <Property name="text" type="java.lang.String" value="Software para gestionar el inventario, clientes, proveedores, notas del libro diario y facturas para PYMES.El programa ha sido desarrollado para realizar el proyecto del modulo &quot;Desarrollo de Aplicaciones Multiplataforma&quot; instituto - IES Juan Jose Calvo Miguel - Sotrondio.&#xa;&#xa;Tutor individual: Julia Paz Triana Toribio&#xa;Tutor colectivo: Jose Luis Arias Cobrero"/>
             <Property name="wrapStyleWord" type="boolean" value="true"/>
             <Property name="focusable" type="boolean" value="false"/>
           </Properties>
@@ -94,7 +94,7 @@
         <Component class="javax.swing.JTree" name="jTree1">
           <Properties>
             <Property name="model" type="javax.swing.tree.TreeModel" editor="org.netbeans.modules.form.editors2.TreeModelEditor">
-              <TreeModel code="Componentes&#xa; Libro Diario&#xa;  Filtrar Notas&#xa;  Table Notas&#xa; Caja&#xa;  help1&#xa;  help2&#xa; Inventario&#xa;  Nuevo Producto&#xa;  Table Productos&#xa; Compras&#xa;  help1&#xa;  help2&#xa; Ventas&#xa;  help1&#xa;  help2&#xa; Personas&#xa;  Clientes&#xa;   help1&#xa;  Proveedores&#xa;   help1&#xa; Estadistica&#xa;  help1&#xa;  help2&#xa; Facturas&#xa;  Filtrar Facturas&#xa;  Table Facturas&#xa; Ajustes&#xa;  General&#xa;  Base de Datos&#xa;  Copia de Seguridad&#xa; Ayuda&#xa;  Info&#xa;  Arbol"/>
+              <TreeModel code="Componentes&#xa; Libro Diario&#xa;  Filtrar Notas&#xa;  Notas&#xa;  Imprimir Nota&#xa; Caja&#xa;  Informacion Caja&#xa; Inventario&#xa;  Nuevo Producto&#xa;  Table Productos&#xa; Compras&#xa;  Informacion Compras&#xa; Ventas&#xa;  Informacion Ventas&#xa; Personas&#xa;  Filtrar&#xa;  Facturas&#xa; Estadistica&#xa;  Estadistica por Fechas&#xa;  Estadistica por Dia &#xa; Facturas&#xa;  Filtrar Facturas&#xa;  Imprimir Facturas&#xa;  Informacion Facturas&#xa; Ajustes&#xa;  General&#xa;  Base de Datos&#xa;  Copia de Seguridad&#xa;  Admin&#xa; Ayuda&#xa;  Info&#xa;  Arbol"/>
             </Property>
           </Properties>
         </Component>

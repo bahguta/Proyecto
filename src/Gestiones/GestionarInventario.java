@@ -83,7 +83,6 @@ public class GestionarInventario {
     /**
      * Metodo para refrescar la lista de los productos
      *
-     * @return retorna la lista de los productos
      */
     public void refrescarListaProductos() {
         if (!conexion.isConexionExitosa()) {

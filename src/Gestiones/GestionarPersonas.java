@@ -257,7 +257,6 @@ public class GestionarPersonas {
     
     /**
      * Metodo para añadir un usuario en la BBDD
-     * @param nombre
      * @param pass
      * @return 
      */
