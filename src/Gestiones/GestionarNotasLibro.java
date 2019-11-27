@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.openide.util.Exceptions;
 
 /**
  * Gestionar Notas del Libro Diario
@@ -154,7 +153,7 @@ public class GestionarNotasLibro {
                             resultado.getDouble(5)));
                 }
             } catch (SQLException ex) {
-                Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
             }
         } else {
             existeLaTabla = false;

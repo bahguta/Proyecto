@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.openide.util.Exceptions;
 
 /**
  * Gestionar Inventario
@@ -74,7 +73,7 @@ public class GestionarInventario {
                     ));
                 }
             } catch (SQLException ex) {
-                Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
             }
         }
         return lista;

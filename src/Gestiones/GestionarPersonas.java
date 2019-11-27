@@ -13,7 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.openide.util.Exceptions;
 
 /**
  * Gestionar Personas
@@ -278,11 +277,11 @@ public class GestionarPersonas {
                         u = new Usuario(resultado.getString(1));
                     }
                 } catch (SQLException ex) {
-                    Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
                 }
             }
         } catch (SQLException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
         }
         return u;
     }
