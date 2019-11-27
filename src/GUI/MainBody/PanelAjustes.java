@@ -29,7 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import org.openide.util.Exceptions;
 
 /**
  * Panel Ajustes
@@ -84,7 +83,7 @@ public class PanelAjustes extends javax.swing.JPanel {
             listaLaf.add(new SyntheticaSkyMetallicLookAndFeel());
             listaLaf.add(new SyntheticaStandardLookAndFeel());
         } catch (ParseException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
         }
 
         LogicaTemas.addListJLabel("JLabelH1Ajustes", listaLabelsH1);

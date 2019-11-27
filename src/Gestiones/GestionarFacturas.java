@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.openide.util.Exceptions;
 
 /**
  * Gestionar Facturas
@@ -116,7 +115,7 @@ public class GestionarFacturas {
             conexion.ejecutarStatementNOSELECT("commit", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             refrescarFacturas();
         } catch (SQLException ex) {
-            Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
         }
         return filas;
     }
@@ -146,7 +145,7 @@ public class GestionarFacturas {
                     lista.add(resultado.getInt("ID_factura"));
                 }
             } catch (SQLException ex) {
-                Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
             }
         }
         return lista;
@@ -236,7 +235,7 @@ public class GestionarFacturas {
                             resultado.getDouble(4)));
                 } // end while
             } catch (SQLException ex) {
-                Exceptions.printStackTrace(ex);
+            logger.info(ex.getMessage(), ex);
             }
         } else {
             existeLaTabla = false;
