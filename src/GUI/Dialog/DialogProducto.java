@@ -146,6 +146,7 @@ public class DialogProducto extends javax.swing.JDialog {
 
         jTextFieldCantidad.setText(org.openide.util.NbBundle.getMessage(DialogProducto.class, "DialogProducto.jTextFieldCantidad.text")); // NOI18N
 
+        jLabel11H2.setFont(LogicaTemas.TEXT_FONT);
         jLabel11H2.setText(org.openide.util.NbBundle.getMessage(DialogProducto.class, "DialogProducto.jLabel11H2.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
