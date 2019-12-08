@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InformeNotas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a1bf312-9bb3-42a4-b7c0-ecdc5a3cd0ef">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="proyecto"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ID_NOTA" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
@@ -65,14 +67,14 @@
 				<textElement textAlignment="Left">
 					<font size="16"/>
 				</textElement>
-				<textFieldExpression><![CDATA[ $F{FECHA}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{FECHA}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="10" y="13" width="180" height="30" uuid="142a4a6f-759c-47e6-b63d-68123700edfc"/>
 				<textElement textAlignment="Right">
 					<font size="16"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{Nota}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" №: " + $P{Nota} + " " + $F{ID_NOTA}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

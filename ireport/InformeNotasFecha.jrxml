@@ -4,7 +4,7 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value="Ik5PVEEiICwxNSwxNSwxYzcwMjQxZC1iNDQwLTRkZDgtODZmNy01ZGNlNjllNDQ3MGE7"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="419"/>
+	<property name="ireport.y" value="139"/>
 	<parameter name="ID_NOTA" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
 	</parameter>
@@ -85,7 +85,7 @@
 				<textElement textAlignment="Left">
 					<font size="16"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Nota # " + $F{ID_nota}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nota: " + $F{ID_nota}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
