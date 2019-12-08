@@ -169,7 +169,7 @@ public class PanelAyuda extends javax.swing.JPanel {
         jTextArea1.setFont(new java.awt.Font("Monospaced", 1, 14)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Software para gestionar el inventario, clientes, proveedores, notas del libro diario y facturas para PYMES.El programa ha sido desarrollado para realizar el proyecto del modulo \"Desarrollo de Aplicaciones Multiplataforma\" instituto - IES Juan Jose Calvo Miguel - Sotrondio.\n\nTutor individual: Julia Paz Triana Toribio\nTutor colectivo: Jose Luis Arias Cobrero");
+        jTextArea1.setText("Software para gestionar el inventario, clientes, proveedores, notas del libro diario y facturas para PYMES.El programa ha sido desarrollado para realizar el proyecto del modulo \"Desarrollo de Aplicaciones Multiplataforma\" instituto - IES Juan Jose Calvo Miguel - Sotrondio.\n\nTutor individual: Julia Triana Toribio\nTutor colectivo: Jose Luis Arias Cobrero");
         jTextArea1.setWrapStyleWord(true);
         jTextArea1.setFocusable(false);
         jTextArea1.setWrapStyleWord(true);

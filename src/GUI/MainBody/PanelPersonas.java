@@ -74,7 +74,6 @@ public class PanelPersonas extends javax.swing.JPanel {
         jTablePersonas = new javax.swing.JTable();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTableFacturas = new javax.swing.JTable();
-        jButtonNuevaPersona = new javax.swing.JButton();
         jButtonVerFactura = new javax.swing.JButton();
         jComboBox = new javax.swing.JComboBox<>();
         jLabel1H1 = new javax.swing.JLabel();
@@ -114,14 +113,6 @@ public class PanelPersonas extends javax.swing.JPanel {
             }
         });
         jScrollPane5.setViewportView(jTableFacturas);
-
-        jButtonNuevaPersona.setFont(LogicaTemas.BUTTON_FONT);
-        jButtonNuevaPersona.setText("Nueva Persona");
-        jButtonNuevaPersona.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonNuevaPersonaActionPerformed(evt);
-            }
-        });
 
         jButtonVerFactura.setFont(LogicaTemas.BUTTON_FONT);
         jButtonVerFactura.setText("Ver Factura");
@@ -192,14 +183,12 @@ public class PanelPersonas extends javax.swing.JPanel {
                         .addGap(357, 357, 357))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButtonborrarPersona)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtoneditarPersona)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButtonNuevaPersona))
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE))
+                                .addComponent(jButtoneditarPersona)))
                         .addGap(18, 18, 18)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)))
@@ -231,7 +220,7 @@ public class PanelPersonas extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 359, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jButtonImprimirFactura)
@@ -240,7 +229,6 @@ public class PanelPersonas extends javax.swing.JPanel {
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButtonNuevaPersona, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jButtoneditarPersona, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jButtonborrarPersona, javax.swing.GroupLayout.Alignment.TRAILING)))))
                     .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -276,16 +264,6 @@ public class PanelPersonas extends javax.swing.JPanel {
         jTableFacturas.setModel(new FacturaTableModel(logica.getListaFacturas(ID_Persona)));
         jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
     }//GEN-LAST:event_jTablePersonasMouseClicked
-
-    /**
-     * Metodo para crear una nueva persona. Se abre ventana nueva
-     * @param evt 
-     */
-    private void jButtonNuevaPersonaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuevaPersonaActionPerformed
-        DialogPersona dialog = new DialogPersona(parent, true, logica, null);
-        dialog.setVisible(true);
-        jTablePersonas.setModel(new PersonasTableModel(logica.getListaPersonas()));
-    }//GEN-LAST:event_jButtonNuevaPersonaActionPerformed
 
     /**
      * Metodo para ver la informacion de una factura
@@ -381,7 +359,6 @@ public class PanelPersonas extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonImprimirFactura;
-    private javax.swing.JButton jButtonNuevaPersona;
     private javax.swing.JButton jButtonVerFactura;
     private javax.swing.JButton jButtonborrarPersona;
     private javax.swing.JButton jButtoneditarPersona;

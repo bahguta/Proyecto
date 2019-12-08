@@ -148,6 +148,7 @@ public class DialogPersona extends javax.swing.JDialog {
         jTextFieldApellidoNuevoCliente.setFont(LogicaTemas.TEXT_FONT);
         jTextFieldApellidoNuevoCliente.setText(org.openide.util.NbBundle.getMessage(DialogPersona.class, "DialogPersona.jTextFieldApellidoNuevoCliente.text")); // NOI18N
 
+        jLabel1.setFont(LogicaTemas.TEXT_FONT);
         jLabel1.setText(org.openide.util.NbBundle.getMessage(DialogPersona.class, "DialogPersona.jLabel1.text")); // NOI18N
 
         jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLIENTE", "PROVEEDOR" }));
