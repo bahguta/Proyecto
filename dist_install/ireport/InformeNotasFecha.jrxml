@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InformeNotas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0a1bf312-9bb3-42a4-b7c0-ecdc5a3cd0ef">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="proyecto"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value="Ik5PVEEiICwxNSwxNSwxYzcwMjQxZC1iNDQwLTRkZDgtODZmNy01ZGNlNjllNDQ3MGE7"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="139"/>
+	<parameter name="ID_NOTA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Nota" class="java.lang.String">
+		<defaultValueExpression><![CDATA["Nota con fecha:  "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Fecha" class="java.sql.Date">
+		<parameterDescription><![CDATA[Fecha]]></parameterDescription>
+	</parameter>
+	<parameter name="ID_nota" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$F{ID_nota}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="total" class="java.lang.Double">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="total_bigInt" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from nota where nota.fecha = $P{Fecha}]]>
+	</queryString>
+	<field name="ID_nota" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="detalle" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="debe" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="haber" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="HABER" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{haber}]]></variableExpression>
+	</variable>
+	<variable name="DEBE" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{debe}]]></variableExpression>
+	</variable>
+	<variable name="Total" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{HABER} -$V{DEBE}]]></variableExpression>
+		<initialValueExpression><![CDATA[0d]]></initialValueExpression>
+	</variable>
+	<variable name="fecha" class="java.lang.String">
+		<variableExpression><![CDATA[$P{Nota}]]></variableExpression>
+	</variable>
+	<variable name="f" class="java.sql.Timestamp">
+		<variableExpression><![CDATA[$F{fecha}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="10" y="10" width="535" height="60" forecolor="#FFFFFF" backcolor="#8584A1" uuid="5788b176-5b55-4292-a2fc-bb96dec99205"/>
+				<textElement>
+					<font size="40" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Libro Diario]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="56" splitType="Stretch">
+			<textField>
+				<reportElement x="295" y="12" width="249" height="28" uuid="625e0b15-44e7-4d84-8100-138ffa5b4497"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha: " + $F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="13" width="280" height="30" uuid="142a4a6f-759c-47e6-b63d-68123700edfc"/>
+				<textElement textAlignment="Left">
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nota: " + $F{ID_nota}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="280" y="10" width="130" height="20" forecolor="#FFFFFF" backcolor="#8584A1" uuid="d660783a-ab67-41ef-b146-13d90630d625"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Debe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="410" y="10" width="134" height="20" forecolor="#FFFFFF" backcolor="#8584A1" uuid="35cef3b7-fb3e-41a9-ad45-b0ac1e0b8a79"/>
+				<textElement textAlignment="Center">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Haber]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="10" y="10" width="270" height="20" forecolor="#FFFFFF" backcolor="#8584A1" uuid="8fc7eb86-f034-4704-a6b0-f1ba3e44a109"/>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ Detalle]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="363" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="10" width="263" height="60" uuid="cc58acd8-39a2-4e03-b268-06b83810b670">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="89309820-e1c1-4099-80bd-904d71ea6c89"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{detalle}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="10" width="110" height="30" uuid="9a65a5a7-d987-4760-a88d-27780b41540c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0fb3ba9-7e63-4807-9a97-86da497d8b3a"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{debe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="10" width="124" height="30" uuid="6cf06827-f4d2-4aec-9f38-9d869ee84268">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="aa4413a4-93e4-4a82-887b-79945b7b5345"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{haber}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="68" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="10" y="40" width="535" height="20" forecolor="#FFFFFF" backcolor="#8584A1" uuid="3ed24fdc-3803-4c5d-a989-c7df4ec42fb3"/>
+				<textElement textAlignment="Right" rotation="None">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total:     " +    + $V{Total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="432" y="10" width="100" height="20" uuid="aa3afa7b-46a4-4754-818c-6e184661ee66"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{HABER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="10" width="100" height="20" uuid="e623c474-9a05-4f17-b75f-5d468abd2285"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{DEBE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
