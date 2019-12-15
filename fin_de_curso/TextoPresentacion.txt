@@ -1,0 +1,108 @@
+Panel 1:
+	Mi idea para el proyecto era, crear un programa con el que se pueda gestionar la contabilidad de una empresa de pequeño o mediano tamaño. 
+	Hoy en dia existe una gran variedad de programas de contabilidad completas en sus funciones y muy complejas. 
+	Debido a que todavia mucha gente depende de sus conocimientos informaticos a la hora de manejar e implementar un programa a la vida diaria laboral, no siempre es sencillo encontrar el software que se adapte a la forma de trabajar, a los costes y a las necesidades de la empresa.
+
+Panel 2:
+	Por eso he optado por hacer un programa que pueda ser utilizado por cualquier persona, sin ningun tipo de conocimientos informaticos, menus elaborados con iconos, funciones intuitivas, capaz de cumplir multitud de funciones y que tenga un formato atractivo visualmente.
+	
+Panel 3:
+	El programa esta dividido en 3 partes.
+	
+	La parte de arriba tenemos el menu desarrollado con texto e iconos para mejorar la orientacion durante su uso. 
+	Seleccionando uno de los botones del menu, la parte del body va cambiando segun el boton presionado. Los paneles del body  muestran informacion sobre los registros de la base de datos, disponen de funciones para el manejo de estos ultimos , lo que se denomina CRUD y ayudan al usuario con textos de auxiliares para cada funcion.
+	
+	la parte del footer / pie ofrece  informacion sobre del programa , la version , pagina web con la api del programa y el desarrollador de la misma.
+
+Panel 4:
+	El primer panel que nos encontramos es el libro diario , muesta las notas que se van tomando cada dia , precio de cobros y gastos de cada una y detalles de las actividades realizadas.
+	Ofrece la filtracion de las notas entre fechas elegidas con la ayuda de los combobox , el manejo de las funciones CRUD e imprimir notas. Muestra el total de los gastos y de los cobros.
+	
+Panel 5:
+	Sobre el panel inventario no hay mucho que decir, ya que ofrece solo la informacion de los productos que dispone la empresa y el manejo de las funciones CRUD de los mismos.
+
+Panel 6:
+	Los paneles compra y venta son muy similares. El panel Venta muestra la informacion de los clientes y el panel Compras de los proveedores. La parte de arriba muestra la informacion de las personas , sean  clientes o proveedores y la parte de abajo aparecen las facturas de la persona seleccionada. 
+	
+Panel 7:
+	El panel Personas consiste en dos tablas que manejan la informacion de los registros de los clientes y proveedores. Este panel ofrece parte de las funciones CRUD ya que no puede existir una persona sin que tenga factura, pero ofrece borrar e editar las personas. A la hora de crear una factura, existe opcion de crear una persona nueva por si no esta en la lista de las personas existentes.
+	La parte de derecha muestra las facturas de la persona seleccionada y permite ver e imprimir  facturas.
+	
+Panel 8:
+	Este panel ofrece crear, ver e imprimir facturas. El panel esta dividido en 3 partes. La parte de izquierda muesta todas las facturas creadas. La parte de derecha , la primera tabla muestra la persona a la que pertenece esta factura y la segunda tabla muestra la lista de los productos.
+	El formato tanto de las facturas como de las notas es un formato estandar pdf. 
+	
+Panel 9:
+	Este panel nos ofrece graficas con la estadistica de la empresa segun las notas del libro diario. 
+	Las notas a mostrar se pueden filtrar entre fechas para obtener una estadistica de un tiempo determinado. la parte de abajo muestra 2 imagenes con graficas ( BarChart, LineChart) , que estan constridas con la informacion de la estadistica de todas o solo entre las notas que se han filtrado. Al seleccionar una de las notas, aparece 3-ra imagen con la estadistica solo para esta nota tipo Pie chart.
+
+Panel 10 y 11:
+	Panel ajustes dispone de todas las funciones acerca del ajuste del programa. Itentificarse o cambiar la contraseña del administrador  para poder usar las funciones de cargar, borrar o crear copia de seguridad. Los registros se guardan/leen de la carpeta $InstallDir/datos.
+	El programa ofrece tambien el cambio del motor de base de datos, puede ser Oracle o MySQL. Ofrece tambien copiar todos los registros de la base de datos actual a la nueva solo con marcar el checkbox.
+	El programa puede adaptarse al gusto de cada usuario, gracias a la gran variedad de vistas a cambiar que ofrece el programa, desde las mas claras hasta muy oscuras.
+	
+Panel 12:
+	En el panel ayuda encontramos informacion sobre porque se ha desarrollado el programa , los datos del desarrollador y un arbol de carpetas con ayuda sobre el funcionamiento de cada operacion, funcion  y panel del programa.
+	Este ultimo posee una pagina web con la api del programa que se ha realizado con el estandar de javadoc, donde se puede encontrar informacion sobre su desarrollo y las funciones usadas.
+
+Panel 13:
+	El programa esta desarrollado por numerosas clases que estan divididas en 8 paquetes segun su proposito.
+	En el paquete Main encontramos la clase  App que se encarga de inicializar todo el proceso ,  es el hilo principal del programa. En este paquete encontramos tambien el dialogo "conexionInicial" , el que se encarga de hacer la conexion inicial para obtener los registros de la base de datos.
+	En el paquete MainBody se encuentran todos los paneles de la parte del Body.
+	En el paquete dialog estan todas las ventanas auxiliares para el manejo de los registros , crear/ editar productos, personas, facturas y notas del libro diario.
+	El paquete dto contine los modelos de datos a usar para los registros.
+	El sigente paquete , nombrado gestiones , alberga todas las clases que realizan la gestion de los registros. Estas clases se encargan de conectar a la base de datos y ejecutar consultas construidas con la informacion obtenida de logica de negocio.
+	En el paquete logica estan las clases encargadas de hacer toda la logica del programa , la logica de negocio que se encarga para la logica de las operaciones del programa para el manejo de los registros, logicatemas maneja la logica de las vistas y el tamaño del texto, clase conexionBBDD que es encargada de conectarse a la base de datos y la clase stretchicon que se encarga de convertir las imagenes creadas en miniaturas para integrarlas en el programa.
+	El paquete TableModels contiene todas las clases de modelos de tablas para los registros a mostrar en el programa. 
+	
+	Para la relacion entre las clases se ha empleado el modelo MVC (Modelo Vista Controlador). Las clases de los paquetes GUI manejan la vista del programa y obtienen la iformacion introducida por el usuario pasandola a las clases del paquete logica, las que se encargan de hacer la logica correspondiente segun la peticion del usuario y entonces mandan la informacion procesada a las clases de gestion , las que construen consultas para  el manejo de los registros en la base de datos con la informacion obtenida. 
+	
+Panel 14:
+	La relacion entre las tablas en la base de datos pretende ser sensilla. Existen 3 tablas que manejan la informacion de las facturas, personas y productos. En la tabla negocio se insertan los registros de las facturas creadas , obteniendo las claves primarias de los objetos relacionados con la factura.
+	
+Panel 15: 
+	El programa esta desarrollado para que sea facil para los desarrolladores , gracias a los comentarios añadidos para cada funcion, cada linea de codigo, la que necesita ser explicada y tambien dispone de trazas de ejecucion de cada funcion que se muestran en el log del programa para una mejor depuracion. 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
