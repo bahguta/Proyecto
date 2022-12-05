@@ -1,12 +1,37 @@
+# bahguta software    [![N|Solid](https://bahguta.ddns.net/ImgProyecto/icono.png)](https://bahguta.ddns.net/ImgProyecto/Proyecto.exe)  
 
+# Windows     [![N|Solid](https://bahguta.ddns.net/ImgProyecto/icono.png)](https://bahguta.ddns.net/ImgProyecto/Windows10.exe)  
+
+
+ * Este Proyecto ha sido desarollado para la asignatura "Proyecto" - fin de modulo, del instituto
+        "IES Juan Jose Calvo Miguel" - Sotrondio (Asturias, Castrillon) España
+	
+### Tutores:
+ * Tutor individual: Julia ###### #########
+ * Tutor colectivo: Jose Luis ###### #########
  
- * Este Proyecto ha sido desarollado para la asignatura "Proyecto" del instituto
- * "IES Juan Jose Calvo Miguel" - Sotrondio<br>
- * Tutor individual: Julia Paz Triana Toribio
- *
- * El programa se concentra en el manejo de la contabilidad de PYMES. Notas del Libro diario que se van
- * tomando, el stock de los productos que entran (compra) y salen (Venta) de la
- * empresa, las personas sean clientes o provedoores y manejo de facturas.
- * 
- * El programa ofrece personalizar la interfaz del programa
- * Se pueden cambiar los colores de la vista y el tamaño del texto.
+### Desarrollador
+ * Plamen Georgiev Petkov 
+ 
+### Información 
+ * El programa se concentra en la gestion de la contabilidad de empresas de pequeño o medio tamaño. Ofrece el manejo de las funciones basicas CRUD para las notas del libro diario , personas, productos, facturas. 
+ * Trabaja con motor de base de datos MySQL.
+	
+ 
+![N|Solid](https://bahguta.ddns.net/ImgProyecto/bahgutasoftware.png)
+ 
+
+
+### API:
+[![N|Solid](https://bahguta.ddns.net/ImgProyecto/pagina_web.png)](https://bahguta.ddns.net)
+
+
+### Documentación:
+[![N|Solid](https://bahguta.ddns.net/ImgProyecto/word.png)](https://bahguta.ddns.net/ImgProyecto/DocumentacionProyecto.doc)
+
+### Presentación:
+[![N|Solid](https://bahguta.ddns.net/ImgProyecto/pptx.png)](https://bahguta.ddns.net/ImgProyecto/PresentationProyecto.pptx)
+
+### Descargar : 
+[![N|Solid](https://bahguta.ddns.net/ImgProyecto/win.png)](https://bahguta.ddns.net/ImgProyecto/Proyecto.exe)
+[![N|Solid](https://bahguta.ddns.net/ImgProyecto/java.png)](https://bahguta.ddns.net/ImgProyecto/Proyecto.7z)
