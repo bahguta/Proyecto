@@ -1,7 +1,5 @@
 # bahguta software    [![N|Solid](https://bahguta.ddns.net/ImgProyecto/icono.png)](https://bahguta.ddns.net/ImgProyecto/Proyecto.exe)  
 
-# Windows     [![N|Solid](https://bahguta.ddns.net/ImgProyecto/icono.png)](https://bahguta.ddns.net/ImgProyecto/Windows10.exe)  
-
 
  * Este Proyecto ha sido desarollado para la asignatura "Proyecto" - fin de modulo, del instituto
         "IES Juan Jose Calvo Miguel" - Sotrondio (Asturias, Castrillon) España
